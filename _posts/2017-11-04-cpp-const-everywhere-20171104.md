@@ -2,7 +2,7 @@
 layout: post
 title: 无处不在的const！
 categories: c/c++之函数 c/c++之面向对象
-tags: c c++ const 函数 参数 读写 指针 引用 类 面向对象
+tags: c c++ const 函数 参数 读写 指针 引用 类 面向对象 多级指针
 ---
 
 在C++的函数定义中，到处都是`const`关键字的使用
@@ -160,7 +160,7 @@ int main()
   p2 = NULL;
 
   /*
-   * const位于*左侧和右侧，指针本身、指向的内都是常量
+   * const位于*左侧和右侧，指针本身、指向的内容都是常量
    */
   const int* const p3 = &varInt;
   //compile error: assignment of read-only location '*(const int*)p3'
@@ -210,3 +210,38 @@ int main()
 上面通过注释、运行结果已经将const关键字的各种应用场景进行了描述。完全可以认为是讲解C++中const用法的一份简单参考手册！
 
 另外结合这篇[《C++函数传值返回和引用返回》](http://www.xumenger.com/cpp-return-reference-20170916/)一起阅读效果会更好
+
+## const修饰多级指针
+
+在上面的示例代码中，对于const用法的一个比较有意思的点是const在修饰指针时候的特性
+
+```
+  /*
+   * const位于*右侧，指针本身是常量
+   */
+  int* const p1 = &varInt;
+  *p1 = 100;
+  //compile error: assignment of read-only variable 'p1'
+  //p1 = NULL;
+
+  /*
+   * const位于*左侧，指针指向一个常量
+   */
+  const int* p2 = &varInt;
+  //compile error: assignment of read-only location '* p2'
+  //*p2 = 100;
+  p2 = NULL;
+
+  /*
+   * const位于*左侧和右侧，指针本身、指向的内容都是常量
+   */
+  const int* const p3 = &varInt;
+  //compile error: assignment of read-only location '*(const int*)p3'
+  //*p3 = 100;
+  //compile error: assignment of read-only variable 'p3'
+  //p3 = NULL;
+```
+
+上面的示例是针对一级指针，假如是多级指针的时候呢？比如不是`char *c;`而是`char **cc;`或者`char ***ccc;`，那么const可以怎么用？
+
+比如保证一级指针、二级指针、指向的内容都要是常量，那么可以这样定义`const char * const * const * const ccc;`

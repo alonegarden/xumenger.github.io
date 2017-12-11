@@ -117,7 +117,7 @@ websockets模块的官网是[http://websockets.readthedocs.io/en/stable/](http:/
 下面是一个使用Python实现的客户端
 
 ```
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import asyncio
 import websockets
@@ -143,7 +143,7 @@ asyncio.get_event_loop().run_until_complete(hello())
 下面是一个对应的服务端实现
 
 ```
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import asyncio
 import websockets
@@ -183,6 +183,8 @@ asyncio.get_event_loop().run_forever()
 异步IO模型需要一个消息循环，在消息循环中，主线程不断地重复“读取消息-->处理消息“这一过程
 
 ```
+#!/usr/bin/env python3
+
 loop = get_event_loop()
 while True:
     event = loop.get_event()
@@ -196,6 +198,8 @@ while True:
 asyncio是Python3.4版本引入的标准库，直接内置了对异步IO的支持。asyncio的编程模型就是一个消息循环。我们从asyncio模块中直接获取一个EventLoop的引用（@asyncio.coroutine把一个generator标记为coroutine类型），然后把需要执行的协程扔到EventLoop中执行，就实现了异步IO
 
 ```
+#!/usr/bin/env python3
+
 import asyncio
 
 @asyncio.coroutine
@@ -230,6 +234,8 @@ Hello again!
 下面用Task封装两个coroutine，同时注意yield的用法
 
 ```
+#!/usr/bin/env python3
+
 import threading
 import asyncio
 
@@ -273,6 +279,8 @@ Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 试着将asyncio.sleep(1)换成time.sleep(1)
 
 ```
+#!/usr/bin/env python3
+
 import threading
 import asyncio
 import time
@@ -309,6 +317,8 @@ Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 将上面讲到的第一份实例代码
 
 ```
+#!/usr/bin/env python3
+
 @asyncio.coroutine
 def hello():
     print("Hello world!")
@@ -319,6 +329,8 @@ def hello():
 可以等价替换为
 
 ```
+#!/usr/bin/env python3
+
 # 把@asyncio.coroutine替换为async
 async def hello():
     print("Hello world!")

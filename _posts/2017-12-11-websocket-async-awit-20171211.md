@@ -310,6 +310,53 @@ Hello world! (<_MainThread(MainThread, started 140736405758912)>)
 Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 ```
 
+再试试这样呢（自己封装一个@asyncio.coroutine的newsleep）？
+
+```
+import threading
+import asyncio
+import time
+
+@asyncio.coroutine
+def newsleep(sec):
+    time.sleep(sec)
+    return 100
+
+@asyncio.coroutine
+def hello():
+    print('Hello world! (%s)' % threading.currentThread())
+    #yield from asyncio.sleep(1)
+    #time.sleep(1)
+    r = yield from newsleep(1)
+    print(r)
+    print('Hello again! (%s)' % threading.currentThread())
+
+loop = asyncio.get_event_loop()
+tasks = [hello(), hello()]
+loop.run_until_complete(asyncio.wait(tasks))
+loop.close()
+```
+
+运行输入如下
+
+```
+(_LAB3) xumenger-mac:websockets xumenger$ python3 async-3.py 
+Hello world! (<_MainThread(MainThread, started 140736405758912)>)
+# 暂停约1s
+100
+Hello again! (<_MainThread(MainThread, started 140736405758912)>)
+Hello world! (<_MainThread(MainThread, started 140736405758912)>)
+# 暂停约1s
+100
+Hello again! (<_MainThread(MainThread, started 140736405758912)>)
+```
+
+>为什么自己用@asyncio.coroutine封装的newsleep()和asyncio.sleep()的运行效果完全不一样？
+
+>那真实的IO是什么样的效果？[《异步IO》](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143208573480558080fa77514407cb23834c78c6c7309000)中提到asyncio.sleep()可以用来模拟IO
+
+>？？？？？
+
 ### await和async简化asyncio语法
 
 为了简化并更好地标识异步IO，从Python 3.5开始引入了新的语法async和await

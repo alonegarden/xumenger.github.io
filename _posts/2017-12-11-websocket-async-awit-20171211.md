@@ -313,6 +313,8 @@ Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 再试试这样呢（自己封装一个@asyncio.coroutine的newsleep）？
 
 ```
+#!/usr/bin/env python3
+
 import threading
 import asyncio
 import time

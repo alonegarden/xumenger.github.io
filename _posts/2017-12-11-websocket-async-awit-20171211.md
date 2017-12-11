@@ -351,7 +351,7 @@ Hello world! (<_MainThread(MainThread, started 140736405758912)>)
 Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 ```
 
->为什么自己用@asyncio.coroutine封装的newsleep()和asyncio.sleep()的运行效果完全不一样？
+>为什么自己用@asyncio.coroutine封装的newsleep()和asyncio.sleep()的运行效果完全不一样？那到底应该怎么封装？
 
 >那真实的IO是什么样的效果？[《异步IO》](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143208573480558080fa77514407cb23834c78c6c7309000)中提到asyncio.sleep()可以用来模拟IO
 

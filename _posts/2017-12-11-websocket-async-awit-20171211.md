@@ -2,7 +2,7 @@
 layout: post
 title: 什么是WebSocket？
 categories: python之网络编程 python之web开发
-tags: web socket websocket python3 websockets http html html5 longpoll ajax轮询 回调 阻塞 asyncio 异步IO await async
+tags: web socket websocket python3 websockets http html html5 longpoll ajax轮询 回调 阻塞 asyncio 异步IO await async delphi 消息机制
 ---
 
 # 什么是WebSocket
@@ -13,13 +13,13 @@ tags: web socket websocket python3 websockets http html html5 longpoll ajax轮�
 
 HTTP有1.1和1.0之分，也就是所谓的keep-alive，把多个HTTP请求合并为一个，但Websocket其实是一个新协议，跟HTTP协议基本没有关系，只是为了兼容现有浏览器的握手规范而已，也就是说它是HTTP协议上的一种补充
 
-WebSocket是一个持久化的协议，而HTTP这种非持久化的协议来说。HTTP的生命周期是通过请求和应答界定的，也就是一个Request一个Response，在HTTP1.0中，客户端发起一个请求，服务端返回一个应答，这个HTTP请求就结束了
+WebSocket是一个持久化的协议，而HTTP这种非持久化的协议来说。HTTP的生命周期是通过请求和应答界定的，也就是一个Request对应一个Response，在HTTP1.0中，客户端发起一个请求，服务端返回一个应答，这个HTTP请求就结束了
 
-在HTTP1.1种进行了改进，又了keep-alive，也就是说，在一个HTTP连接中，可以发送多个Request，接受多个Response，但请求和应答还是一对一的关系的，并且只有客户端发起请求，服务端才能返回应答。Response是被动的，不能由服务端主动给到客户端
+在HTTP1.1中进行了改进，有了keep-alive，也就是说，在一个HTTP连接中，可以发送多个Request，接受多个Response，但请求和应答还是一对一的关系的，并且只有客户端发起请求，服务端才能返回应答。Response是被动的，不能由服务端主动给到客户端
 
-### websocket技术解析
+### WebSocket技术解析
 
-websocket是基于HTTP协议的，或者是说借用了HTTP的协议来完成一部分握手，首先来看一个典型的websocket握手（借用Wikipedia的）
+WebSocket是基于HTTP协议的，或者是说借用了HTTP的协议来完成一部分握手，首先来看一个典型的WebSocket握手（借用Wikipedia的）
 
 ```
 GET /chat HTTP/1.1
@@ -39,7 +39,7 @@ Upgrade: websocket
 Connection: Upgrade
 ```
 
-这是websocket的核心，告诉Apache、Nginx等服务器：注意了，我现在发起的是WebSocket协议，而不是HTTP协议
+这是WebSocket的核心，告诉Apache、Nginx等服务器：注意了，我现在发起的是WebSocket协议，而不是HTTP协议
 
 ```
 Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
@@ -68,9 +68,9 @@ Upgrade: websocket
 Connection: Upgrade
 ```
 
-依然是固定的，告诉客户端即将升级的是Websocket协议，而不是mozillasocket，lurnarsocket或者shitsocket其它乱七八糟的协议；然后，Sec-WebSocket-Accept这个则是经过服务器确认，并且加密过后的Sec-WebSocket-Key 。 服务器：好了，给你看我的ID CARD来证明行了吧。后面的，Sec-WebSocket-Protocol 则是表示最终使用的协议
+依然是固定的，告诉客户端即将升级的是Websocket协议，而不是mozillasocket，lurnarsocket或者shitsocket其它乱七八糟的协议；然后，Sec-WebSocket-Accept这个则是经过服务器确认，并且加密过后的Sec-WebSocket-Key。服务器：好了，给你看我的ID CARD来证明行了吧。后面的，Sec-WebSocket-Protocol则是表示最终使用的协议
 
-至此，HTTP已经完成它所有工作了，接下来就是完全按照Websocket协议进行了。具体的协议就不在这阐述了
+至此，HTTP已经完成它所有工作了，接下来就是完全按照WebSocket协议进行了。具体的协议就不在这阐述了
 
 ### WebSocket和http long poll、ajax轮询比较
 
@@ -90,19 +90,19 @@ http long poll和ajax轮询都可以实现信息传递，那它们的区别是�
 	* 客户端：有没有新信息，没有的话就等有了才返回给我吧（Request） 
 	* 服务端：额。。(等待到有消息的时候。。) 来 给你（Response）
 	* 一直循环......
-* websocket的简单进行说明
-	* 客户端：我要建立websocket协议，需要的服务是chat，Websocket协议版本：17（HTTP Request）
-	* 服务端：ok，确认，已升级为Websocket协议（HTTP Protocols Switched）
+* WebSocket的简单进行说明
+	* 客户端：我要建立WebSocket协议，需要的服务是chat，WebSocket协议版本：17（HTTP Request）
+	* 服务端：ok，确认，已升级为WebSocket协议（HTTP Protocols Switched）
 	* 客户端：麻烦你有信息的时候推送给我噢。。
 	* 服务端：ok，有的时候会告诉你的。
 	* 服务端：balabalabalabala
 	* 服务端：balabalabalabala
 
-websocket就变成了这样，只需要经过一次HTTP请求，就可以做到源源不断的信息传送了。（在程序设计中，这种设计叫做回调，即：你有信息了再来通知我，而不是我傻乎乎的每次跑来问你）。这样的协议解决了http long poll、ajax轮询同步有延迟，而且还非常消耗资源的这种情况！
+WebSocket就变成了这样，只需要经过一次HTTP请求，就可以做到源源不断的信息传送了。（在程序设计中，这种设计叫做回调，即：你有信息了再来通知我，而不是我傻乎乎的每次跑来问你）。这样的协议解决了http long poll、ajax轮询同步有延迟，而且还非常消耗资源的这种情况！
 
-websocket是类似socket通信，web端连接服务器后，握手成功，一直保持连接，可以理解为长连接，这时服务器就可以主动给客户端发送数据，实现数据的自动更新
+WebSocket是类似Socket通信，Web端连接服务器后，握手成功，一直保持连接，可以理解为长连接，这时服务器就可以主动给客户端发送数据，实现数据的自动更新
 
-使用websocket需要注意浏览器和当前的版本，不同的浏览器提供的支持不一样，因此设计服务器的时候，需要考虑
+使用WebSocket需要注意浏览器和当前的版本，不同的浏览器提供的支持不一样，因此设计服务器的时候，需要考虑
 
 # 在Python3中使用websockets
 
@@ -180,7 +180,7 @@ asyncio.get_event_loop().run_forever()
 
 >[《异步IO》](https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/00143208573480558080fa77514407cb23834c78c6c7309000)
 
-异步IO模型需要一个消息循环，在消息循环中，主线程不断地重复“读取消息-->处理消息“这一过程
+异步IO模型需要一个消息循环，在消息循环中，主线程不断地重复“读取消息-->处理消息”这一过程
 
 ```
 #!/usr/bin/env python3
@@ -191,7 +191,9 @@ while True:
     process_event(event)
 ```
 
-消息模型其实早就应用在桌面应用程序中了。一个GUI程序的主线程就负责不停地读取消息并处理。所有的键盘、鼠标等消息都被发送到GUI程序的消息队列中，然后由GUI程序的主线程处理。由于GUI线程处理键盘、鼠标等消息的速度非常快，所以用户感觉不到延迟。但假如GUI线程在一个消息处理的过程中遇到问题（比如死锁、死循环、阻塞）导致一次消息耗时长，那么用户会感觉到整个GUI程序停止响应了，敲键盘、点鼠标都没有反应。这种情况说明在消息模型中，处理一个消息必须非常迅速，否则，主线程将无法及时处理消息队列中的其他消息，导致程序看上去停止响应
+消息模型其实早就应用在桌面应用程序中了。一个GUI程序的主线程就负责不停地读取消息并处理。所有的键盘、鼠标等消息都被发送到GUI程序的消息队列中，然后由GUI程序的主线程处理。由于GUI线程处理键盘、鼠标等消息的速度非常快，所以用户感觉不到延迟
+
+但假如GUI线程在一个消息处理的过程中遇到问题（比如死锁、死循环、阻塞）导致一次消息耗时长，那么用户会感觉到整个GUI程序停止响应了，敲键盘、点鼠标都没有反应。这种情况说明在消息模型中，处理一个消息必须非常迅速，否则，主线程将无法及时处理消息队列中的其他消息，导致程序看上去停止响应
 
 ### asyncio
 

@@ -231,7 +231,7 @@ Hello again!
 
 因为上面只有一个task，所以看到的效果还是和顺序执行类似：print("Hello world!") -> 等待1s -> print("Hello again!")
 
-下面用Task封装两个coroutine，同时注意yield的用法
+**下面用Task封装两个coroutine，同时注意yield的用法**
 
 ```
 #!/usr/bin/env python3
@@ -276,7 +276,7 @@ Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 	* 接着开始执行第一个Task的`print('Hello again! (%s)' % threading.currentThread())`
 	* 接着执行第二个Task的`print('Hello again! (%s)' % threading.currentThread())`
 
-试着将asyncio.sleep(1)换成time.sleep(1)
+**试着将asyncio.sleep(1)换成time.sleep(1)**
 
 ```
 #!/usr/bin/env python3
@@ -310,7 +310,7 @@ Hello world! (<_MainThread(MainThread, started 140736405758912)>)
 Hello again! (<_MainThread(MainThread, started 140736405758912)>)
 ```
 
-再试试这样呢（自己封装一个@asyncio.coroutine的newsleep）？
+**再试试这样呢（自己封装一个@asyncio.coroutine的newsleep）？**
 
 ```
 #!/usr/bin/env python3

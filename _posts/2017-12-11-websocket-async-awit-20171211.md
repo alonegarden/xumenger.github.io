@@ -68,7 +68,7 @@ Upgrade: websocket
 Connection: Upgrade
 ```
 
-依然是固定的，告诉客户端即将升级的是Websocket协议，而不是mozillasocket，lurnarsocket或者shitsocket其它乱七八糟的协议；然后，Sec-WebSocket-Accept这个则是经过服务器确认，并且加密过后的Sec-WebSocket-Key 。 服务器：好了，给你看我的ID CARD来证明行了吧。后面的，Sec-WebSocket-Protocol 则是表示最终使用的协议。
+依然是固定的，告诉客户端即将升级的是Websocket协议，而不是mozillasocket，lurnarsocket或者shitsocket其它乱七八糟的协议；然后，Sec-WebSocket-Accept这个则是经过服务器确认，并且加密过后的Sec-WebSocket-Key 。 服务器：好了，给你看我的ID CARD来证明行了吧。后面的，Sec-WebSocket-Protocol 则是表示最终使用的协议
 
 至此，HTTP已经完成它所有工作了，接下来就是完全按照Websocket协议进行了。具体的协议就不在这阐述了
 
@@ -389,3 +389,7 @@ async def hello():
 ```
 
 剩下的代码保持不变，运行效果是一样的
+
+### Python的asyncio和Delphi消息机制
+
+看到asyncio的运行效果，和之前整理的[《ScktComp OnRead的回调逻辑》](http://www.xumenger.com/scktcomp-onread-test-20170329/)、[《ScktComp非阻塞网络编程的坑》](http://www.xumenger.com/socketapi-error-usage-20170404/)、[《ScktComp OnRead回调的各种诡异现象》](http://www.xumenger.com/socketapi-onread-20170406/)中Delphi的消息机制、Application.ProcessMessage的运行情况有一些类似的地方

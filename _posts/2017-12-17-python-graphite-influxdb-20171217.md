@@ -93,6 +93,41 @@ $ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=testDB"
 
 ![image](../media/image/2017-12-17/02.png)
 
+## Python操作infulxdb
+
+编写简单测试程序如下
+
+```
+# -*- coding: utf-8 -*-
+
+from influxdb import InfluxDBClient
+
+client = InfluxDBClient('localhost', 8086, 'root', '', 'testDB')
+
+print("显示所有数据库")
+print(client.get_list_database())
+
+print("创建数据库")
+client.create_database("testDB")
+
+# 删除数据库
+# client.drop_database("testDB")
+
+print("通过influxdb的语句查表")
+result = client.query("show measurements;")
+print("Result: {0}".format(result))
+
+# 删除表
+# client.query("drop measurement testTable")
+
+```
+
+运行效果如下
+
+![image](../media/image/2017-12-17/03.png)
+
+>推荐[《使用python操作InfluxDB》](https://www.cnblogs.com/MikeZhang/p/InfluxDBPythonOpt20170312.html)
+
 ## grafana使用
 
 
@@ -105,3 +140,4 @@ $ curl -G 'http://localhost:8086/query?pretty=true' --data-urlencode "db=testDB"
 * [《influxdb+grafana搭建业务监控平台前篇-相关环境搭建》](http://blog.csdn.net/u010185262/article/details/53118711)
 * [《度量驱动开发之 InfluxDB》](http://www.jianshu.com/p/60764f9ae0d0)
 * [《influxdb的简单使用》](http://www.361way.com/influxdb-user/5291.html)
+* [《使用python操作InfluxDB》](https://www.cnblogs.com/MikeZhang/p/InfluxDBPythonOpt20170312.html)

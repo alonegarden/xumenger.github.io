@@ -5,7 +5,7 @@ categories: 数据库之influxdb python之数据库编程
 tags: 数据库 时序数据库 influxdb python python3 grafana curl javascript js 监控 时间序列 监控系统 datadog
 ---
 
-## 简介
+## 简单介绍
 
 时间序列数据库，最简单的定义就是数据格式里包含Timestamp字段的数据，比如某一时间环境的温度、CPU使用率等。时间序列数据的更重要的一个属性是如何去查询它，包括数据的过滤，计算等等（时间序列数据, 由一系列来自相同数据源, 按一定时间间隔采样的连续数据组成）
 
@@ -144,7 +144,7 @@ print("Result: {0}".format(result))
 
 ![image](../media/image/2017-12-17/06.png)
 
-更多使用说明这里不做说明！
+更多使用说明、监控配置这里不做说明！
 
 ## 参考资料
 

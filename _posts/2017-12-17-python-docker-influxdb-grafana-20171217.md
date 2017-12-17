@@ -5,6 +5,18 @@ categories: 数据库之influxdb python之数据库编程
 tags: 数据库 时序数据库 influxdb python python3 docker LXC boot2docker grafana
 ---
 
+## 简介
+
+时间序列数据库，最简单的定义就是数据格式里包含Timestamp字段的数据，比如某一时间环境的温度、CPU使用率等。时间序列数据的更重要的一个属性是如何去查询它，包括数据的过滤，计算等等
+
+influxdb是一个开源的分布式时序、时间和指标数据库，使用go语言编写，它有三个特性
+
+* 时序性（Time Series）：与时间相关的函数的灵活使用（诸如最大、最小、求和等）
+* 度量（Metrics）：对实时大量数据进行计算
+* 事件（Event）：支持任意的事件数据，换句话说，任意事件的数据我们都可以操作
+
+granfana是一个open source的图形化数据展示工具，可以自定义datasource、自定义报表、显示数据等
+
 ## 安装和配置influxdb
 
 我是在Mac OS环境上做的测试，首先是安装docker和influxdb
@@ -19,7 +31,16 @@ $ brew install docker
 $ export DOCKER_HOST=tcp://127.0.0.1:4243
 
 $ brew install influxdb
+
+$ brew install grafana
 ```
+
+同时说一下influxdb的两个http端口：
+
+* 8083：管理页面端口，访问`http://localhost:8083`可以进入你本机的influxdb管理页面
+* 8086：http连接influxdb client端口，一般使用该端口往本机的influxdb读写数据
+
+再说一下grafana的端口，访问http://localhost:3000可以访问本地搭建的grafana，用户名跟密码都是admin
 
 Python3安装influxdb驱动
 
@@ -42,19 +63,3 @@ error in run: Failed to initialize machine "boot2docker-vm": exec: "VBoxManage":
 
 ## influxdb使用
 
-
-
-## InfluxDB和Docker简介
-
-InfluxDB是一个开源的时序数据库，使用GO语言开发，特别适合用于处理和分析资源监控数据这种时序相关数据。而InfluxDB自带的各种特殊函数如求标准差，随机取样数据，统计数据变化比等，使数据统计和实时分析变得十分方便。在我们的容器资源监控系统中，就采用了InfluxDB存储cadvisor的监控数据
-
-Docker是一个开源的引擎，可以轻松地为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括虚拟机、OpenStack集群和其他的基础应用平台
-
-Docker通常用于如下场景：
-
-* web应用的自动化打包和发布
-* 自动化测试和持续集成、发布
-* 在服务型环境中部署和调整数据库或其它的后台应用
-* 从头编译或者扩展现有的OpenShift或Cloud Foundry平台来搭建自己的PaaS环境
-
-云主机可以选择操作系统镜像快速创建主机，这笔虚拟机更便捷了，我们本地也可以通过docker这么做。它依赖于LXC（Linux Container），能从网络上获得配置好的Linux镜像，非常容易地在隔离的系统中运行自己的应用。也因为底层是一个LXC，所以在Mac OS X下需要在VirtualBox中跑一个精小的LXC(这里是一个 Tiny Core Linux，完全在内存中运行，个头只约 24MB，启动时间小于 5 秒的 boot2docker) 虚拟机，构建在VirtualBox中。以后的通信过程就是【docker --> boot2docker --> container】，端口或磁盘映射也是遵照这一关系

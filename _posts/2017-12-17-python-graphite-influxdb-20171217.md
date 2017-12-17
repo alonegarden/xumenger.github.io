@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 时序数据库influxdb
-categories: 数据库之influxdb python之数据库编程
-tags: 数据库 时序数据库 influxdb python python3 grafana curl
+title: 时序数据库InfluxDB
+categories: 数据库之influxdb python之数据库编程 
+tags: 数据库 时序数据库 influxdb python python3 grafana curl javascript js 监控 时间序列 监控系统 datadog
 ---
 
 ## 简介
@@ -130,7 +130,21 @@ print("Result: {0}".format(result))
 
 ## grafana使用
 
+上面使用`brew install`安装了grafana，然后可以使用`brew services start grafana`启动服务
 
+然后在浏览器输入`localhost:3000`，回车看到登录界面
+
+![image](../media/image/2017-12-17/04.png)
+
+默认账户（用户名admin、密码admin）登录系统，大概界面是这样的
+
+![image](../media/image/2017-12-17/05.png)
+
+上图中看到有【Add data source】，然后可以配置InfluxDB中的数据库
+
+![image](../media/image/2017-12-17/06.png)
+
+更多使用说明这里不做说明！
 
 ## 参考资料
 
@@ -141,3 +155,8 @@ print("Result: {0}".format(result))
 * [《度量驱动开发之 InfluxDB》](http://www.jianshu.com/p/60764f9ae0d0)
 * [《influxdb的简单使用》](http://www.361way.com/influxdb-user/5291.html)
 * [《使用python操作InfluxDB》](https://www.cnblogs.com/MikeZhang/p/InfluxDBPythonOpt20170312.html)
+* [《玩转时序数据库InfluxDB》](http://www.ywnds.com/?p=10763)
+* [《使用Prometheus+Grafana监控MySQL实践》](http://www.ywnds.com/?p=9656)
+* [《Grafana安装配置介绍》](http://www.ywnds.com/?p=5903)
+* [《Graphite 和 grafana 集成》](https://segmentfault.com/a/1190000000693520)
+* [《致这个看脸的世界 — 高颜值监控绘图工具Grafana》](http://www.jianshu.com/p/6bc606348050)

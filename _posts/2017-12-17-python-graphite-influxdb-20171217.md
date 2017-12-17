@@ -2,7 +2,7 @@
 layout: post
 title: 时序数据库InfluxDB
 categories: 数据库之influxdb python之数据库编程 
-tags: 数据库 时序数据库 influxdb python python3 grafana curl javascript js 监控 时间序列 监控系统 datadog
+tags: 数据库 时序数据库 influxdb python python3 grafana curl javascript js 监控 时间序列 监控系统 datadog dashboard
 ---
 
 ## 简单介绍
@@ -144,7 +144,7 @@ print("Result: {0}".format(result))
 
 ![image](../media/image/2017-12-17/06.png)
 
-更多使用说明、监控配置这里不做说明！
+更多使用说明、监控配置、dashboard配置这里不做说明！
 
 ## 参考资料
 
@@ -160,3 +160,5 @@ print("Result: {0}".format(result))
 * [《Grafana安装配置介绍》](http://www.ywnds.com/?p=5903)
 * [《Graphite 和 grafana 集成》](https://segmentfault.com/a/1190000000693520)
 * [《致这个看脸的世界 — 高颜值监控绘图工具Grafana》](http://www.jianshu.com/p/6bc606348050)
+* [《Datadog Agent是啥？它消耗什么资源？》](https://yq.aliyun.com/articles/6636)
+* [《生产环境下的性能监控 - Datadog》](http://tech.glowing.com/cn/performance-monitoring-with-Datadog/)

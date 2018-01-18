@@ -63,7 +63,7 @@ list命令
 
 在gdb中运行list命令（缩写l）可以列出代码，list的具体形式包括：
 
-**list <linenum>**，显示程序第linenum行周围的源程序，如：
+**list \<linenum\>**，显示程序第linenum行周围的源程序，如：
 
 ```
     (gdb) list 15  
@@ -79,7 +79,7 @@ list命令
     19  
 ```
 
-**list <function>**，显示函数名为function的函数的源程序，如：
+**list \<function\>**，显示函数名为function的函数的源程序，如：
 
 ```
     (gdb) list main  
@@ -150,11 +150,11 @@ break命令
 
 在gdb中用break命令来设置断点，设置断点的方法包括：
 
-**break <function>**
+**break \<function\>**
 
 在进入指定函数时停住，C++中可以使用class::function或function(type, type)格式来指定函数名。
 
-**break <linenum>**
+**break \<linenum\>**
 
 在指定行号停住。
 
@@ -178,7 +178,7 @@ break命令
 
 break命令没有参数时，表示在下一条指令处停住。
 
-**break ... if <condition>**
+**break ... if \<condition\>**
 
 “...”可以是上述的`break <linenum>`、`break +offset`、`break –offset`中的参数，condition表示条件，在条件成立时停住。比如在循环体中，可以设置break if i=100，表示当i为100时停住程序。
 
@@ -202,11 +202,11 @@ break命令没有参数时，表示在下一条指令处停住。
 
 单步执行的更复杂用法包括：
 
-**step <count>**
+**step \<count\>**
 
 单步跟踪，如果有函数调用，则进入该函数（进入函数的前提是，此函数被编译有debug信息）。step后面不加count表示一条条地执行，加表示执行后面的count条指令，然后再停住。
 
-**next <count>**
+**next \<count\>**
 
 单步跟踪，如果有函数调用，它不会进入该函数。同样地，next后面不加count表示一条条地执行，加表示执行后面的count条指令，然后再停住。
 

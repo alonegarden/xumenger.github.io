@@ -74,7 +74,7 @@ tcpdump -i eth0 '((tcp) and (dst host 192.168.163.41 and dst port 1433) or (src 
 
 ![image](../media/image/2017-07-06/07.png)
 
->这里只是发送了小数据，可以进一步测试如果发生大量数据，TCP是如何进行分包等处理的；另外既然是研究SQL Server，可以在使用freetds操作SQL Server数据库的时候，抓包，然后用telnet发送类似的包，来通过telnet操作数据库，理论上是可以的，只是难度比较大，到这里不就是一些黑客性质的技术了吗？！
+>这里只是发送了小数据，可以进一步测试如果发生大量数据，TCP是如何进行分包等处理的；另外既然是研究SQL Server，可以在使用freetds操作SQL Server数据库的时候，抓包，然后用telnet发送类似的包，来通过telnet操作数据库，理论上是可以的，只是难度比较大！
 
 >这里只是熟悉WireShark、tcpdump、telnet的用法，以上的点不在本文研究，不过后续都是有必要好好研究的！
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Mac OS下安装eclipse
+title: Mac OS下安装Eclipse
 categories: 好资源之开发工具
 tags: Mac Eclipse Java JavaEE JDK IDE 环境变量 虚拟机 面向对象
 ---

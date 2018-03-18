@@ -124,17 +124,17 @@ class Hello(object):
 $ python3 setup.py build
 ```
 
-![image](../media/images/2018-03-17/ext/01.png)
+![image](../media/images/2018-03-17-ext/01.png)
 
 ```
 $ python3 setup.py install
 ```
 
-![image](../media/images/2018-03-17/ext/02.png)
+![image](../media/images/2018-03-17-ext/02.png)
 
 `pip3 freeze | grep Hello`可以看到扩展已经安装
 
-![image](../media/images/2018-03-17/ext/03.png)
+![image](../media/images/2018-03-17-ext/03.png)
 
 ### 编写测试程序
 
@@ -162,21 +162,21 @@ if __name__ == '__main__':
 
 启动服务器
 
-![image](../media/images/2018-03-17/ext/04.png)
+![image](../media/images/2018-03-17-ext/04.png)
 
 在浏览器地址栏输入`http://localhost:5000/`回车，可以看到浏览器的输出如下
 
-![image](../media/images/2018-03-17/ext/05.png)
+![image](../media/images/2018-03-17-ext/05.png)
 
 同时可以看到服务器的输出如下
 
-![image](../media/images/2018-03-17/ext/06.png)
+![image](../media/images/2018-03-17-ext/06.png)
 
 可以看到teardown()方法有被调用
 
 刷新浏览器，向服务端再次发起一次访问，可以看到teardown()方法被再次调用
 
-![image](../media/images/2018-03-17/ext/07.png)
+![image](../media/images/2018-03-17-ext/07.png)
 
 # 更深入的讲解
 

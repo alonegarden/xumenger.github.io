@@ -24,8 +24,7 @@ Mac上默认是没有安装JDK的，所以需要自己安装
 
 然后写一个万年不变的Hello World看看
 
-```
-
+```java
 public class HelloWorld {
 	public static void main(String[] args) {
         // Prints "Hello, World" to the terminal window.

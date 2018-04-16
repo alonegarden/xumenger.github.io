@@ -1,6 +1,6 @@
 ---
 layout: post
-title: C++中的malloc()/free()和new/delete
+title: C++的malloc()/free()和new/delete
 categories: c/c++之面向对象 c/c++之指针与内存 delphi之指针与内存 
 tags: c++ struct 对象 面相对象 malloc free new delete 指针 内存 内存管理 c delphi 类 构造函数 析构函数 x86 x64 gcc g++ 兼容 
 ---

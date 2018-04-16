@@ -336,7 +336,7 @@ int main()
 }
 ```
 
-![image](../media/image/2018-04-16/01-07.png)
+![image](../media/image/2018-04-16/01-08.png)
 
 ## 简单总结
 

@@ -218,6 +218,7 @@ int main(){
 
 ## 参考资料
 
+* [FreeTDS官方API文档](http://www.freetds.org/reference/index.html)
 * [《linux下的find文件查找命令与grep文件内容查找命令》](http://www.cnblogs.com/huninglei/p/5824205.html)
 * [《在Linux上配置Telnet服务》](http://www.cnblogs.com/hyddd/archive/2009/09/19/1570214.html)
 * [《退出telnet 命令》](http://blog.csdn.net/beyondlpf/article/details/7546120)

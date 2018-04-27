@@ -225,6 +225,7 @@ int main(){
 * [《SQL Server数据库的默认端口号》](http://database.51cto.com/art/201006/206353.htm)
 * [《Linux下通过ODBC连接sqlserver》](http://www.cnblogs.com/yangliheng/p/5778711.html)
 * [《error: newly created file is older than distributed file》](http://blog.sina.com.cn/s/blog_75a07c3b0101kqnr.html)
+* [《Linux下FreeTDS使用及问题总结》](https://blog.csdn.net/geqiandebei/article/details/50540527)
 * [FreeTDS - Unable to connect: Adaptive Server is unavailable or does not exist](https://stackoverflow.com/questions/22991584/freetds-unable-to-connect-adaptive-server-is-unavailable-or-does-not-exist)
 * [[freetds] Cannot connect to MS SQL 2008 server from OS X using	FreeTDS](http://lists.ibiblio.org/pipermail/freetds/2012q2/027805.html)
 * [《配置SQLServer，允许远程连接》](http://www.cnblogs.com/weizhengLoveMayDay/p/3267756.html)

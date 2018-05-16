@@ -28,15 +28,15 @@ MySQL数据库根据应用的需要准备了不同的引擎，不同的引擎侧
 
 MySQL的存储引擎接口定义良好，有兴趣的开发者可以通过阅读文档编写自己的存储引擎
 
-![image](../media/image/2018-05-12/01.png)
+![image](../media/image/2018-05-16/01.png)
 
 在Mac上是这样启动MySQL服务器，连接到MySQL的
 
-![image](../media/image/2018-05-12/02.png)
+![image](../media/image/2018-05-16/02.png)
 
 Linux下是这样启动服务器和连接到服务器的
 
-![image](../media/image/2018-05-12/03.png)
+![image](../media/image/2018-05-16/03.png)
 
 ## 基础数据准备
 
@@ -150,7 +150,7 @@ where u.id = b.user_id and u.admin = true;
 
 执行的结果如下
 
-![image](../media/image/2018-05-12/04.png)
+![image](../media/image/2018-05-16/04.png)
 
 在SQL语句前面加上一个关键字explain就可以看到该SQL的执行计划
 
@@ -161,7 +161,7 @@ from users u, blogs b
 where u.id = b.user_id and u.admin = true;
 ```
 
-![image](../media/image/2018-05-12/05.png)
+![image](../media/image/2018-05-16/05.png)
 
 ## 看懂MySQL的执行计划
 
@@ -196,7 +196,7 @@ where users.id=blogs.user_id
     and users.name='';
 ```
 
-![image](../media/image/2018-05-12/06.png)
+![image](../media/image/2018-05-16/06.png)
 
 **2) id不同**。如果是子查询，id的序号会递增，id越大优先级越高，越先被执行
 
@@ -215,7 +215,7 @@ where id =
 );
 ```
 
-![image](../media/image/2018-05-12/07.png)
+![image](../media/image/2018-05-16/07.png)
 
 **3) id相同和不同的情况都存在**。id如果相同，可以认为是一组，从上往下顺序执行；在所有组中，id值越大，优先级越高，越先执行
 
@@ -230,7 +230,7 @@ from
 where s1.id = blogs.user_id;
 ```
 
-![image](../media/image/2018-05-12/08.png)
+![image](../media/image/2018-05-16/08.png)
 
 ### select\_type
 
@@ -250,7 +250,7 @@ union
 select * from blogs a right join users b on a.user_id = b.id;
 ```
 
-![image](../media/image/2018-05-12/09.png)
+![image](../media/image/2018-05-16/09.png)
 
 ### type
 
@@ -272,7 +272,7 @@ from
 )a;
 ```
 
-![image](../media/image/2018-05-12/10.png)
+![image](../media/image/2018-05-16/10.png)
 
 **3) eq\_ref**。唯一性索引扫描，对于每个索引键，表中只有一条记录阈值匹配，常见于主键或唯一索引扫描
 
@@ -281,7 +281,7 @@ explain select * from users, blogs where users.id=blogs.id;
 explain select * from blogs, users where users.id=blogs.id;
 ```
 
-![image](../media/image/2018-05-12/11.png)
+![image](../media/image/2018-05-16/11.png)
 
 **4) ref**。非唯一性索引扫描，返回匹配某个单独值的所有行。本质是也是一种索引访问，它返回所有匹配单独值的行，然而它可能会找到多个符合条件的行，所以应该属于查找和扫描的混合体
 
@@ -289,7 +289,7 @@ explain select * from blogs, users where users.id=blogs.id;
 explain select * from users where created_at = 20180415101010;
 ```
 
-![image](../media/image/2018-05-12/12.png)
+![image](../media/image/2018-05-16/12.png)
 
 **5) range**。值检索给定范围的行，使用一个索引来选择行。key列显示使用的那个索引。一般就是在where语句中出现between、>、<、in等的查询。这种索引列上的范围扫描比全索引扫描要好。只需要开始于某一点，结束于另一个点，不用扫描全部索引
 
@@ -300,7 +300,7 @@ from users
 where id between '1' and '10';
 ```
 
-![image](../media/image/2018-05-12/13.png)
+![image](../media/image/2018-05-16/13.png)
 
 **6) index**。Full Index Scan，index与ALL区别为index类型只遍历索引树。这通常比ALL快，因为索引文件通常比数据文件小（Index与ALL虽然都是读全表，但index是从索引中读取，而ALL是从硬盘读取）
 
@@ -310,7 +310,7 @@ select id
 from users;
 ```
 
-![image](../media/image/2018-05-12/14.png)
+![image](../media/image/2018-05-16/14.png)
 
 **7) ALL**。Full Table Scan，遍历全表以找到匹配的行
 
@@ -321,7 +321,7 @@ from users
 where name = 'xumenger';
 ```
 
-![image](../media/image/2018-05-12/15.png)
+![image](../media/image/2018-05-16/15.png)
 
 ### key
 
@@ -333,7 +333,7 @@ explain select id, created_at from users;
 explain select id from users;
 ```
 
-![image](../media/image/2018-05-12/16.png)
+![image](../media/image/2018-05-16/16.png)
 
 下面这个因为select存在非索引列，所以key为NULL
 
@@ -343,7 +343,7 @@ select id, name, email
 from users;
 ```
 
-![image](../media/image/2018-05-12/17.png)
+![image](../media/image/2018-05-16/17.png)
 
 ### Extra
 
@@ -361,7 +361,7 @@ create index `idx_image` on users (image);
 show index from users;
 ```
 
-![image](../media/image/2018-05-12/18.png)
+![image](../media/image/2018-05-16/18.png)
 
 然后针对下面的SQL查看其执行计划
 
@@ -371,7 +371,7 @@ explain select * from users where name = 'xumenger' order by name, image;
 explain select * from users where name = 'xumenger' order by image, created_at;
 ```
 
-![image](../media/image/2018-05-12/19.png)
+![image](../media/image/2018-05-16/19.png)
 
 比如最后一条，由于索引是先按image排序，再按created\_at排序，所以查询如果直接按照address排序，索引就不能满足要求了，MySQL内部必须要再实现一次文件排序
 
@@ -385,7 +385,7 @@ where created_at = 20180415101010
 group by name;
 ```
 
-![image](../media/image/2018-05-12/20.png)
+![image](../media/image/2018-05-16/20.png)
 
 **3) using index**。表示响应的select操作中使用了覆盖索引，避免了访问表的数据行，效率高。如果同时出现using where，表明索引被用来执行索引键值的查找；如果没有同时出现using where，表明索引用来读取数据而非执行查找动作
 
@@ -395,7 +395,7 @@ select name
 from users;
 ```
 
-![image](../media/image/2018-05-12/21.png)
+![image](../media/image/2018-05-16/21.png)
 
 **4) 覆盖索引(covering index)**。也叫索引覆盖，就是select列表中的字段，只用从索引中就能获取，不必根据索引再次读取数据文件，换句话说就是查询列要被所建的索引覆盖
 
@@ -412,7 +412,7 @@ where name = 'a'
 and name = 'b';
 ```
 
-![image](../media/image/2018-05-12/22.png)
+![image](../media/image/2018-05-16/22.png)
 
 ## 实际分析一个例子
 
@@ -431,7 +431,7 @@ select id, name
 from blogs;
 ```
 
-![image](../media/image/2018-05-12/23.png)
+![image](../media/image/2018-05-16/23.png)
 
 它的执行顺序是这样的
 

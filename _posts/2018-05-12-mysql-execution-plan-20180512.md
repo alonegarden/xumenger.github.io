@@ -325,7 +325,7 @@ where name = 'xumenger';
 
 ### key
 
-世纪使用的索引，如果为NULL，则没有使用索引。查询中如果使用了覆盖索引，则该索引仅出现在key列表中
+实际使用的索引，如果为NULL，则没有使用索引。查询中如果使用了覆盖索引，则该索引仅出现在key列表中
 
 ```sql
 explain select created_at from users;
@@ -435,11 +435,19 @@ from blogs;
 
 它的执行顺序是这样的
 
-1. id=4。`select id, name from blogs`。select\_type位union，说明id=4的select是union里面的第二个select
-2. id=3。`select id, name from users where created_at = 20180415101010`。因为是在from语句中包含的子查询，所以被标记为DERIVED。`created_at = 20180415101010`通过非唯一性索引idx\_created\_at检索到多行，所以type为ref
-3. id=2。`select id from comments`。因为是在select中包含的子查询所以被标记为SUBQUERY
-4. id=1。`select d1.name, (...)d2 from (...)d1`。select\_type位PRIMARY表示该查询为最外层查询，table列标记为<derived3>表示查询来自一个衍生表，即id=3的查询结果
-5. id=NULL。`... union ...`。表示从union的临时表中读取行的阶段，table列的<union1,4>表示用id=1和id=4的select结果进行union操作
+1. id=4。`select id, name from blogs`
+    * select\_type为union，说明id=4的select是union里面的第二个select
+2. id=3。`select id, name from users where created_at = 20180415101010`
+    * 因为是在from语句中包含的子查询，所以被标记为DERIVED
+    * `created_at = 20180415101010`通过非唯一性索引`idx_created_at`检索到多行，所以type为ref
+3. id=2。`select id from comments`
+    * 因为是在select中包含的子查询所以被标记为SUBQUERY
+4. id=1。`select d1.name, (...)d2 from (...)d1`
+    * select\_type位PRIMARY表示该查询为最外层查询
+    * table列标记为<derived3>表示查询来自一个衍生表，即id=3的查询结果
+5. id=NULL。`... union ...`
+    * 表示从union的临时表中读取行的阶段
+    * table列的<union1,4>表示用id=1和id=4的select结果进行union操作
 
 >完全参考[《MySQL高级 之 explain执行计划详解》](https://blog.csdn.net/wuseyukui/article/details/71512793)的思路对这几张表进行实验
 

@@ -373,7 +373,7 @@ explain select * from users where name = 'xumenger' order by image, created_at;
 
 ![image](../media/image/2018-05-16/19.png)
 
-比如最后一条，由于索引是先按image排序，再按created\_at排序，所以查询如果直接按照address排序，索引就不能满足要求了，MySQL内部必须要再实现一次文件排序
+比如最后一条，由于索引是先按image排序，再按created\_at排序，所以查询如果直接按照created\_at排序，索引就不能满足要求了，MySQL内部必须要再实现一次文件排序
 
 **2) using temporary**。使用临时表保存中间结果，也就是说MySQL在对查询排序时使用了临时表，常见于order by和group by
 

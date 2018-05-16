@@ -365,7 +365,7 @@ show index from users;
 
 然后针对下面的SQL查看其执行计划
 
-```
+```sql
 explain select * from users where name = 'xumenger' order by image;
 explain select * from users where name = 'xumenger' order by name, image;
 explain select * from users where name = 'xumenger' order by image, created_at;

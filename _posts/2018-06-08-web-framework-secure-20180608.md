@@ -2,7 +2,7 @@
 layout: post
 title: 在Web框架层面思考安全问题
 categories: 网络安全之web安全
-tags: web web安全 攻击 防御 web框架 HTML注入 XSS HtmlEncode OWASP CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法 编码 编码集 
+tags: web web安全 攻击 防御 web框架 HTML注入 XSS HtmlEncode OWASP ESAPI CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法 编码 编码集 URL
 ---
 
 MVC架构将Web应用分为三层
@@ -41,17 +41,17 @@ MVC架构将Web应用分为三层
 
 ### XSS有多种类型
 
-1)反射型XSS
+**1)** 反射型XSS
 
 反射型XSS只是简单地把用户输入的数据“反射”给浏览器。也就是说，攻击者往往需要诱使用户点击一个恶意链接，才能攻击成功
 
-2)存储型XSS
+**2)** 存储型XSS
 
 Web应用中，一般会把用户的一些输入的数据“存储”在服务器，存储型XSS就是攻击者利用Web应用的这种特将恶意的脚本保存到服务器端，这种XSS具有很强的稳定性
 
 比较常见的场景就是：攻击者写下一篇包含恶意的JavaScript代码的博客文章，文章发表后，所有访问该博客的用户都会在他们的浏览器上执行这段恶意的JavaScript代码
 
-3)DOM Based XSS
+**3)** DOM Based XSS
 
 DOM Based XSS其实是反射型XSS的一种，不过因为比较特殊，所以单独拿出来作为一个类型。通过修改页面的DOM节点形成的XSS，称之为DOM Based XSS
 
@@ -278,11 +278,11 @@ String safe = ESAPI.encoder().encodeForURL(request.getParameter("input"));
 
 CSRF攻击可以在受害者毫不知情的情况下以受害者名义伪造请求发送给受攻击站点，从而在并未授权的情况下执行在权限保护之下的操作
 
-比如，受害者Bob在银行有一笔存款，通过对银行的网站发送请求 http://bank.example/withdraw?account=bob&amount=1000000&for=bob2 可以使Bob把1000000的存款转到bob2的账户下。通常情况下，该请求发送到网站后，服务器会先验证该请求是否来自一个合法的session，并且该session的用户Bob已经成功登陆
+比如，受害者Bob在银行有一笔存款，通过对银行的网站发送请求[http://bank.example/withdraw?account=bob&amount=1000000&for=bob2](http://bank.example/withdraw?account=bob&amount=1000000&for=bob2)可以使Bob把1000000的存款转到bob2的账户下。通常情况下，该请求发送到网站后，服务器会先验证该请求是否来自一个合法的session，并且该session的用户Bob已经成功登陆
 
-黑客Mallory自己在该银行也有账户，他知道上文中的URL可以把钱进行转账操作。Mallory可以自己发送一个请求给银行： http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory
+黑客Mallory自己在该银行也有账户，他知道上文中的URL可以把钱进行转账操作。Mallory可以自己发送一个请求给银行：[http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory](http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory)
 
-但这个请求来自Mallory而不是Bob，他不能通过安全认证，因此该请求不会起作用。此时Mallory想到使用CSRF的攻击方式，他先自己做一个网站，在自己的网站中放入如下代码 `src="http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory"`。并且通过广告等方式诱使Bob来访问他的网站。当 Bob访问该网站时，上述 url就会从 Bob的浏览器发向银行，而这个请求会附带 Bob浏览器中的 cookie一起发向银行服务器。大多数情况下，该请求会失败，因为他要求 Bob的认证信息。但是，如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session尚未过期，浏览器的 cookie之中含有 Bob的认证信息。这时，悲剧发生了，这个 url请求就会得到响应，钱将从 Bob的账号转移到 Mallory的账号，而 Bob当时毫不知情。等以后 Bob发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而 Mallory则可以拿到钱后逍遥法外
+但这个请求来自Mallory而不是Bob，它不能通过安全认证，因此该请求不会起作用。此时Mallory想到使用CSRF的攻击方式，他先自己做一个网站，在自己的网站中放入如下代码 `src="http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory"`。并且通过广告等方式诱使Bob来访问他的网站。当Bob访问该网站时，上述url就会从Bob的浏览器发向银行，而这个请求会附带Bob浏览器中的 cookie一起发向银行服务器。大多数情况下，该请求会失败，因为他要求 Bob的认证信息。但是，如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session尚未过期，浏览器的 cookie之中含有Bob的认证信息。这时，悲剧发生了，这个url请求就会得到响应，钱将从Bob的账号转移到Mallory的账号，而Bob当时毫不知情。等以后Bob发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而Mallory则可以拿到钱后逍遥法外
 
 ### 使用token防御CSRF攻击
 

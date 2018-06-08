@@ -2,7 +2,7 @@
 layout: post
 title: 在Web框架层面思考安全问题
 categories: 网络安全之web安全
-tags: web web安全 攻击 防御 web框架 HTML注入 XSS CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法
+tags: web web安全 攻击 防御 web框架 HTML注入 XSS HtmlEncode OWASP CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法
 ---
 
 MVC架构将Web应用分为三层
@@ -86,9 +86,11 @@ function test(){
 
 ![](../media/image/2018-06-08/04.png)
 
+>XSS的本质还是一种“HTML注入”，用户的数据被当成了HTML代码一部分来执行，从而混淆了原本的语义，产生了新的语义
+
 >讲到底，XSS攻击与防御就是在基于HTML语法、CSS语法、JavaScript语法、HTTP协议规范的基础上进行的“文字游戏”！具体能玩出什么花样，就看你对HTML、CSS、JavaScript、HTTP的熟悉程度了！
 
-**在MVC框架中解决XSS**
+**正确的防御**
 
 在View层，可以解决XSS问题。XSS攻击是在用户的浏览器上执行的，其形成过程则是在服务端页面渲染时，引入了恶意的HTML代码导致的
 
@@ -103,11 +105,126 @@ function test(){
 * 在CSS中输出变量
 * 在URL中输出变量
 
-针对不同的情况，使用不同的编码函数！
+下面将用变量“$var”表示用户数据，它将被填充入HTML代码中，可能存在以下场景
 
-但是当前流行的MVC框架中，View层常用的技术是使用模板引擎对页面进行渲染，比如在Flask中的Jinja2
+**在HTML标签中输出**
 
+```php
+<div>$var</div>
 
+<a href=# >$var</a>
+```
+
+所有在标签中输出的变量，如果没有进行任何处理，都会导致直接产生XSS
+
+在这种场景下，XSS的利用方式一般是构造一个script标签，或者是任何能够产生脚本执行方式的代码，比如
+
+```html
+<div><script>alert(/xss/)</script></div>
+
+<a href=# ><img src=# onerror=alert(1) /></a>
+```
+
+防御方法就是对变量使用HtmlEncode
+
+**在HTML属性中输出变量**
+
+```php
+<div id="abc" name="$var"></div>
+```
+
+与在HTML标签中输出类似，可能的攻击方法：
+
+```html
+<div id="abc" name=""><script>alert(/xss/)</script><"" ></div>
+```
+
+防御方法也是采用HtmlEncode
+
+在OWASP ESAPI中推荐了一种更严格的HtmlEncode——除了字母、数字外，其他所有的特殊字符都被编码成HTMLEntities
+
+```java
+String safe = ESAPI.encoder().encodeForHTMLAttribute(request.getParameter("input"));
+```
+
+这种严格的编码方式，可以保证不出任何安全问题
+
+**在script标签中输出变量**
+
+在script标签中输出时，首先应该确保输出的变量在引号中
+
+```php
+<script>
+var x = "&var";
+</script>
+```
+
+攻击者首先需要闭合引号才能实施XSS攻击
+
+```html
+<script>
+var x ="";alert(/xss/);//";
+</script>
+```
+
+防御时使用JavaScriptEncode
+
+**在事件中输出变量**
+
+在事件中输出和在script标签中输出蕾西
+
+```php
+<a href=# onclick="funcA('$var')">test</a>
+```
+
+可能的攻击方法是
+
+```html
+<a href=# onclick="funcA('');alert(/xss/);//" >test</a>
+```
+
+防御时使用JavaScriptEncode
+
+**在CSS中输出变量**
+
+在CSS和style、style attribute中形成XSS的方式非常多样化，参考下面几个XSS的例子
+
+```html
+<STYLE>@import 'http://ha.ckers.org/xss.css';</STYLE>
+<STYLE>BODY{-moz-binding:url("http://ha.ckers.org/xssmoz.xml#xss")}</STYLE>
+<XSS STYLE="behavior: url(xss.htc);">
+<STYLE>li  {list-style-image: url("javascript:alert('XSS')")}</STYLE><UL><LI>XSS
+<DIV STYLE="background-image: url(javascript:alert('XSS'))">
+<DIV STYLE="width: expression(alert('XSS'));">
+```
+
+所以，一般来说，尽可能禁止用户可控制的变量在`<style>标签`、`HTML标签的style属性`以及`CSS文件`中输出。如果一定有这样的需要，则推荐使用OWASP ESAPI中的encodeForCSS()函数
+
+```java
+String safe = ESAPI.encoder().encodeForCSS(request.getParameter("input"));
+```
+
+其实现原理类似于ESAPI.encoder().encodeForJavaScript()函数，除了字母、数字外的所有字符都被编码为十六进制形式“\uHH”
+
+**在URL中输出变量**
+
+在地址中输出也比较复杂。一般来说，在URL的path(路径)或者search(参数)中输出，使用URLEncode即可。URLEncode会将字符转换为“%HH”格式，比如空格就是"%20"，"<"就是"%3c"
+
+```php
+<a href="http://www.evil.com/?test=$var" >test</a>
+```
+
+可能的攻击方法
+
+```html
+<a href="http://www.evil.com/?test=" onclick=alert(1)"" ></a>
+```
+
+经过URLEncode后，变成
+
+```hmtl
+<a href="http://www.evil.com/?test=%22%20onclick%3balert%281%29%22" ></a>
+```
 
 ## Web框架与CSRF防御
 

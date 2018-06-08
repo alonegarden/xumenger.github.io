@@ -226,6 +226,54 @@ String safe = ESAPI.encoder().encodeForCSS(request.getParameter("input"));
 <a href="http://www.evil.com/?test=%22%20onclick%3balert%281%29%22" ></a>
 ```
 
+但是还有一种情况，就是整个URL能够被用户完全控制。这时URL的Protocal和Host部分是不能使用URLEncode的，否则会改变URL的语义
+
+一个URL的组成如下
+
+>[Protocal][Host][Path][Search][Hash]
+
+例如
+
+```
+https://www.evil.com/a/b/c/test?abc=123#ssss
+
+[Protocal] = https://
+[Host] = www.evil.com
+[Path] = /a/b/c/test
+[Search] = ?abc=123
+[Hash] = #ssss
+```
+
+在Protocal与Host中，如果使用严格的URLEncode函数，会把"://"、"."等都编码掉了！
+
+对于如下的输出方式
+
+```php
+<a href="$var">test</a>
+```
+
+攻击者可能会构造伪协议实施攻击
+
+```html
+<a href="javascript:alert(1);">test</a>
+```
+
+除了JavaScript作为伪协议可以执行代码外，还有vbscript、dataURI等伪协议可能导致脚本执行
+
+由此可见，如果用户能够完全控制URL，则可以执行脚本的方式有很多，如何解决这种情况呢？
+
+一般来说，如果变量是整个URL，则应该先检查变量是否以"http"开头（如果不是则自动添加），以保证不会出现伪协议类的XSS攻击
+
+在此之后，再对变量进行URLEncode，即可保证不会有此类的XSS发生！
+
+OWASP ESAPI中有一个URLEncode的实现（此API未解决伪协议问题）
+
+```java
+String safe = ESAPI.encoder().encodeForURL(request.getParameter("input"));
+```
+
+当然，除了以上整理的这些，还有其他很多中XSS攻击方式这里并没有谈及的，只能说攻击和防御就是一个此消彼长的过程！
+
 ## Web框架与CSRF防御
 
 CSRF攻击可以在受害者毫不知情的情况下以受害者名义伪造请求发送给受攻击站点，从而在并未授权的情况下执行在权限保护之下的操作

@@ -2,7 +2,7 @@
 layout: post
 title: 在Web框架层面思考安全问题
 categories: 网络安全之web安全
-tags: web web安全 攻击 防御 web框架 HTML注入 XSS HtmlEncode OWASP CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法
+tags: web web安全 攻击 防御 web框架 HTML注入 XSS HtmlEncode OWASP CSRF SQL注入 MVC View Controller Model HTML CSS JavaScript 服务端 数据库 SQL HTTP 模板引擎 数据持久层 ORM 绑定变量法 编码 编码集 
 ---
 
 MVC架构将Web应用分为三层
@@ -39,7 +39,7 @@ MVC架构将Web应用分为三层
 
 >XSS攻击，通常是指攻击者通过“HTML注入”等方式篡改网页，插入恶意的脚本，从而在用户浏览网页时，控制用户浏览器的一种攻击。在一开始，这种攻击的演示案例是跨域的，所以叫做“跨站脚本”。但是发展到今天，由于JavaScript的功能强大以及网站前端应用的复杂化，是否跨域已经不再重要了。但由于历史原因，XSS这个名字就一直保留下来了
 
-**XSS有多种类型**
+### XSS有多种类型
 
 1)反射型XSS
 
@@ -90,7 +90,7 @@ function test(){
 
 >讲到底，XSS攻击与防御就是在基于HTML语法、CSS语法、JavaScript语法、HTTP协议规范的基础上进行的“文字游戏”！具体能玩出什么花样，就看你对HTML、CSS、JavaScript、HTTP的熟悉程度了！
 
-**正确的防御**
+### 正确的防御
 
 在View层，可以解决XSS问题。XSS攻击是在用户的浏览器上执行的，其形成过程则是在服务端页面渲染时，引入了恶意的HTML代码导致的
 
@@ -107,7 +107,7 @@ function test(){
 
 下面将用变量“$var”表示用户数据，它将被填充入HTML代码中，可能存在以下场景
 
-**在HTML标签中输出**
+### 在HTML标签中输出
 
 ```php
 <div>$var</div>
@@ -127,7 +127,7 @@ function test(){
 
 防御方法就是对变量使用HtmlEncode
 
-**在HTML属性中输出变量**
+### 在HTML属性中输出变量
 
 ```php
 <div id="abc" name="$var"></div>
@@ -149,7 +149,7 @@ String safe = ESAPI.encoder().encodeForHTMLAttribute(request.getParameter("input
 
 这种严格的编码方式，可以保证不出任何安全问题
 
-**在script标签中输出变量**
+### 在script标签中输出变量
 
 在script标签中输出时，首先应该确保输出的变量在引号中
 
@@ -169,7 +169,7 @@ var x ="";alert(/xss/);//";
 
 防御时使用JavaScriptEncode
 
-**在事件中输出变量**
+### 在事件中输出变量
 
 在事件中输出和在script标签中输出蕾西
 
@@ -185,7 +185,7 @@ var x ="";alert(/xss/);//";
 
 防御时使用JavaScriptEncode
 
-**在CSS中输出变量**
+### 在CSS中输出变量
 
 在CSS和style、style attribute中形成XSS的方式非常多样化，参考下面几个XSS的例子
 
@@ -206,7 +206,7 @@ String safe = ESAPI.encoder().encodeForCSS(request.getParameter("input"));
 
 其实现原理类似于ESAPI.encoder().encodeForJavaScript()函数，除了字母、数字外的所有字符都被编码为十六进制形式“\uHH”
 
-**在URL中输出变量**
+### 在URL中输出变量
 
 在地址中输出也比较复杂。一般来说，在URL的path(路径)或者search(参数)中输出，使用URLEncode即可。URLEncode会将字符转换为“%HH”格式，比如空格就是"%20"，"<"就是"%3c"
 
@@ -284,7 +284,7 @@ CSRF攻击可以在受害者毫不知情的情况下以受害者名义伪造请�
 
 但这个请求来自Mallory而不是Bob，他不能通过安全认证，因此该请求不会起作用。此时Mallory想到使用CSRF的攻击方式，他先自己做一个网站，在自己的网站中放入如下代码 `src="http://bank.example/withdraw?account=bob&amount=1000000&for=Mallory"`。并且通过广告等方式诱使Bob来访问他的网站。当 Bob访问该网站时，上述 url就会从 Bob的浏览器发向银行，而这个请求会附带 Bob浏览器中的 cookie一起发向银行服务器。大多数情况下，该请求会失败，因为他要求 Bob的认证信息。但是，如果 Bob 当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的 session尚未过期，浏览器的 cookie之中含有 Bob的认证信息。这时，悲剧发生了，这个 url请求就会得到响应，钱将从 Bob的账号转移到 Mallory的账号，而 Bob当时毫不知情。等以后 Bob发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而 Mallory则可以拿到钱后逍遥法外
 
-**使用token防御CSRF攻击**
+### 使用token防御CSRF攻击
 
 CSRF攻击的目标，一般都会产生“写数据”操作的URL，比如增、删、改；而“读数据”操作并不是CSRF攻击的目标，因为在CSRF的攻击过程中攻击者无法获取服务端返回的数据，攻击者只是借用用户之手触发服务端动作，所以读数据对于CSRF来说并无直接的意义
 
@@ -309,7 +309,7 @@ CSRF攻击的目标，一般都会产生“写数据”操作的URL，比如增�
 
 ![](../media/image/2018-06-08/05.png)
 
-**为什么使用token可以防御CSRF**
+### 为什么使用token可以防御CSRF
 
 CSRF攻击之所以能够成功，是因为攻击者可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于cookie中的，因此攻击者可以在不知道这些验证信息的情况下直接利用用户自己的cookie来通过安全验证
 

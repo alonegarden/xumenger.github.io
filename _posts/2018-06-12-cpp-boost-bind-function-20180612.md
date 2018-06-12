@@ -2,7 +2,7 @@
 layout: post
 title: boost::function和boost::bind
 categories: c/c++之基础语法 c/c++之函数 c/c++之指针与内存 
-tags: c++ boost bind function 函数指针 生命周期 作用域 栈内存 堆内存 
+tags: c++ boost bind function 函数指针 闭包 生命周期 作用域 栈内存 堆内存 
 ---
 
 ## boost::function

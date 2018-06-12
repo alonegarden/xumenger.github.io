@@ -26,8 +26,8 @@ int test(int num,char sign)
 int main()
 {
     Func f;
-    f = &test;  //or f=test
-    f(1,'A');
+    f = &test;  //or f = test;
+    f(1, 'A');
 }
 ```
 
@@ -53,8 +53,8 @@ int test(int num,char sign)
 int main()
 {
     Func f;
-    f = &test;  //or f=test
-    f(1,'A');
+    f = &test;  //or f = test;
+    f(1, 'A');
 }
 ```
 

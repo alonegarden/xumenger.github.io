@@ -324,18 +324,18 @@ int main()
     boost::function<void()> fun1;
     Foo foo;
 
-    //c1指向内存的生命周期在fun1前就结束了
-    //但调用了string(c1)，其得到的匿名变量的生命周期比fun1长
+    //c指向内存的生命周期在fun1前就结束了
+    //但调用了string(c)，其得到的匿名变量的生命周期比fun1长
     //所以这种方式是安全的
-    char *c1 = (char *)malloc(7 * sizeof(char)); 
-    strcpy(c1, "safe");
-    fun1 = boost::bind(&Foo::methodString, &foo, string(c1));
-    c1[0] = '\0';
-    free(c1);
-    c1 = NULL;
+    char *c = (char *)malloc(7 * sizeof(char)); 
+    strcpy(c, "safe");
+    fun1 = boost::bind(&Foo::methodString, &foo, string(c));
+    c[0] = '\0';
+    free(c);
+    c = NULL;
     fun1();
 
-    //在main函数的 } 结束的时候，string(c1)得到的临时变量的生命周期才结束！
+    //在main函数的 } 结束的时候，string(c)得到的临时变量的生命周期才结束！
 }
 ```
 

@@ -2,7 +2,7 @@
 layout: post
 title: OpenResty实践
 categories: lua之基础 大型系统架构 
-tags: nginx web http lua OpenResty Mac c c++
+tags: nginx web http lua OpenResty Mac c c++ 日志 
 ---
 
 ## 部署OpenResty环境
@@ -80,10 +80,14 @@ http {
 
 ![](../media/image/2018-06-13/05.png)
 
+>详细的日志是帮助我们分析用户行为、Web攻击等必不可少的东西！
+
+
 
 ## 参考资料
 
 * [《使用Nginx+Lua(OpenResty)开发高性能Web应用》](http://jinnianshilongnian.iteye.com/blog/2280928)
+* [《跟我学OpenResty(Nginx+Lua)》](http://jinnianshilongnian.iteye.com/blog/2190344)
 * [《OpenResty最佳实践》](https://moonbingbing.gitbooks.io/openresty-best-practices/content/)
 * [《深入 Nginx：我们是如何为性能和规模做设计的》](http://blog.jobbole.com/88766/)
 * [《使用Nginx和uWSGI部署Flask程序》](http://www.xumenger.com/nginx-flask-python-20180331/)

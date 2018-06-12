@@ -52,6 +52,7 @@ worker_processes  1;
 
 # 指定错误日志文件路径
 error_log /Users/xumenger/Desktop/code/OpenResty/logs/error.log;
+pid       /Users/xumenger/Desktop/code/OpenResty/logs/nginx.pid;
 
 events {
     worker_connections 1024;
@@ -96,8 +97,97 @@ http {
 
 >详细的日志是帮助我们分析用户行为、Web攻击等必不可少的东西！
 
-## 
+## 简单的API Server框架
 
+参考[简单API Server框架](https://moonbingbing.gitbooks.io/openresty-best-practices/content/openresty/simple_api.html)实现一个最最简单的数学计算：加、减、乘、除，演示如何搭建简单的API Server
+
+按照上面的思路，直接通过配置文件编写功能代码
+
+```nginx
+# nginx worker 数量
+worker_processes  1;
+
+# 指定错误日志文件路径
+error_log /Users/xumenger/Desktop/code/OpenResty/logs/error.log;
+pid       /Users/xumenger/Desktop/code/OpenResty/logs/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 6699;
+
+        # 加法
+        location /addition {
+           content_by_lua_block {
+                local args = ngx.req.get_uri_args()
+                ngx.say(args.a + args.b)
+            }
+        }
+
+        # 减法
+        location /subtraction {
+            content_by_lua_block {
+                local args = ngx.req.get_uri_args()
+                ngx.say(args.a - args.b)
+            }
+        }
+
+        # 乘法
+        location /multiplication {
+            content_by_lua_block {
+                local args = ngx.req.get_uri_args()
+                ngx.say(args.a * args.b)
+            }
+        }
+
+        # 除法
+        location /division {
+            content_by_lua_block {
+                local args = ngx.req.get_uri_args()
+                ngx.say(args.a / args.b)
+            }
+        }
+    }
+}
+```
+
+修改了配置文件后，执行下面的命令重新加载配置
+
+>/usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+
+然后通`http://127.0.0.1:6699/addition?a=1&b=2`访问服务器，可以看到确实得到的求加法的结果
+
+![](../media/image/2018-06-13/06.png)
+
+但是明显这样的编码方式让人不舒服，能不能把配置文件和Lua代码拆分出来（解耦）
+
+首先把配置文件修改为
+
+```nginx
+# nginx worker 数量
+worker_processes  1;
+
+# 指定错误日志文件路径
+error_log /Users/xumenger/Desktop/code/OpenResty/logs/error.log;
+pid       /Users/xumenger/Desktop/code/OpenResty/logs/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 6699;
+    }
+}
+```
+
+![](../media/image/2018-06-13/07.png)
+
+>OpenResty还支持访问MySQL、Redis，支持模板引擎等，合理组合这些组件完全可以直接使用OpenResty开发出强大的Web应用
 
 ## 简单总结
 

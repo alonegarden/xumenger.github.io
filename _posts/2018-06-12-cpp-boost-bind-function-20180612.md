@@ -132,11 +132,11 @@ int main()
 
 
     cout << endl;
-    //三个参数，有返回值
-    boost::function<int(int, char, int)> func3;
+    boost::function<int(int, int)> func3;
     //bind的时候未传入实参，需要_1、_2、_3作为参数的占位
-    func3 = boost::bind(&Bar::methodTest, &bar, _1, _2, _3);  //用_1、_2、_3作为参数的占位符
-    func3(1, 'c', 2);
+    //下面传入一个实参，其他的用_n做占位符，很明显是一个闭包
+    func3 = boost::bind(&Bar::methodTest, &bar, _1, 'z', _2);
+    func3(1, 2);
 }
 ```
 

@@ -279,8 +279,6 @@ ngx.say(args.a / args.b)
 
 ![](../media/image/2018-06-13/07.png)
 
-比较意外的是
-
 >OpenResty还支持访问MySQL、Redis，支持模板引擎等，合理组合这些组件完全可以直接使用OpenResty开发出强大的Web应用
 
 ## 简单总结

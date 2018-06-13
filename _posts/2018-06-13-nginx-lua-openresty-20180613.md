@@ -156,7 +156,7 @@ http {
 
 修改了配置文件后，执行下面的命令重新加载配置
 
->/usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+>sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
 
 然后通`http://127.0.0.1:6699/addition?a=1&b=2`访问服务器，可以看到确实得到的求加法的结果
 
@@ -179,13 +179,107 @@ events {
 }
 
 http {
+    # 设置默认Lua文件的搜索路径
+    lua_package_path '$prefix/lua/?.lua;/blah/?.lua;;';
+
     server {
         listen 6699;
+
+        # 在代码中使用nginx变量
+        location ~ ^/api/([-_a-zA-Z0-9/]+) {
+            # 准入阶段完成参数验证
+            access_by_lua_file  lua/access_check.lua;
+
+            #内容生成阶段
+            content_by_lua_file lua/$1.lua;
+        }
     }
 }
 ```
 
+在/Users/xumenger/Desktop/code/OpenResty/目录下心中lua文件夹，在该文件夹下编写lua代码，然后分别添加下面的lua源文件
+
+**参数验证**
+
+./lua/comm/param.lua
+
+```lua
+local _M = {}
+
+--对输入参数进行逐个校验，只要不是数字类型就返回false
+function _M.is_number(...)
+    local arg = {...}
+    local num
+    for _, v in ipairs(arg) do
+        num = tonumber(v)
+        if nil == num then
+            return false
+        end
+    end
+
+    return true
+end
+
+return _M
+```
+
+./lua/access_check.lua
+
+```lua
+local param = require("comm.param")
+local args = ngx.req.get_uri_args()
+
+if not args.a or not args.b or not param.is_number(args.a, args.b) then
+    ngx.exit(ngx.HTTP_BAD_REQUEST)
+    return
+end
+```
+
+**四则运算**
+
+./lua/addition.lua
+
+```lua
+local args = ngx.req.get_uri_args()
+ngx.say(args.a + args.b)
+```
+
+./lua/subtraction.lua
+
+```lua
+local args = ngx.req.get_uri_args()
+ngx.say(args.a - args.b)
+```
+
+./lua/multiplication.lua
+
+```lua
+local args = ngx.req.get_uri_args()
+ngx.say(args.a * args.b)
+```
+
+./lua/division.lua
+
+```lua
+local args = ngx.req.get_uri_args()
+ngx.say(args.a / args.b)
+```
+
+然后分别执行下面的命令重启服务、发起请求
+
+>sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+
+>curl '127.0.0.1:6699/api/addition?a=1'
+
+>curl '127.0.0.1:6699/api/subtraction?a=1&b=q'
+
+>curl '127.0.0.1:6699/api/division?a=1&b=0'
+
+>curl '127.0.0.1:6699/api/addition?a=100&b=100'
+
 ![](../media/image/2018-06-13/07.png)
+
+比较意外的是
 
 >OpenResty还支持访问MySQL、Redis，支持模板引擎等，合理组合这些组件完全可以直接使用OpenResty开发出强大的Web应用
 
@@ -202,4 +296,5 @@ http {
 * [《使用Nginx和uWSGI部署Flask程序》](http://www.xumenger.com/nginx-flask-python-20180331/)
 * [《Lua简明教程》](http://www.xumenger.com/lua-20180126/)
 * [《Lua与C/C++混合编程》](http://www.xumenger.com/lua-c-cpp-20180202/)
+* [《Redis下使用Lua脚本》](http://www.xumenger.com/lua-redis-20180127/)
 * [《浅谈 OpenResty》](http://www.linkedkeeper.com/detail/blog.action?bid=1034)

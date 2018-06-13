@@ -2,7 +2,7 @@
 layout: post
 title: OpenResty实践
 categories: lua之基础 大型系统架构 
-tags: nginx web http lua OpenResty Mac c c++ 日志 Web攻击 LuaVM 协程
+tags: nginx web http lua OpenResty Mac c c++ 日志 Web攻击 LuaVM 协程 curl 
 ---
 
 Nginx 采用的是master-worker模型，一个master进程管理多个worker进程，基本的事件处理都是放在woker中，master负责一些全局初始化，以及对worker的管理
@@ -278,6 +278,12 @@ ngx.say(args.a / args.b)
 >curl '127.0.0.1:6699/api/addition?a=100&b=100'
 
 ![](../media/image/2018-06-13/07.png)
+
+不过其实这里存在一个安全问题，我们只是希望提供四则运算的接口，但其实./lua/comm/param.lua和./lua/access_check.lua也都是可以访问的
+
+比如通过curl 'http://localhost:6699/api/access_check?a=10&b=100'发起请求
+
+好在这两个文件都只是一些运算，发起请求也只是占用少许的CPU资源，但假如一些本不计划暴露的接口可以被攻击者访问到，并且这些接口是写操作、或者是会占用大量资源的，那么这就是很危险的行为了
 
 >OpenResty还支持访问MySQL、Redis，支持模板引擎等，合理组合这些组件完全可以直接使用OpenResty开发出强大的Web应用
 

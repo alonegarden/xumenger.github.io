@@ -77,7 +77,9 @@ http {
 
 然后我们用下面的命令启动Nginx
 
->/usr/local/openresty/nginx/sbin/nginx -c ./conf/nginx.conf -p .
+```
+/usr/local/openresty/nginx/sbin/nginx -c ./conf/nginx.conf -p .
+```
 
 ![](../media/image/2018-06-13/03.png)
 
@@ -156,7 +158,9 @@ http {
 
 修改了配置文件后，执行下面的命令重新加载配置
 
->sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+```
+sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+```
 
 然后通`http://127.0.0.1:6699/addition?a=1&b=2`访问服务器，可以看到确实得到的求加法的结果
 
@@ -267,15 +271,13 @@ ngx.say(args.a / args.b)
 
 然后分别执行下面的命令重启服务、发起请求
 
->sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
-
->curl '127.0.0.1:6699/api/addition?a=1'
-
->curl '127.0.0.1:6699/api/subtraction?a=1&b=q'
-
->curl '127.0.0.1:6699/api/division?a=1&b=0'
-
->curl '127.0.0.1:6699/api/addition?a=100&b=100'
+```
+sudo /usr/local/openresty/nginx/sbin/nginx -s reload -c ./conf/nginx.conf -p .
+curl '127.0.0.1:6699/api/addition?a=1'
+curl '127.0.0.1:6699/api/subtraction?a=1&b=q'
+curl '127.0.0.1:6699/api/division?a=1&b=0'
+curl '127.0.0.1:6699/api/addition?a=100&b=100'
+```
 
 ![](../media/image/2018-06-13/07.png)
 

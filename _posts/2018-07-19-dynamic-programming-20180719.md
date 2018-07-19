@@ -99,6 +99,8 @@ int fib(int n){
 
 当然，根据上图，我们知道约束条件：min(A3, T) == path(A3, T)，min(B4, T) == path(B4, T)，min(C2, T) == path(C2, T)
 
+>动态规划的核心是状态和状态转移方程
+
 比如这样一个求解有向无环图的最短路径问题。对应的Python 代码为
 
 ```python

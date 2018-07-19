@@ -2,7 +2,7 @@
 layout: post
 title: 最美的动态规划
 categories: 深入学习之算法 深入学习之数据结构 重学算法与数据结构
-tags: 算法 数据结构 动态规划 子问题 状态 状态函数 斐波那契 DP 最短路径 有向无环图 DAG 图论 递归 循环 C++ C 
+tags: 算法 数据结构 动态规划 子问题 状态 状态转移函数 斐波那契 DP 最短路径 有向无环图 DAG 图论 递归 循环 C++ C 
 ---
 
 >the basic idea of dynamic programming is to take a problem, split into subproblems, solve those subproblems and reuse the solutions to your subproblems.
@@ -91,7 +91,43 @@ int fib(int n){
 
 ## 最短路径问题
 
+比如下图怎么求解S 到V 的最短路径？
 
+![image](../media/image/2018-07-19/01.png)
+
+很明显，其状态转移函数应该为：min(S, T) = min{ min(A1, T) + path(S, A1),  min(B1, T) + path(S, B1), min(C1, T) + path(S, C1)}，然后依次类推求出 min(A1, T)、min(B1, T)、min(C1, T)，……
+
+当然，根据上图，我们知道约束条件：min(A3, T) == path(A3, T)，min(B4, T) == path(B4, T)，min(C2, T) == path(C2, T)
+
+比如这样一个求解有向无环图的最短路径问题。对应的Python 代码为
+
+```python
+'''
+* W：权重图
+* d[u]：u 到终点的距离
+* s、t：起点和终点
+'''
+def dag_dp(W, s, t, d):
+    if s == t:
+        return 0;
+    if s not in d:
+        d[s] = min(W[s][v] + dag_dp(W, v, t, d) for v in W[s])
+    return d[s]
+
+DAG = {
+    'a': {'b': 0},
+    'b': {'c': 4, 'd': 6},
+    'c': {'g': 2, 'h': -6},
+    'd': {'f': 3, 'e': 5},
+    'e': {'g': 0, 'h': -6},
+    'f': {'i': -1},
+    'g': {'h': 4},
+    'h': {'i': 7},
+    'i': {}
+}
+d = {}
+print(dag_dp(DAG, 'a', 'i', d))
+```
 
 ## 参考资料
 

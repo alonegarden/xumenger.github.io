@@ -2,7 +2,7 @@
 layout: post
 title: 最美的动态规划
 categories: 深入学习之算法 深入学习之数据结构 重学算法与数据结构
-tags: 算法 数据结构 动态规划 斐波那契 DP 最短路径 有向无环图 DAG 递归 循环 C++ C 
+tags: 算法 数据结构 动态规划 子问题 状态 状态函数 斐波那契 DP 最短路径 有向无环图 DAG 图论 递归 循环 C++ C 
 ---
 
 >the basic idea of dynamic programming is to take a problem, split into subproblems, solve those subproblems and reuse the solutions to your subproblems.
@@ -23,7 +23,7 @@ int fib(int n){
 
 参考[《递归和循环》](http://www.xumenger.com/recursion-vs-loop-20170830/)，可以知道因为存在大量的重复运算，所以这种实现的复杂度达到`O(2^N)`
 
-**自顶向下的备忘录法**
+**自顶向下的记忆法**
 
 每当我们计算出一个斐波那契数字，就把它放到一个字典中，然后当我们要计算某个斐波那契数字的时候，先检查字典中是否已经存在这个数，如果存在就直接拿出来，否则再进行计算
 
@@ -31,6 +31,7 @@ int fib(int n){
 int compute(int n, int *memo){
     if(0 != memo[n])
         return memo[n];
+    
     if(n <= 2)
         memo[n] = 1;
     else
@@ -50,7 +51,7 @@ int fib(int n){
 
 用空间换时间的策略，把已经计算出来的结果保存起来，下次直接从对应的内存中获取，而不需要进行重复运算！现在的时间复杂度从 O(2^N) 降到 O(N)
 
->这正是动态规划的核心：先计算出子问题，再由子问题计父问题！
+>这正是动态规划的核心：先计算出子问题，再由子问题计父问题！但是在设计动态规划算法中真正的挑战在于如何正确找出什么是所谓的“子问题”！
 
 **自底向上的动态规划**
 
@@ -76,7 +77,9 @@ int fib(int n){
 }
 ```
 
->当然！这是一个极其简单的例子！！！！
+这里解释一下所谓的自底向上和自顶向下！上面的自顶向下是要计算fib(n)，就要先计算出fib(n-1) 和fib(n-2)，然后逐步往下递归计算；而自底向上则是从fib(1)、fib(2) 往上递推得到fib(n)
+
+当然！这只是一个极其简单的例子！！！！
 
 ## 最短路径
 

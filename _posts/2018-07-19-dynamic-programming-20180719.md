@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 最美的动态规划
+title: 美丽的动态规划
 categories: 深入学习之算法 深入学习之数据结构 重学算法与数据结构
-tags: 算法 数据结构 动态规划 子问题 状态 状态转移函数 斐波那契 DP 最短路径 有向无环图 DAG 图论 递归 循环 C++ C 
+tags: 算法 数据结构 动态规划 子问题 状态 状态转移函数 斐波那契 DP 最短路径 有向无环图 DAG 图论 递归 循环 C++ C 自顶向下的记忆法 自底向上 
 ---
 
 >the basic idea of dynamic programming is to take a problem, split into subproblems, solve those subproblems and reuse the solutions to your subproblems.
@@ -95,7 +95,7 @@ int fib(int n){
 
 ![image](../media/image/2018-07-19/02.png)
 
-很明显，其状态转移函数应该为：min(S, T) = min{ min(A1, T) + path(S, A1),  min(B1, T) + path(S, B1), min(C1, T) + path(S, C1)}，然后依次类推求出 min(A1, T)、min(B1, T)、min(C1, T)，……
+很明显，其**状态转移函数**应该为：min(S, T) = min{ min(A1, T) + path(S, A1),  min(B1, T) + path(S, B1), min(C1, T) + path(S, C1)}，然后依次类推求出 min(A1, T)、min(B1, T)、min(C1, T)，……
 
 当然，根据上图，我们知道约束条件：min(A3, T) == path(A3, T)，min(B4, T) == path(B4, T)，min(C2, T) == path(C2, T)
 
@@ -110,9 +110,12 @@ int fib(int n){
 def dag_dp(W, s, t, d):
     if s == t:
         return 0;
+    # 如果d[s]没有计算过，那么重新计算
+    # 否则直接返回结果即可
     if s not in d:
         d[s] = min(W[s][v] + dag_dp(W, v, t, d) for v in W[s])
     return d[s]
+
 
 DAG = {
     'a': {'b': 0},

@@ -31,7 +31,7 @@ int fib(int n){
 int compute(int n, int *memo){
     if(0 != memo[n])
         return memo[n];
-    
+
     if(n <= 2)
         memo[n] = 1;
     else
@@ -81,9 +81,11 @@ int fib(int n){
 
 当然！这只是一个极其简单的例子！！！！
 
-## 最短路径
+## 有向无环图的最短路径
 
+其实上面的斐波那契问题可以转换为有向无环图（DAG）的最短路径问题
 
+![image](../media/image/2018-07-19/01.png)
 
 ## 参考资料
 

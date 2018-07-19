@@ -93,7 +93,7 @@ int fib(int n){
 
 比如下图怎么求解S 到V 的最短路径？
 
-![image](../media/image/2018-07-19/01.png)
+![image](../media/image/2018-07-19/02.png)
 
 很明显，其状态转移函数应该为：min(S, T) = min{ min(A1, T) + path(S, A1),  min(B1, T) + path(S, B1), min(C1, T) + path(S, C1)}，然后依次类推求出 min(A1, T)、min(B1, T)、min(C1, T)，……
 

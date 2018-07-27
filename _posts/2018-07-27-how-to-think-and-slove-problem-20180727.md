@@ -64,7 +64,13 @@ tags: python 闰年 日期 时间 软件工程 测试用例 测试 自动化测�
 
 ```python
 def getExpirationDate(year, month, day):
-	return [year, month, day]
+    next_year = 0
+    next_month = 0
+    next_day = 0
+
+    # 后续完善逻辑
+
+    return [next_year, next_month, next_day]
 ```
 
 **首先去分析所有可能的场景**
@@ -94,7 +100,7 @@ def judgeLegalDate(year, month, day):
 * 4、6、9、11 每个月30 天
 * 2 月，闰年29 天，非闰年28 天
 * 跨年的情况，从去年的12 月到今年的1 月
-	* 如果现在是12 月，那么 next_year = year+1; next_month = 1
+    * 如果现在是12 月，那么 next_year = year+1; next_month = 1
     * 如果现在不是12 月，那么 next_year = year; next_month = month + 1
 
 所以可能就要设计判断闰年的函数、针对31/30/29/28 天的月份进行分别处理、考虑跨年的情况
@@ -111,6 +117,8 @@ def getExpirationDate(year, month, day):
     next_day = 0
 
     # 后续完善逻辑
+
+    return [next_year, next_month, next_day]
 ```
 
 **设计测试用例**
@@ -275,8 +283,8 @@ if (__name__ == '__main__'):
 * 编写代码实现逻辑
 * 执行测试用例，检查代码逻辑是否正确
 * 上面没有提到这样几点，也很重要
-	* code review，看看哪些公共逻辑可以解耦出来作为单独的函数或类……
-	* 扩展性，以上只要求实现获取一个月后的日期，那如果要求扩展功能，获取2、3、4个月……之后的日期呢？
+    * code review，看看哪些公共逻辑可以解耦出来作为单独的函数或类……
+    * 扩展性，以上只要求实现获取一个月后的日期，那如果要求扩展功能，获取2、3、4个月……之后的日期呢？
 
 对于平时遇到的很多平常问题都可以通过这个套路去搞定
 

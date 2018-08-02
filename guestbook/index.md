@@ -5,7 +5,6 @@ comments: yes
 thread: 616
 ---
 
-![come on](guest.jpg)
+![come on](../media/image/xu_menger.jpg)
 
-
-来了，就留下你的足迹吧～
+请通过我的微信公共号(xu\_menger)给我留言！

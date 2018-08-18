@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java服务端开发：容器
+title: Java服务端开发：一些常用的容器
 categories: 大型系统架构 java之多线程 java之面向对象
 tags: Java服务端开发 Java 服务端 服务器 HashMap HashSet List 数据结构 算法 算法与数据结构 STL C++ 红黑树 
 ---

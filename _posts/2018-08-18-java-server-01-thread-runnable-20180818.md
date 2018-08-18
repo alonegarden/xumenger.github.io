@@ -2,7 +2,7 @@
 layout: post
 title: Java服务端开发：Thread与Runnable
 categories: 大型系统架构 java之多线程 java之面向对象
-tags: Java服务端开发 Java 服务端 服务器 Thread Runnable Delphi C++ Windows JVM 类 接口 
+tags: Java服务端开发 Java 服务端 服务器 Thread Runnable Delphi C++ Windows JVM 类 接口 Override 
 ---
 
 之前使用Delphi、C++ 在Windows 下做开发，总结了很多[多线程](http://www.xumenger.com/tags/#%E5%A4%9A%E7%BA%BF%E7%A8%8B)的文章，运行原理不再多言，因为现在要用到Java 做服务端开发，也要用到多线程的东西，所以还是写一篇流水账文章把相关的API 梳理一遍吧
@@ -39,7 +39,7 @@ class AThread extends Thread{
 
 编译运行的效果如下
 
-![](../media/image/2018-08-18/01-01.jpg)
+![](../media/image/2018-08-18/01-01.png)
 
 ## Runnable接口
 
@@ -70,4 +70,4 @@ class Runner implements Runnable{
 }
 ```
 
-![](../media/image/2018-08-18/01-02.jpg)
+![](../media/image/2018-08-18/01-02.png)

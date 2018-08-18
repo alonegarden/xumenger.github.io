@@ -19,9 +19,10 @@ JDK7 提供了以下7 个阻塞队列
 
 阻塞队列提供了下列四种处理方法
 
-    | 抛异常      | 特定值    | 阻塞     | 超时 
-----|------------|----------|----------|-----------------------------
-插入 | add(o)     | offer(o) | put(o)  | offer(o, timeout, timeunit)
-移除 | remove(o)  | poll(o)  | take(o) | poll(timeout, timeunit)
-检查 | element(o) | peek(o)  |         |
+ 操作 | 抛异常      | 特定值    | 阻塞     | 超时 
+-----|------------|----------|----------|-----------------------------
+插入  | add(o)     | offer(o) | put(o)  | offer(o, timeout, timeunit)
+移除  | remove(o)  | poll(o)  | take(o) | poll(timeout, timeunit)
+检查  | element(o) | peek(o)  |         |
 
+## 

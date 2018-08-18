@@ -2,7 +2,7 @@
 layout: post
 title: 分布式计算的八个谬论
 categories: 大型系统架构
-tags: 分布式 分布式系统 分布式计算 MapReduce 分布式存储 GFS Bigtable 网络 分布式事务 分布式锁 分布式监控 
+tags: 分布式 分布式系统 分布式计算 MapReduce 分布式存储 GFS Bigtable 网络 分布式事务 分布式锁 分布式监控 微服务 
 ---
 
 >英文原文[The Eight Fallacies of Distributed Computing](https://www.red-gate.com/simple-talk/blogs/the-eight-fallacies-of-distributed-computing/)

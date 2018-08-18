@@ -62,8 +62,8 @@ class Runner implements Runnable{
 
     public static void main(String[] args){
         Runner r = new Runner();
-        Thread t1 = new Thread(r, "thread-1");
-        Thread t2 = new Thread(r, "thread-2");
+        Thread t1 = new Thread(r, "线程1");
+        Thread t2 = new Thread(r, "线程2");
         t1.start();
         t2.start();
     }
@@ -73,3 +73,4 @@ class Runner implements Runnable{
 编译运行的效果如下
 
 ![](../media/image/2018-08-18/01-02.png)
+

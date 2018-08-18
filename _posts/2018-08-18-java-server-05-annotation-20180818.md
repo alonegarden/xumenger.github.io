@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java服务端开发：Java注解
+title: Java服务端开发：Java Annotation
 categories: 大型系统架构 java之多线程 java之面向对象
 tags: Java服务端开发 Java 服务端 服务器 注解 装饰器 Python Spring-Boot Flask 
 ---
@@ -34,7 +34,7 @@ public class TestController {
 }
 ```
 
-在看[《使用Flask进行简单Web开发》](http://www.xumenger.com/python2-flask-20170701/)中讲到Flask 在做URL 路由的时候是这样的
+在[《使用Flask进行简单Web开发》](http://www.xumenger.com/python2-flask-20170701/)中讲到Flask 在做URL 路由的时候是这样的
 
 ```python
 # -*- coding: utf-8 -*-
@@ -56,4 +56,11 @@ if __name__ == '__main__':
 ```
 
 是不是很像？！那到底Java 的注解和Python 的装饰器
+
+## Java元注解
+
+
+
+## 编写自己的注解
+
 

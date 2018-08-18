@@ -15,6 +15,8 @@ class Main{
 }
 ```
 
+编译运行的效果如下
+
 ![](../media/image/2018-08-18/03-01.png)
 
 ## Condition
@@ -26,5 +28,7 @@ class Main{
     }
 }
 ```
+
+编译运行的效果如下
 
 ![](../media/image/2018-08-18/03-02.png)

@@ -74,6 +74,8 @@ class Runner implements Runnable{
 
 ![](../media/image/2018-08-18/01-02.png)
 
+虽然是多线程，但为什么没有并发的效果呢：线程1 运行完，线程2 才开始运行？
+
 如果把上面Runner 类的run() 方法的synchronized 关键字去掉会怎么样？
 
 ```java

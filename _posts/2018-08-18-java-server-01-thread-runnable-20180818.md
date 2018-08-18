@@ -74,3 +74,38 @@ class Runner implements Runnable{
 
 ![](../media/image/2018-08-18/01-02.png)
 
+如果把上面Runner 类的run() 方法的synchronized 关键字去掉会怎么样？
+
+```java
+class Runner implements Runnable{
+    @Override
+    public void run(){
+        for(int i=0; i<5; i++){
+            System.out.println(Thread.currentThread().getName());
+            try{
+                Thread.sleep(100);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public static void main(String[] args){
+        Runner r = new Runner();
+        Thread t1 = new Thread(r, "线程1");
+        Thread t2 = new Thread(r, "线程2");
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+编译运行的效果如下
+
+![](../media/image/2018-08-18/01-03.png)
+
+## 多线程安全
+
+讲到多线程，那么不得不讲一下多线程并发下的安全问题！
+

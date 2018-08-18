@@ -30,12 +30,84 @@ JDK7 提供了以下7 个阻塞队列
 队列在多线程
 
 ```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
+class Producer implements Runnable{
+    private BlockingQueue<Integer> queue;
+    private Integer counter = 0;
+
+    Producer(BlockingQueue<Integer> q){
+        queue = q;
+    }
+
+    public void run(){
+        try{
+            while(true){
+                // 当队列满时，生产者阻塞
+                queue.put(produce());
+                Thread.sleep(1000);
+            }
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    int produce(){
+        counter++;
+        System.out.println("Produce: " + counter.toString());
+        return counter;
+    }
+}
+
+class Consumer implements Runnable{
+    private BlockingQueue<Integer> queue;
+    private Integer index;
+
+    Consumer(BlockingQueue<Integer> q, Integer i){
+        queue = q;
+        index = i;
+    }
+
+    public void run(){
+        try{
+            while(true){
+                // 当队列空时，消费者阻塞等待
+                consume(queue.take());
+            }
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    void consume(Integer num){
+        System.out.println("Consume-" + index.toString() + ": " + num.toString());
+    }
+}
+
+class Main{
+    public static void main(String[] args){
+        BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(2);
+        Producer p = new Producer(queue);
+        Consumer c1 = new Consumer(queue, 1);
+        Consumer c2 = new Consumer(queue, 2);
+
+        new Thread(p).start();
+        new Thread(c1).start();
+        new Thread(c2).start();
+    }
+}
 ```
 
 编译运行效果如下
 
 ![](../media/image/2018-08-18/02-01.png)
+
+## 更多的方法
+
+上面的例子中用到了put() 和take() 方法
+
+
 
 ## 分布式队列
 

@@ -8,7 +8,11 @@ tags: Java服务端开发 Java 服务端 服务器 Lock Condition 多线程 线�
 ## Lock
 
 ```java
+class Main{
+    public static void main(String[] args){
 
+    }
+}
 ```
 
 ![](../media/image/2018-08-18/03-01.png)
@@ -16,7 +20,11 @@ tags: Java服务端开发 Java 服务端 服务器 Lock Condition 多线程 线�
 ## Condition
 
 ```java
+class Main{
+    public static void main(String[] args){
 
+    }
+}
 ```
 
 ![](../media/image/2018-08-18/03-02.png)

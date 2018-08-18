@@ -59,7 +59,6 @@ class Runner implements Runnable{
         }
     }
 
-
     public static void main(String[] args){
         Runner r = new Runner();
         Thread t1 = new Thread(r, "线程1");
@@ -91,7 +90,6 @@ class Runner implements Runnable{
             }
         }
     }
-
 
     public static void main(String[] args){
         Runner r = new Runner();

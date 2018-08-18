@@ -85,6 +85,7 @@ class Consumer implements Runnable{
     }
 }
 
+// main function
 class Main{
     public static void main(String[] args){
         BlockingQueue<Integer> queue = new ArrayBlockingQueue<Integer>(2);

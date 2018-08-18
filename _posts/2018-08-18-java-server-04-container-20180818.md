@@ -12,9 +12,27 @@ tags: Java服务端开发 java 服务端 服务器 HashMap HashSet HashTable Lis
 ## HashSet
 
 ```java
+import java.util.*;
+
 class Main{
     public static void main(String[] args){
+        HashSet<String> set = new HashSet<String>();
 
+        set.add("xumenger");
+        set.add("joker");
+        set.add("haha");
+
+        System.out.println(set);
+        System.out.println("Set contains \"xumenger\" or not: " + set.contains("xumenger"));
+
+        set.remove("joker");
+        System.out.println("List after removing joker: " + set);
+
+        System.out.println("Iterating over set:");
+        Iterator<String> it = set.iterator();
+        while (it.hasNext()){
+            System.out.println("  " + it.next());
+        }
     }
 }
 ```
@@ -26,9 +44,26 @@ class Main{
 ## HashMap
 
 ```java
+import java.util.*;
+
 class Main{
     public static void main(String[] args){
+        int array[] = {10, 20, 30, 40, 50, 50, 10};
 
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+
+        for(int i=0; i<array.length; i++){
+            Integer c = map.get(array[i]);
+
+            if(null == map.get(array[i]))
+                map.put(array[i], 1);
+            else
+                map.put(array[i], ++c);
+        }
+
+        for(Map.Entry<Integer, Integer> m: map.entrySet()){
+            System.out.println("Frequency of " + m.getKey() + " is " + m.getValue());
+        }
     }
 }
 ```
@@ -37,12 +72,32 @@ class Main{
 
 ![](../media/image/2018-08-18/04-02.png)
 
-## HashTable
+## Hashtable
 
 ```java
+import java.util.*;
+
 class Main{
     public static void main(String[] args){
+        Hashtable ht = new Hashtable();
+        Enumeration keys;
+        String str;
+        double d;
 
+        ht.put("111", new Double(1.1));
+        ht.put("222", new Double(2.2));
+        ht.put("333", new Double(3.3));
+
+        keys = ht.keys();
+        while(keys.hasMoreElements()){
+            str = (String)keys.nextElement();
+            System.out.println(str + ": " + ht.get(str));
+        }
+        System.out.println();
+
+        d = ((Double)ht.get("222")).doubleValue();
+        ht.put("222", new Double(d + 1000));
+        System.out.println("222's new value: " + ht.get("222"));
     }
 }
 ```

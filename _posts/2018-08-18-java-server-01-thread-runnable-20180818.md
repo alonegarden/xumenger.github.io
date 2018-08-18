@@ -9,12 +9,11 @@ tags: Java服务端开发 Java 服务端 服务器 Thread Runnable Delphi C++ Wi
 
 可以说这个【Java服务端开发】系列的文章就是一系列的流水账文章，更多的是介绍API 怎么用的，虽然可以参考[官方网站](http://www.oracle.com/technetwork/cn/java/index.html)和[官方文档](https://docs.oracle.com/en/java/)。我还是写下来是因为选择其中常用的点，以后倒方便随时翻阅参考！
 
-继续说Java 下的多线程！Java 中创建线程有两种方法
+继续说Java 下的多线程！Java 中创建线程有两种方法：
 
-1. 继承Thread 类，重写Thread 的run() 方法
-2. 实现Runnable 接口，实例化Thread 类
+## Thread类
 
-## Thread
+继承Thread 类，重写Thread 的run() 方法
 
 ```java
 class AThread extends Thread{
@@ -42,7 +41,9 @@ class AThread extends Thread{
 
 ![](../media/image/2018-08-18/01-01.jpg)
 
-## Runnable
+## Runnable接口
+
+实现Runnable 接口，实例化Thread 类
 
 ```java
 class Runner implements Runnable{

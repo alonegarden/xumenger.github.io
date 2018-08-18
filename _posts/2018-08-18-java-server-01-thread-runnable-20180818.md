@@ -70,4 +70,6 @@ class Runner implements Runnable{
 }
 ```
 
+编译运行的效果如下
+
 ![](../media/image/2018-08-18/01-02.png)

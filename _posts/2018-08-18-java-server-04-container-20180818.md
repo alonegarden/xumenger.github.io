@@ -2,7 +2,7 @@
 layout: post
 title: Java服务端开发：一些常用的容器
 categories: 大型系统架构 java之多线程 java之面向对象
-tags: Java服务端开发 Java 服务端 服务器 HashMap HashSet HashTable List 数据结构 算法 算法与数据结构 C++ STL 红黑树 哈希 
+tags: Java服务端开发 java 服务端 服务器 HashMap HashSet HashTable List 数据结构 算法 算法与数据结构 C++ STL 红黑树 哈希 
 ---
 
 算法与数据结构一直是计算机科学领域的核心所在，如何合理的利用有限的内存资源、如何利用有限的CPU资源提升性能、如何优化磁盘与内存间的数据加载等，其实都可以以算法与数据结构为切入点找到原因，以及找到解决方法

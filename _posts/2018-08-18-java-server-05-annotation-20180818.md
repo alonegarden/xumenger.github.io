@@ -2,7 +2,7 @@
 layout: post
 title: Java服务端开发：Java Annotation
 categories: 大型系统架构 java之多线程 java之面向对象
-tags: Java服务端开发 Java 服务端 服务器 注解 装饰器 Python Spring-Boot Flask 
+tags: Java服务端开发 java 服务端 服务器 注解 装饰器 Python Spring-Boot Flask 框架 反射机制 class AOP 
 ---
 
 在[《Spring Boot开发Web程序》](http://www.xumenger.com/java-springboot-20180322/)讲到Spring Boot 在做URL 路由的时候使用到了**注解**
@@ -63,4 +63,11 @@ if __name__ == '__main__':
 
 ## 编写自己的注解
 
+```java
+
+```
+
+![](../media/image/2018-08-18/05-0.png)
+
+## class对象与java反射机制
 

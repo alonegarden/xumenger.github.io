@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java服务端开发：阻塞队列
+title: Java服务端开发：BlockingQueue
 categories: 大型系统架构 java之多线程 java之面向对象
 tags: Java服务端开发 Java 服务端 服务器 阻塞队列 BlockingQueue 阻塞 非阻塞 poll 生产者 消费者 多线程 线程安全 数据机构 
 ---
@@ -25,4 +25,10 @@ JDK7 提供了以下7 个阻塞队列
 移除  | remove(o)  | poll(o)  | take(o) | poll(timeout, timeunit)
 检查  | element(o) | peek(o)  |         |
 
-## 
+## 生产者消费者
+
+队列在多线程
+
+
+## 分布式队列
+

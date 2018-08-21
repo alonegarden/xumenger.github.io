@@ -2,7 +2,7 @@
 layout: post
 title: Java服务端开发：并发中的竞态条件
 categories: 大型系统架构 java之多线程 java之面向对象
-tags: Java服务端开发 java 服务端 服务器 Lock Condition 多线程 线程 锁 线程同步 synchronized Semaphore CAS理论 CAS 
+tags: Java服务端开发 java 服务端 服务器 Lock Condition 多线程 线程 锁 线程同步 synchronized Semaphore CAS理论 CAS AtomicInteger 
 ---
 
 ## Lock

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java服务端开发：Java Annotation
+title: Java服务端开发：理解Java注解
 categories: 大型系统架构 java之多线程 java之面向对象
 tags: Java服务端开发 java 服务端 服务器 注解 装饰器 Python Spring-Boot Flask 框架 反射机制 class AOP 
 ---

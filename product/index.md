@@ -4,23 +4,23 @@ layout: page
 ---
 
 <ul class="listing2">
-{% for post in paginator.posts %}
-  {% capture y %}{{post.date | date:"%Y"}}{% endcapture %}
+{% for blog in paginator.blogs %}
+  {% capture y %}{{blog.date | date:"%Y"}}{% endcapture %}
   {% if year != y %}
     {% assign year = y %}
     <li class="listing-seperator">{{ y }}</li>
   {% endif %}
   <li class="listing-item">
-    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    <time datetime="{{ blog.date | date:"%Y-%m-%d" }}">{{ blog.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ blog.url }}" title="{{ blog.title }}">{{ blog.title }}</a>
     {% if site.truncate %}
-    <p>{{ post.content | strip_html | truncate: site.truncate }}</p>
+    <p>{{ blog.content | strip_html | truncate: site.truncate }}</p>
     {% endif%}
   </li>
 {% endfor %}
 </ul>
 
-<div id="post-pagination" class="paginator">
+<div id="blog-pagination" class="paginator">
 
   {% if paginator.previous_page %}
     {% if paginator.previous_page == 1 %}
@@ -51,5 +51,5 @@ layout: page
   {% else %}
     <span class="next disabled" >后页&gt;</span>
   {% endif %}
-  (共{{ paginator.total_posts }}篇)
+  (共{{ paginator.total_blogs }}篇)
 </div>

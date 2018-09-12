@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Java服务端开发：BlockingQueue
+title: Java服务端开发：消息队列
 categories: 大型系统架构 java之多线程 java之面向对象
 tags: Java服务端开发 java 服务端 服务器 阻塞队列 BlockingQueue 阻塞 非阻塞 poll 生产者 消费者 多线程 线程安全 数据机构 分布式队列 分布式消息队列 
 ---

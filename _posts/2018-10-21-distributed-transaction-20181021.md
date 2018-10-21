@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 分布式事务
+title: TCC分布式事务
 categories: 大型系统架构 
 tags: 分布式事务 TCC TCC-Transaction 事务 数据库 ACID 数据一致性 注解 柔性事务 刚性事务 CAP BASE 
 ---
@@ -21,7 +21,11 @@ OK，在单体应用中可以通过数据库的ACID 事务机制来保证数据�
 
 但如果是在一个分布式系统中做开发，尤其是在一个微服务架构的系统中，一个业务操作可能分布在多台机器、多个应用中，当中任何一步的失败都会导致整个业务操作的失败，这个时候如何保证数据的一致性呢？！
 
-## CAP 理论
+## 分布式理论
+
+下面分别介绍CAP 理论和BASE 理论
+
+**CAP 理论**
 
 在[分布式计算的八大谬论](http://www.xumenger.com/the-eight-fallacies-of-distributed-computing-20180817/)中有提到过分布式系统的难点，即分布式的网络环境很复杂
 
@@ -35,7 +39,7 @@ OK，在单体应用中可以通过数据库的ACID 事务机制来保证数据�
 
 具体而言，在分布式系统中，在任何数据库设计中，一个Web 应用至多只能同时支持上面的两个属性
 
-## BASE 理论
+**BASE 理论**
 
 在分布式系统中，我们往往追求的是高可用性，它的重要性程度比一致性要高，那么如何实现高可用性呢？这里就涉及到另外一个理论：BASE 理论，它是对CAP 定理进行进一步扩充的
 
@@ -45,11 +49,27 @@ OK，在单体应用中可以通过数据库的ACID 事务机制来保证数据�
 
 BASE 理论是对CAP 中的一致性和可用性进行权衡后的结果，理论的核心在于：我们无法做到强一致性，但每个应用都可以根据自身业务的特点，采用适当的方法来使系统达到最终一致性
 
-## TCC-Transaction
+## TCC补偿事务机制
 
->[TCC-Transaction](https://github.com/changmingxie/tcc-transaction)是一个开源的TCC 分布式事务框架
+TCC（Try/Confirm/Cancel）其实就是采用的补偿机制，其核心思想是：针对每个操作，都要注册一个与之对应的确认和补偿操作
 
->[《tcc-transaction 官方文档 —— 使用指南1.2.x》](https://github.com/changmingxie/tcc-transaction/wiki/%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%971.2.x)
+![](../media/image/2018-10-21/01.jpeg)
+
+* Try 阶段：尝试执行业务。完成所有业务检查（一致性）、预留必须业务资源（准隔离性）
+* Confirm 阶段：确认执行业务。不做任何业务检查，Confirm 操作需要满足幂等性
+* Cancel 阶段：取消执行业务。释放Try 阶段预留的业务资源，Cancel 操作需要满足幂等性
+
+具体举个例子，在电子商务系统中（分为交易系统、账户系统、红包系统），每笔交易发起时，调用交易系统的服务，交易系统再去账户系统扣钱、去红包系统扣红包，假如Tom 发起了交易
+
+* Try 阶段，调用到交易系统，交易系统调用账户系统和红包系统的远程接口，将账户系统中相应的钱、红包系统中响应的红包进行冻结
+* Confirm 阶段，远程调用，将用户的钱进行转账操作
+* 如果Confirm 成功，那么交易成功，如果失败，那么进入Cancel 阶段对钱和红包进行解冻
+
+TCC 的实现和流程相对简单。但是其缺点也是很明显的，比如Confirm、Cancel 阶段都有可能失败，正常的思路是定时尝试，如果尝试多次还是失败，那么就需要人工干预；另外TCC 属于应用层的一种补偿方式，所以需要程序员在实现的时候写很多补偿的代码，在一些业务场景中，一些业务流程可能用TCC 不太好定义及处理！
+
+**TCC-Transaction框架**
+
+目前在开源世界中，有这么一个项目[TCC-Transaction](https://github.com/changmingxie/tcc-transaction)，它是一个开源的TCC 分布式事务框架。推荐先去阅读[《tcc-transaction 官方文档 —— 使用指南1.2.x》](https://github.com/changmingxie/tcc-transaction/wiki/%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%971.2.x)
 
 在TCC 中，一个事务可以包含多个操作。TCC-Transaction 将每个业务操作抽象成事务参与者，每个事务可以包含多个参与者
 
@@ -79,6 +99,10 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
 
 }
 ```
+
+## 更多分布式事务机制
+
+
 
 ## 参考资料
 

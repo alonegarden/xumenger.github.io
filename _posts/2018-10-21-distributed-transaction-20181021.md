@@ -2,7 +2,7 @@
 layout: post
 title: 分布式事务
 categories: 大型系统架构 
-tags: 分布式事务 TCC TCC-Transaction 事务 数据库 ACID 数据一致性 注解 柔性事务 刚性事务 CAP 
+tags: 分布式事务 TCC TCC-Transaction 事务 数据库 ACID 数据一致性 注解 柔性事务 刚性事务 CAP BASE 
 ---
 
 在一个软件系统中，最重要的是什么？当然是数据，数据必须是可信的，为了保证数据的一致性，在一个简单的单体应用中，我们假如用到了多线程并发机制，那么必须在多线程竞争的数据上使用竞态条件来保证线程安全，最根本的其实就是为了保证数据的一致性！
@@ -21,15 +21,29 @@ OK，在单体应用中可以通过数据库的ACID 事务机制来保证数据�
 
 但如果是在一个分布式系统中做开发，尤其是在一个微服务架构的系统中，一个业务操作可能分布在多台机器、多个应用中，当中任何一步的失败都会导致整个业务操作的失败，这个时候如何保证数据的一致性呢？！
 
-答案就是分布式事务！
-
-## 分布式事务
+## CAP 理论
 
 在[分布式计算的八大谬论](http://www.xumenger.com/the-eight-fallacies-of-distributed-computing-20180817/)中有提到过分布式系统的难点，即分布式的网络环境很复杂
 
 在分布式系统中可能的异常有：某个机器宕机、网络异常、消息丢失、消息乱序、数据错误、不可靠的TCP、存储数据丢失等等异常
 
+这里先插播一个概念：CAP 定理！CAP 定理是由加州大学伯克利分校Eric Brewer 教授提出来的，他指出Web 服务无法同时满足以下三个属性
 
+* 一致性(Consistency)：客户端知道一系列的操作会同时发生
+* 可用性(Availability)：每个操作都必须以可预期的响应结束
+* 分区容错性(Partition tolerance)：即使出现单个组件无法可用,操作依然可以完成
+
+具体而言，在分布式系统中，在任何数据库设计中，一个Web 应用至多只能同时支持上面的两个属性
+
+## BASE 理论
+
+在分布式系统中，我们往往追求的是高可用性，它的重要性程度比一致性要高，那么如何实现高可用性呢？这里就涉及到另外一个理论：BASE 理论，它是对CAP 定理进行进一步扩充的
+
+* Basically Available（基本可用）
+* Soft state（软状态）
+* Eventually consistent（最终一致性）
+
+BASE 理论是对CAP 中的一致性和可用性进行权衡后的结果，理论的核心在于：我们无法做到强一致性，但每个应用都可以根据自身业务的特点，采用适当的方法来使系统达到最终一致性
 
 ## TCC-Transaction
 
@@ -69,4 +83,5 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
 ## 参考资料
 
 * [聊聊分布式事务，再说说解决方案](https://www.cnblogs.com/savorboard/p/distributed-system-transaction-consistency.html)
+* [分布式计算的八大谬论](http://www.xumenger.com/the-eight-fallacies-of-distributed-computing-20180817/)
 * [tcc-transaction 官方文档 —— 使用指南1.2.x](https://github.com/changmingxie/tcc-transaction/wiki/%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%971.2.x)

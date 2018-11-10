@@ -142,7 +142,7 @@ with open("sells.log") as file:
 
 所以，如果列表元素可以按照某种算法推算出来，那我们是否可以在循环的过程中不断推算出后续的元素呢？这样就不必创建完整的list，从而节省大量的空间。在Python 中，这种一边循环一遍计算的机制，成为生成器：generator
 
-要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，就创建了一个generator
+要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[] 改成()，就创建了一个generator
 
 ```python
 >>> L = [x * x for x in range(10)]
@@ -213,7 +213,7 @@ def fib(max):
 
 仔细观察，可以看出，fib 函数实际上是定义了斐波那契数列的推算规则，可以从第一个元素开始，推算出后续任意的元素，这种逻辑其实非常类似generator
 
-也就是说，上面的函数和generator 仅一步之遥。要把fib 函数变成generator ，只需要把print(b) 改为yield b 即可
+也就是说，上面的函数和generator 仅一步之遥。要把fib 函数变成generator，只需要把print(b) 改为yield b 即可
 
 ```python
 def fib(max):

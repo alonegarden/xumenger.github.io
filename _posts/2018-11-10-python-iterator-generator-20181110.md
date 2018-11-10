@@ -213,7 +213,7 @@ def fib(max):
 
 仔细观察，可以看出，fib 函数实际上是定义了斐波那契数列的推算规则，可以从第一个元素开始，推算出后续任意的元素，这种逻辑其实非常类似generator
 
-也就是说，上面的函数和generator 仅一步之遥。要把fib函数变成generator ，只需要把print(b) 改为yield b 即可
+也就是说，上面的函数和generator 仅一步之遥。要把fib 函数变成generator ，只需要把print(b) 改为yield b 即可
 
 ```python
 def fib(max):

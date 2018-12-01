@@ -25,6 +25,12 @@ $ ./mvnw eclipse:eclipse
 
 ![](../media/image/2018-12-01/03.png)
 
+>上面截图中我是一次性导入所有项目，结果堆内存不够用，所以建议一部分一部分的导入！
+
+spring-boot-sample-simple 中打开SampleSimpleApplication.java，Run as Java Application，但是报错
+
+![](../media/image/2018-12-01/04.png)
+
 
 
 ## 参考资料

@@ -23,16 +23,67 @@ $ ./mvnw clean install -DskipTests -Pfast
 $ ./mvnw eclipse:eclipse
 ```
 
+然后将项目导入到Eclipse 中
+
 ![](../media/image/2018-12-01/02.png)
 
-然后将项目导入到Eclipse 中
+编写测试代码如下
+
+```java
+package example;
+
+import java.util.Arrays;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+@RestController
+@SpringBootApplication
+public class RunServer {
+
+    public static void main(String[] args) {
+        SpringApplication.run(RunServer.class, args);
+    }
+
+    @RequestMapping("/")
+    public String index() {
+            return "This is Index Page";
+    }
+    
+    @RequestMapping("/about")
+    public String about() {
+        return "This is About Page";
+    }
+    
+    @RequestMapping(value="/user/{name}", method= RequestMethod.GET)
+    public String user(@PathVariable("name") String name) {
+        return "Hello " + name;
+    }
+    
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+            System.out.println("来看看 SpringBoot 默认为我们提供的 Bean：");
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            Arrays.stream(beanNames).forEach(System.out::println);
+        };
+    }
+}
+```
+
+但是报错
 
 ![](../media/image/2018-12-01/03.png)
 
-打开SampleSimpleApplication 运行成功
+解决办法是，右键当前项目->【Properties】，引入spring-boot-autoconfigure 项目
 
 ![](../media/image/2018-12-01/04.png)
 
-可以直接在浏览器中访问
-
-![](../media/image/2018-12-01/05.png)

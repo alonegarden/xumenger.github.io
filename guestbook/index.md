@@ -5,6 +5,4 @@ comments: yes
 thread: 616
 ---
 
-![come on](../media/image/xu_menger.jpg)
-
-请通过我的微信公共号(xu\_menger)给我留言！
+>留言请到我的github issue [https://github.com/xumenger/xumenger.github.io/issues](https://github.com/xumenger/xumenger.github.io/issues)

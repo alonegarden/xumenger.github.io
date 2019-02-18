@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 查看数据库执行计划
+title: MySQL/Oracle执行计划
 categories: 数据库之mysql 数据库之sql 数据库之oracle
 tags: 数据库 关系型数据库 SQLServer Oracle MySQL SQL 数据库引擎 执行计划 Linux 
 ---

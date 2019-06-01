@@ -88,7 +88,42 @@ public class Player : MonoBehaviour
 
 ## 控制摄像机跟随
 
+上面的实践中，可以让角色运动起来了，但是为了更好的游戏体验，希望摄像机能跟随角色运动，很简单，还是通过脚本来控制，在游戏运行时获取游戏和主角的偏移，然后在运行过程中一直保证两者的偏移不变即可实现Camera 随着主角运动（要求在场景中便为Camera 设置一个合适的视角）
 
+为摄像机添加一个C# Script，代码内容如下
+
+```c#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MainCamera : MonoBehaviour
+{
+    // 目标组件，就是角色，在Inspector 中将角色拖动到这个变量上
+    public Transform player;
+
+    // 偏移
+    private Vector3 offset;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // 开始的时候获取相机相对于角色的偏移
+        offset = transform.position - player.position;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // 每一帧都保持两者的偏移不变即可
+        transform.position = offset + player.position;
+    }
+}
+```
+
+OK，现在的游戏体验是这样的了！
+
+![](../media/image/2019-06-01/05-09.gif)
 
 ## 控制角色动画
 

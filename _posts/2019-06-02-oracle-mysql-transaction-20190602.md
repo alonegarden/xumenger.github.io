@@ -72,9 +72,9 @@ update account set money = money - 100 where username = 'A';
 
 ## Oracle的事务隔离机制
 
-Oracle 数据库支持READ COMMITTED 和 SERIALIZABLE 这两种事务隔离级别，默认系统事务隔离级别是READ COMMITTED,也就是读已提交
+Oracle 数据库支持READ COMMITTED 和SERIALIZABLE 这两种事务隔离级别，默认系统事务隔离级别是READ COMMITTED，也就是读已提交
 
-查看系统默认事务隔离级别，也是当前会话隔离级别
+执行下面的SQL 可以查看系统默认事务隔离级别，也是当前会话隔离级别
 
 ```sql
 --首先创建一个事务
@@ -95,7 +95,7 @@ from v$transaction t
 join v$session s on t.addr = s.taddr and s.sid = sys_context('USERENV', 'SID');
 ```
 
-可以在事务开始时使用以下语句设定事务的隔离级别：
+可以在事务开始时使用以下语句设定事务的隔离级别
 
 * 已提交读模式: SET TRANSACTION ISOLATION LEVEL ＝ READ COMMITTED;
 * 串行模式: SET TRANSACTION ISOLATION LEVEL ＝ SERIALIZABLE;

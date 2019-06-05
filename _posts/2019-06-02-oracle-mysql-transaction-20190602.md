@@ -134,3 +134,4 @@ set global transaction isolation level repeatable read;
 * [数据库四大特性及数据库隔离级别](https://blog.csdn.net/sinat_35322593/article/details/81040479)
 * [Oracle事务隔离级别](https://blog.csdn.net/leozhou13/article/details/50449965)
 * [数据库的四种隔离级别](https://www.cnblogs.com/s-b-b/p/5845096.html)
+* [数据库隔离级别及实现原理](https://blog.csdn.net/chenyiminnanjing/article/details/82714341)

@@ -5,7 +5,7 @@ categories: 数据库之sql 数据库之oracle 数据库之mysql
 tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读 不可重复读 脏读
 ---
 
-数据库特性：原子性、一致性、隔离性、持久性，数据库的隔离机制是属于隔离性的范畴
+数据库特性包括原子性、一致性、隔离性、持久性。本文所要讲的数据库隔离机制则是属于隔离性的范畴
 
 先看一个Oracle 下的例子（Oracle 默认的事务隔离级别是READ COMMITTED，且该例子需要设置不自动提交事务）
 

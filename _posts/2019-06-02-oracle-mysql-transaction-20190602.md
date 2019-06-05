@@ -43,10 +43,11 @@ tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读
 
 ```sql
 update account set money = money + 100 where username = 'B';
+
 update account set money = money - 100 where username = 'A';
 ```
 
-在这个事务执行过程中，另外一个事务读取结果发现B 账户中的钱已经到账，提示B 钱已到账，B 就进行了下一步的操作。但是最终转账事务失败，导致操作回滚。实际上B 并未收到钱，但进行了下一步的操作，造成了损失，这就是脏读
+在这个事务执行过程中，另外一个事务读取结果发现B 账户中的钱已经到账，提示B 钱已到账，B 就进行了下一步的操作。但最终转账事务失败，导致操作回滚。实际上B 并未收到钱，但进行了下一步的操作，造成了损失，这就是脏读
 
 **不可重复读**
 

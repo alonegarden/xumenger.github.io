@@ -7,7 +7,7 @@ tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读
 
 数据库特性：原子性、一致性、隔离性、持久性，数据库的隔离机制是属于隔离性的范畴
 
-首先看一个Oracle 下的例子（Oracle 默认的事务隔离级别是READ COMMITTED，且该例子需要设置不自动提交事务）
+先看一个Oracle 下的例子（Oracle 默认的事务隔离级别是READ COMMITTED，且该例子需要设置不自动提交事务）
 
 **在DBeaver下打开两个Tab 页按照下面的顺序执行**
 

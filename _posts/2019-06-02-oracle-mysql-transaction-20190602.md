@@ -2,7 +2,7 @@
 layout: post
 title: 数据库隔离机制
 categories: 数据库之sql 数据库之oracle 数据库之mysql
-tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 
+tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读 不可重复读 脏读
 ---
 
 数据库特性：原子性、一致性、隔离性、持久性，数据库的隔离机制是属于隔离性的范畴
@@ -39,14 +39,14 @@ tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper
 
 **脏读**
 
-脏读是指一个事务读取了未提交事务执行过程中的数据。当一个事务的操作正在多次修改数据，而在事务还未提交的时候，另外一个并发事务来读取了数据，就会导致读取到的数据并非是最终持久化之后的数据，这个数据就是脏读的数据。最典型的例子就是银行转账，从A账户转账100到B账户，脚本命令为
+脏读是指一个事务读取了未提交事务执行过程中的数据。当一个事务的操作正在多次修改数据，而在事务还未提交的时候，另外一个并发事务来读取了数据，就会导致读取到的数据并非是最终持久化之后的数据，这个数据就是脏读的数据。最典型的例子就是银行转账，从A账户转账100 到B 账户，脚本命令为
 
 ```sql
 update account set money = money + 100 where username = 'B';
 update account set money = money - 100 where username = 'A';
 ```
 
-在这个事务执行过程中，另外一个事务读取结果发现B账户中的钱已经到账，提示B钱已到账，B就进行了下一步的操作。但是最终转账事务失败，导致操作回滚。实际上B并未收到钱，但是进行了下一步的操作，造成了损失，这就是脏读。
+在这个事务执行过程中，另外一个事务读取结果发现B 账户中的钱已经到账，提示B 钱已到账，B 就进行了下一步的操作。但是最终转账事务失败，导致操作回滚。实际上B 并未收到钱，但进行了下一步的操作，造成了损失，这就是脏读
 
 **不可重复读**
 
@@ -54,18 +54,18 @@ update account set money = money - 100 where username = 'A';
 
 不可重复读同脏读的区别在于，脏读是一个事务读取了另一未完成的事务执行过程中的数据，而不可重复读是一个事务执行过程中，另一事务提交并修改了当前事务正在读取的数据
 
-**虚读(幻读)**
+**虚读(幻读、幻行)**
 
-幻读是事务非独立执行时发生的一种现象，例如事务T1批量对一个表中某一列列值为1的数据修改为2的变更，但是在这时，事务T2对这张表插入了一条列值为1的数据，并完成提交。此时，如果事务T1查看刚刚完成操作的数据，发现还有一条列值为1的数据没有进行修改，而这条数据其实是T2刚刚提交插入的，这就是幻读
+幻读是事务非独立执行时发生的一种现象，例如事务T1 批量对一个表中某一列列值为1 的数据修改为2 的变更，但在这时，事务T2 对这张表插入了一条列值为1 数据，并完成提交。此时，如果事务T1 查看刚刚完成操作的数据，发现还有一条列值为1 的数据没有进行修改，而这条数据其实是T2 刚刚提交插入的，这就是幻读
 
 幻读和不可重复读都是读取了另一条已经提交的事务（这点同脏读不同），所不同的是不可重复读查询的都是同一个数据项，而幻读针对的是一批数据整体（比如数据的个数）
 
-针对以上可能出现的并发问题，数据库提供不同的事务隔离级别
+针对以上可能出现的并发问题，数据库提供不同的**事务隔离级别**
 
-* READ UNCIMMITTED（未提交读）。事务中的修改，即使没有提交，其他事务也可以看得到，比如说上面的两步这种现象就叫做脏读，这种隔离级别会引起很多问题，如无必要，不要随便使用
-* READ COMMITTED（提交读）。大多数数据库系统的默认隔离级别是READ COMMITTED，这种隔离级别就是一个事务的开始，只能看到已经完成的事务的结果，正在执行的，是无法被其他事务看到的
-* REPEATABLE READ（可重复读）。可以解决脏读的问题，该级别保证了每行的记录的结果是一致的，也就是上面说的读了旧数据的问题，但是却无法解决另一个问题，幻行，顾名思义就是突然蹦出来的行数据。指的就是某个事务在读取某个范围的数据，但是另一个事务又向这个范围的数据去插入数据，导致多次读取的时候，数据的行数不一致
-* SERIALIZABLE（可串行化）。这S是最高的隔离级别，它通过强制事务串行执行（注意是串行），避免了前面的幻读情况，由于他大量加上锁，导致大量的请求超时，因此性能会比较底下，再特别需要数据一致性且并发量不需要那么大的时候才可能考虑这个隔离级别
+* READ UNCIMMITTED（未提交读）。事务中的修改，即使没有提交，其他事务也可以看得到，也就是脏读，这种隔离级别会引起很多问题，如无必要，不要随便使用
+* READ COMMITTED（提交读）。是大多数据库系统的默认隔离级别，这种隔离级别就是一个事务的开始，只能看到已经完成的事务的结果，正在执行的，是无法被其他事务看到的，但是其他事务执行完成Commit 后还是会对当前事务产生影响，会存在不可重复读问题
+* REPEATABLE READ（可重复读）。可以解决脏读、不可重复读的问题，该级别保证了每行的记录的结果是一致的，也就是上面说的读了旧数据（不可重复读）的问题，但却无法解决另一个问题，幻行，顾名思义就是突然蹦出来的行数据。指的就是某个事务在读取某个范围的数据，但另一个事务又向这个范围的数据去插入数据，导致多次读取的时候，数据的行数不一致
+* SERIALIZABLE（可串行化）。这是最高的隔离级别，它通过强制事务串行执行（注意是串行），避免了前面的幻读情况，但由于大量加上锁，导致大量的请求超时，因此性能会比较低，在特别需要数据一致性且并发量不需要那么大的时候才可能考虑这个隔离级别
 
 >应用程序的设计开发者及数据库管理员可以依据应用程序的需求及系统负载（workload）而为不同的事务选择不同的隔离级别（isolation level）
 
@@ -73,22 +73,23 @@ update account set money = money - 100 where username = 'A';
 
 Oracle 数据库支持READ COMMITTED 和 SERIALIZABLE 这两种事务隔离级别，默认系统事务隔离级别是READ COMMITTED,也就是读已提交
 
-查看系统默认事务隔离级别,也是当前会话隔离级别
+查看系统默认事务隔离级别，也是当前会话隔离级别
 
 ```sql
 --首先创建一个事务
 declare
-     trans_id VARCHAR2(100);
-  begin
-     trans_id := dbms_transaction.local_transaction_id( TRUE );
-  end;
+    trans_id VARCHAR2(100);
+begin
+    trans_id := dbms_transaction.local_transaction_id( TRUE );
+end;
+
 
 --查看事务隔离级别
 select s.sid, s.serial#,
-　　case BITAND(t.flag, POWER(2, 28))
-　　　　when 0 then 'READ COMMITTED'
-　　　　else 'SERIALIZABLE'
-　　end as isolation_level
+    case BITAND(t.flag, POWER(2, 28))
+        when 0 then 'READ COMMITTED'
+        else 'SERIALIZABLE'
+    end as isolation_level
 from v$transaction t
 join v$session s on t.addr = s.taddr and s.sid = sys_context('USERENV', 'SID');
 ```
@@ -101,34 +102,29 @@ join v$session s on t.addr = s.taddr and s.sid = sys_context('USERENV', 'SID');
 
 ## MySQL的事务隔离机制
 
-MySQL支持这些事务隔离级别，默认是REPEATABLE READ
+MySQL支持这些事务隔离级别，默认是REPEATABLE READ，这个和Oracle 默认的隔离级别不同
 
 * READ UNCOMMITTED
 * READ COMMITTED
 * REPEATABLE READ
 * SERIALIZABLE
 
-查看当前会话隔离级别
+下面是在MySQL 下与数据库隔离级别相关的命令
 
 ```sql
+--查看当前会话隔离级别
 select @@tx_isolation;
-```
 
-查看系统当前隔离级别
 
-```sql
+--查看系统当前隔离级别
 select @@global.tx_isolation;
-```
 
-设置当前会话隔离级别
 
-```sql
+--设置当前会话隔离级别
 set session transaction isolatin level repeatable read;
-```
 
-设置系统当前隔离级别
 
-```sql
+--设置系统当前隔离级别
 set global transaction isolation level repeatable read;
 ```
 

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 数据库隔离机制
+title: 说一说数据库的隔离机制
 categories: 数据库之sql 数据库之oracle 数据库之mysql
 tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读 不可重复读 脏读
 ---

@@ -19,7 +19,7 @@ tags: 数据库 sql oracle mysql 隔离机制 事务 DBeaver SQLDeveloper 幻读
 * “事务1” rollback
 * “事务2” 再insert，这时候可以成功
 
->排查发现DBeaver，开启的两个Tab 页，并不是每个Tab 页下对应一个会话，而是共用一个会话
+>排查发现DBeaver，开启的两个Tab 页，并非每个Tab 页下对应一个会话，而是共用一个会话，所以并不是两个事务！
 
 **为了模拟两个会话，使用一个DBeaver，一个SQL Developer**
 

@@ -29,4 +29,30 @@ tags: Unity Unity3D 粒子系统 特效 预制体 游戏 Shader 渲染 C#
 
 ![](../media/image/2019-09-21/03.gif)
 
+属性                |  说明
+-------------------|-----------------------------------------
+Duration           | 发射粒子的持续时间（喷射周期）
+Looping            | 是否循环发射
+Prewarm            | 预热（Looping状态下预产生下一周期的粒子）
+Start Delay        | 发射粒子之前的延迟（Perwarm状态下无法延迟）
+Start Lifetime     | 开始的生命周期
+Start Speed        | 发射时的速度（m/s）
+3D Start Size      | 三维尺寸
+Start Size         | 初始尺寸
+3D Start Rotation  | 三维旋转
+Start Rotation     | 开始旋转角
+Randomize Rotation | 随机数旋转
+Start Color        | 发射时的颜色
+Gravity Modifier   | 重力修改器（相当于物理管理器中重力加速度的重力密度）
+Simulation Space   | 模拟空间
+Simulation Speed   | 模拟速度
+Delta Time         | 时间增量
+Scaling Mode       | 扩展模式
+Play On Awake      | 是否开始自动播放
+Emitter Velocity   | 发射器速度
+Max Particle       | 发射的最大数量（一个周期内的最大发射数量，超过则停止发射）
+Auto Random Seed   | 随机种子
+
+
 通过这些基础的配置，直观、感性的了解了粒子系统的视觉效果，那么接下来再对Unity3D 的粒子系统进行详细、全面、深入的剖析和实践
+

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: jdb排查数据库死锁
+title: JDB排查数据库死锁
 categories: java之内存管理 深入学习之编译原理 
 tags: java JVM jdb 调试 死锁 数据库 Oracle 锁 线程 堆栈 连接池 DBeaver 
 ---

@@ -21,7 +21,9 @@ tags: java JVM jdb 调试 死锁 数据库 Oracle 锁 线程 堆栈 连接池 DB
 
 首先以Debug 方式启动Java 进程
 
->nohup java -server -Xms512m -Xmx2g -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=7077,server=y,suspend=y -cp /app/server/servercld.jar com.frm.server.api.servercld.CLD_Process_Start com.frm.server.api.serverolt.OLT_Process_Start XUM2 >>/app/log.txt 2>&1 &
+```
+nohup java -server -Xms512m -Xmx2g -XX:PermSize=256m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=7077,server=y,suspend=y -cp /app/server/servercld.jar com.frm.server.api.servercld.CLD_Process_Start com.frm.server.api.serverolt.OLT_Process_Start XUM2 >>/app/log.txt 2>&1 &
+```
 
 然后再重新开启一个Shell，执行下面的命令连接到待调试进程
 

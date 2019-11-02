@@ -11,7 +11,7 @@ tags: Linux g++ rapidxml XML 编译 tinyxml
 
 编写测试代码如下
 
-```
+```c++
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
 #include "rapidxml_print.hpp"
@@ -34,8 +34,87 @@ int main()
 
 >[https://stackoverflow.com/questions/3830822/compile-rapidxml-under-linux-with-g](https://stackoverflow.com/questions/3830822/compile-rapidxml-under-linux-with-g)
 
-## 
+## 加载XML 文件
 
+用来测试的XML 文件内容如下
+
+```xml
+?xml verson="1.0" encoding="utf-8"
+
+<classroom>
+    <person>
+        <name>Tom</name>
+        <age>18</age>
+        <address>England</address>
+    </person>
+    <person>
+    	<name>John</name>
+        <age>19</age>
+        <address>England</address>
+    </person>
+    <person>
+        <name>Lily</name>
+        <age>18</age>
+        <address>American</address>
+    </person>
+</classroom>
+```
+
+编写测试程序如下
+
+```c++
+#include "rapidxml/rapidxml.hpp"
+//#include "rapidxml/rapidxml_iterators.hpp"
+#include "rapidxml/rapidxml_print.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
+
+#include <iostream>
+
+int main ()
+{
+    rapidxml::file<> doc("./classroom.xml");
+
+    std::cout << "----begin" << std::endl;
+    std::cout << "----length: " << doc.size() << std::endl;
+    std::cout << doc.data() << std::endl;
+    std::cout << "----end" << std::endl;
+
+    return 0;
+}
+```
+
+编译运行
+
+![](../media/image/2019-11-02/02.png)
+
+## 解析XML文件
+
+编写代码如下
+
+```c++
+#include "rapidxml/rapidxml.hpp"
+//#include "rapidxml/rapidxml_iterators.hpp"
+#include "rapidxml/rapidxml_print.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
+
+#include <iostream>
+
+int main ()
+{
+    rapidxml::file<> xmlfile("./classroom.xml");
+
+    std::cout << "----begin" << std::endl;
+    std::cout << "----length: " << xmlfile.size() << std::endl;
+    std::cout << xmlfile.data() << std::endl;
+    std::cout << "----end" << std::endl;
+
+    return 0;
+}
+```
+
+编译运行
+
+![](../media/image/2019-11-02/03.png)
 
 ## 参考资料
 

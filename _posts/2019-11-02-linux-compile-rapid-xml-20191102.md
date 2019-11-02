@@ -21,6 +21,18 @@ int main()
 }
 ```
 
+编译的时候直接报错如下
+
+![](../media/image/2019-11-02/01.png)
+
+这些错误是因为 rapidxml_iterators.hpp 这个头文件导致的。在常规的XML 解析中，其实这个头文件并不是必须的！
+
+所以暂时的解决方法就是先不包含这个头文件！
+
+>[https://stackoverflow.com/questions/3830822/compile-rapidxml-under-linux-with-g](https://stackoverflow.com/questions/3830822/compile-rapidxml-under-linux-with-g)
+
+## 
+
 
 ## 参考资料
 
@@ -28,3 +40,4 @@ int main()
 * [c++ rapidxml node_iterator example?](https://stackoverflow.com/questions/2104523/c-rapidxml-node-iterator-example)
 * [RAPIDXML Manual](http://rapidxml.sourceforge.net/manual.html)
 * [rapidxml,一个快速的xml库](https://www.cnblogs.com/lancidie/archive/2013/04/13/3019527.html)
+* [c++开源库rapidxml介绍与示例](https://blog.csdn.net/v_xchen_v/article/details/75634273)

@@ -1,11 +1,13 @@
 ---
 layout: post
-title: Linux下编译RapidXML报错
+title: rapidxml，一个高效的xml库
 categories: c/c++之基础语法 c/c++之预处理 c/c++之面向对象 c/c++之函数 c/c++之指针与内存
-tags: Linux g++ rapidxml XML 编译 
+tags: Linux g++ rapidxml XML 编译 tinyxml
 ---
 
->开发环境：Ubuntu 16.04 LTS、C++11
+>测试环境：Ubuntu 16.04 LTS、C++11
+
+>rapidxml是一个快速的xml库，官方网站：[http://rapidxml.sourceforge.net/](http://rapidxml.sourceforge.net/)，根据manual 看到，竟然比tinyxml 快了50-100倍
 
 编写测试代码如下
 
@@ -17,6 +19,7 @@ tags: Linux g++ rapidxml XML 编译
 
 int main()
 {
+
     return 0;
 }
 ```

@@ -48,7 +48,7 @@ int main()
         <address>England</address>
     </person>
     <person>
-    	<name>John</name>
+        <name>John</name>
         <age>19</age>
         <address>England</address>
     </person>
@@ -72,11 +72,11 @@ int main()
 
 int main ()
 {
-    rapidxml::file<> doc("./classroom.xml");
+    rapidxml::file<> xmlfile("./classroom.xml");
 
     std::cout << "----begin" << std::endl;
-    std::cout << "----length: " << doc.size() << std::endl;
-    std::cout << doc.data() << std::endl;
+    std::cout << "----length: " << xmlfile.size() << std::endl;
+    std::cout << xmlfile.data() << std::endl;
     std::cout << "----end" << std::endl;
 
     return 0;
@@ -89,27 +89,34 @@ int main ()
 
 ## 解析XML文件
 
+xml 文件现在加了一些属性
+
+```xml
+?xml verson="1.0" encoding="utf-8"
+
+<classroom>
+    <person id = "1" gender = "male">
+        <name>Tom</name>
+        <age>18</age>
+        <address>England</address>
+    </person>
+    <person id = "2" gender = "male">
+        <name>John</name>
+        <age>19</age>
+        <address>England</address>
+    </person>
+    <person id = "3" gender = "female">
+        <name>Lily</name>
+        <age>18</age>
+        <address>American</address>
+    </person>
+</classroom>
+```
+
 编写代码如下
 
 ```c++
-#include "rapidxml/rapidxml.hpp"
-//#include "rapidxml/rapidxml_iterators.hpp"
-#include "rapidxml/rapidxml_print.hpp"
-#include "rapidxml/rapidxml_utils.hpp"
 
-#include <iostream>
-
-int main ()
-{
-    rapidxml::file<> xmlfile("./classroom.xml");
-
-    std::cout << "----begin" << std::endl;
-    std::cout << "----length: " << xmlfile.size() << std::endl;
-    std::cout << xmlfile.data() << std::endl;
-    std::cout << "----end" << std::endl;
-
-    return 0;
-}
 ```
 
 编译运行

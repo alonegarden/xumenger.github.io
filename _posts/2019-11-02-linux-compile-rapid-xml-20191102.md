@@ -139,11 +139,13 @@ int main ()
     std::cout << "root name_size: " << root->name_size() << std::endl;
 
 
+    // 获取根节点的第一个子节点
     std::cout << std::endl << "------------------------------------" << std::endl;
     rapidxml::xml_node<> *root_first = root->first_node();
     std::cout << "first node of root: " << std::endl << *root_first << std::endl;
 
-
+    
+    // 获取根节点的第一个子节点上的属性信息
     std::cout << std::endl << "------------------------------------" << std::endl;
     root_first = root->first_node("person");
     rapidxml::xml_attribute<> *attr;
@@ -156,6 +158,7 @@ int main ()
     std::cout << "attr_value: " << attr->value() << std::endl;
 
 
+    // 遍历根节点的子节点
     std::cout << std::endl << "------------------------------------" << std::endl;
     for (; root_first!=NULL; root_first=root_first->next_sibling())
     {

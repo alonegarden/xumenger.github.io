@@ -168,6 +168,8 @@ int main ()
 
 编译运行（如果不加 -fpermissive，会出现编译报错）
 
+>g++ testxml.cpp -o testxml -fpermissive
+
 ![](../media/image/2019-11-02/03.png)
 
 ## 参考资料

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: rapidxml，一个高效的xml库
+title: rapidxml：一个高效的xml库
 categories: c/c++之基础语法 c/c++之预处理 c/c++之面向对象 c/c++之函数 c/c++之指针与内存
 tags: Linux g++ rapidxml XML 编译 tinyxml
 ---

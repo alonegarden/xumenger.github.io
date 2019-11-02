@@ -19,7 +19,6 @@ tags: Linux g++ rapidxml XML 编译 tinyxml
 
 int main()
 {
-
     return 0;
 }
 ```
@@ -36,10 +35,10 @@ int main()
 
 ## 加载XML 文件
 
-用来测试的XML 文件内容如下
+用来测试的XML 文件内容如下（有没有发现上面最开始给出的XML 格式是有问题的！！）
 
 ```xml
-?xml verson="1.0" encoding="utf-8"
+<?xml verson="1.0" encoding="utf-8"?>
 
 <classroom>
     <person>
@@ -92,7 +91,7 @@ int main ()
 xml 文件现在加了一些属性
 
 ```xml
-?xml verson="1.0" encoding="utf-8"
+<?xml verson="1.0" encoding="utf-8"?>
 
 <classroom>
     <person id = "1" gender = "male">
@@ -111,15 +110,63 @@ xml 文件现在加了一些属性
         <address>American</address>
     </person>
 </classroom>
+
 ```
 
 编写代码如下
 
 ```c++
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_print.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
 
+#include <iostream>
+
+int main ()
+{
+    rapidxml::file<> xmlfile("./classroom.xml");
+
+    rapidxml::xml_document<> doc;
+    doc.parse<0>(xmlfile.data());
+
+
+    // fitst node of DOM Tree
+    rapidxml::xml_node<> *root = doc.first_node();
+    std::cout << "root: " << root << std::endl;
+    // *root 会输出整个xml 内容
+    // std::cout << *root << std::endl;
+    std::cout << "root name: " << root->name() << std::endl;
+    std::cout << "root name_size: " << root->name_size() << std::endl;
+
+
+    std::cout << std::endl << "------------------------------------" << std::endl;
+    rapidxml::xml_node<> *root_first = root->first_node();
+    std::cout << "first node of root: " << std::endl << *root_first << std::endl;
+
+
+    std::cout << std::endl << "------------------------------------" << std::endl;
+    root_first = root->first_node("person");
+    rapidxml::xml_attribute<> *attr;
+    attr = root_first->first_attribute();
+    std::cout << "attr_name: " << attr->name() << std::endl;
+    std::cout << "attr_value: " << attr->value() << std::endl;
+
+    attr = attr->next_attribute();
+    std::cout << "attr_name: " << attr->name() << std::endl;
+    std::cout << "attr_value: " << attr->value() << std::endl;
+
+
+    std::cout << std::endl << "------------------------------------" << std::endl;
+    for (; root_first!=NULL; root_first=root_first->next_sibling())
+    {
+        std::cout << "sib: " << *root_first << std::endl;
+    }
+
+    return 0;
+}
 ```
 
-编译运行
+编译运行（如果不加 -fpermissive，会出现编译报错）
 
 ![](../media/image/2019-11-02/03.png)
 
@@ -130,3 +177,4 @@ xml 文件现在加了一些属性
 * [RAPIDXML Manual](http://rapidxml.sourceforge.net/manual.html)
 * [rapidxml,一个快速的xml库](https://www.cnblogs.com/lancidie/archive/2013/04/13/3019527.html)
 * [c++开源库rapidxml介绍与示例](https://blog.csdn.net/v_xchen_v/article/details/75634273)
+* [编译链接错误及解决方法记录](https://blog.csdn.net/woxiwangxuehaocpp/article/details/43764811)

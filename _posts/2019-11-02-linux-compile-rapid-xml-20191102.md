@@ -165,6 +165,9 @@ int main ()
         std::cout << "sib: " << *root_first << std::endl;
     }
 
+
+    doc.clear();
+
     return 0;
 }
 ```

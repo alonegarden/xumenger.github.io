@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 从零开始做游戏：Mixamo绑定动画给Unity用
+title: 从零开始做游戏：Mixamo绑定动画导入Unity
 categories: 游戏开发之blender 游戏开发之unity 
 tags: 游戏 建模 blender 贴图 3D 雕刻 绑定骨骼 动画 快捷键 摸索Blender 骨骼 骨骼权重 Rigging:Rigify unity unity3d Unity3D U3D 镜像模式 fbx mixamo 从零开始做游戏
 ---

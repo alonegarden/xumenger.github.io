@@ -79,3 +79,4 @@ public class CuberScript : MonoBehaviour
 * [[傅老師/Blender教學] 03 - 做個方塊人(Make a Blockman)](https://www.bilibili.com/video/av16721533)
 * [[傅老師/Blender教學] 04 - 使用第三方服務綁骨(Rigging with Mixamo)](https://www.bilibili.com/video/av16738239)
 * [摸索Blender：Blender常用基础操作](http://www.xumenger.com/blender-example-01-20190907/)
+* [深入理解加载FBX模型文件](https://blog.csdn.net/jxw167/article/details/81630899)

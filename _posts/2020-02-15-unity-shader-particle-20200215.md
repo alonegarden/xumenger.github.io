@@ -1,9 +1,10 @@
 ---
 layout: post
-title: 从零开始做游戏：学习Unity Shader Graph
-categories: 游戏开发之unity 
-tags: unity shader ShaderGraph 特效 材质 美工 视觉效果 贴图 水面 Unity商店 着色器 渲染 管线 建模 粒子系统
+title: 从零开始做游戏：在Unity中做游戏特效
+categories: 游戏开发之unity 游戏开发之blender
+tags: unity shader ShaderGraph 特效 材质 美工 视觉效果 贴图 水面 Unity商店 着色器 渲染 管线 建模 粒子系统 blender 
 ---
+
 
 
 

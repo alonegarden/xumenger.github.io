@@ -262,3 +262,10 @@ public class Man
 ```
 
 如上面所说的，@Autowired 效果的实现就是通过一个后置处理器AutowiredAnnotationBeanPostProcessor 实现的
+
+>[@Autowired注解注入实现原理](https://blog.csdn.net/qq_38951372/article/details/88809878)
+
+>[Spring 源码（九）@Autowired注解实现原理（Spring Bean的自动装配）](https://www.jianshu.com/p/a65f50451ed3)
+
+>对于Java 的反射机制要有一个很好的掌握，再来看这个实现细节将会很清晰！
+

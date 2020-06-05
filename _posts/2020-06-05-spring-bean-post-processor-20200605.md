@@ -174,8 +174,8 @@ public class Application
     * 构造方法最先执行
     * 实现了InitializingBean 接口的afterPropertiesSet() 方法接着执行
     * @Bean 执行的initMethod 方法最后执行
-* 实现了BeanPostProcessor 的类，在Bean 构造完成，初始化之前，执行postProcessBeforeInitialization()
-* 实现了BeanPostProcessor 的类，在Bean 初始化完成后，执行postProcessAfterInitialization()
+* 实现BeanPostProcessor 的类，在Bean 构造完成，初始化前，执行postProcessBeforeInitialization()
+* 实现BeanPostProcessor 的类，在Bean 初始化完成后，执行postProcessAfterInitialization()
 * postProcessBeforeInitialization()、postProcessAfterInitialization() 的入参是具体的Bean
 * 可以利用BeanPostProcessor 子类在Bean 初始化的时候对Bean 做一些必要的处理
 

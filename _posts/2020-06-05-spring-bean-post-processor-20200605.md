@@ -246,9 +246,9 @@ Application (3) [Java Application]
 
 当一个Bean 初始化的时候，会遍历所有的BeanPostProcessor 实现类，调用其postProcessBeforeInitialization() 方法，并将当前初始化过程中的Bean 传给该PostProcessor 后置处理器进行处理
 
-## @Autowired自动注入原理
+## @Autowired自动装配原理
 
-比如实现这样的一个Bean，为其参数添加@Autowired 注解，在IoC 加载的过程中，如果容器中有Dog 这个Bean，那么会自动将其注入到Man 的dog 参数上！
+比如实现这样的一个Bean，为其参数添加@Autowired 注解，在IoC 加载的过程中，如果容器中有Dog 这个Bean，那么会自动将其装配到Man 的dog 参数上！
 
 ```java
 @Component
@@ -268,4 +268,15 @@ public class Man
 >[Spring 源码（九）@Autowired注解实现原理（Spring Bean的自动装配）](https://www.jianshu.com/p/a65f50451ed3)
 
 >对于Java 的反射机制要有一个很好的掌握，再来看这个实现细节将会很清晰！
+
+![](../media/image/2020-06-05/03.png)
+
+* PriorityOrdered：确认 AutowiredAnnotationBeanPostProcessor 后置处理器的执行优先级
+* BeanFactoryAware：使得AutowiredAnnotationBeanPostProcessor可以直接通过BeanFactory获取容器中的Bean
+* BeanPostProcessor：在 Bean 初始化前后执行的后置处理器
+* InstantiationAwareBeanPostProcessor：在 Bean 实例化前后和Bean设置属性值时执行的后置处理器
+* SmartInstantiationAwareBeanPostProcessor：智能实例化Bean的后处理器，如预测Bean的类型和确认Bean的构造函数等。
+* MergedBeanDefinitionPostProcessor：合并Bean的定义信息
+
+AutowiredAnnotationBeanPostProcessor 后置处理器主要负责对添加了@Autowired 和@Value 注解的元素实现自动装配。所以找到需要自动装配的元素，其实就是对@Autowired 和@Value 注解的解析
 

@@ -202,4 +202,99 @@ public class Application
 
 可以试着将@Transactional 注释掉，效果就不是这样的了
 
-## 
+## 事务嵌套
+
+第一种情况是，调用者和被调用者都被@Transactional 标注，两个方法中都有SQL 写操作，被调用的方法中有异常
+
+```java
+package com.xum.demo06;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class TableService 
+{
+	@Autowired
+	private TableDao tableDao;
+	
+	@Transactional
+	public void insert(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert() 插入第一条完成");
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert() 插入第二条完成");
+		
+		// 调用另外一个带有@Transactional的方法？
+		// 并且另外一个方法中有异常怎么办
+		insert2(i*2, f*2, s);
+	}
+	
+	@Transactional
+	public void insert2(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert2() 插入第一条完成");
+		
+	    int value = 1/0;
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert2() 插入第二条完成");
+	}
+}
+```
+
+运行效果如下，因为被调用者有异常，导致整个事务失效，事务回滚
+
+![](../media/image/2020-06-18/02.png)
+
+第二种情况是，调用者和被调用者都被@Transactional 标注，两个方法中都有SQL 写操作，调用者中有异常
+
+```java
+package com.xum.demo06;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class TableService 
+{
+	@Autowired
+	private TableDao tableDao;
+	
+	@Transactional
+	public void insert(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert() 插入第一条完成");
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert() 插入第二条完成");
+		
+		// 调用另一个被@Transactional 标注的方法
+		insert2(i*2, f*2, s);
+		
+		// 两个方法都调用完，在调用者内部有异常会怎么样
+		int value = 1/0;
+	}
+	
+	@Transactional
+	public void insert2(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert2() 插入第一条完成");
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert2() 插入第二条完成");
+	}
+}
+```
+
+运行效果如下，调用者有异常，也会导致调用者和被调用者的SQL 都回滚，所以说明被调用者并没有自己再开启一个事务，而是在嵌套的情况下，以最外层的事务为准
+
+![](../media/image/2020-06-18/03.png)
+

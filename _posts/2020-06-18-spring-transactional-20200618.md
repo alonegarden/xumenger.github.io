@@ -78,39 +78,39 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @EnableTransactionManagement
 public class MyConfig 
 {
-	// 设置数据源，并导入到IoC 容器中
+    // 设置数据源，并导入到IoC 容器中
     @Bean
     public DataSource dataSource()
     {
-    	ComboPooledDataSource dataSource = new ComboPooledDataSource();
-    	dataSource.setUser("root");
-    	dataSource.setPassword("");
-    	try {
-			dataSource.setDriverClass("com.mysql.jdbc.Driver");
-		} catch (PropertyVetoException e) {
-			e.printStackTrace();
-		}
-    	dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/testDB");
-    	
-    	return dataSource;
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        dataSource.setUser("root");
+        dataSource.setPassword("");
+        try {
+            dataSource.setDriverClass("com.mysql.jdbc.Driver");
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/testDB");
+        
+        return dataSource;
     }
     
     // 为了操作数据库方便，使用JdbcTemplate 简化增删改查操作
     @Bean
     public JdbcTemplate jdbcTemplate()
     {
-    	// Spring 对Config 类会进行特殊处理
-    	// 这里调用dataSource()，并不是执行这个方法，其实是从IoC 容器中拿到这个Bean
-    	JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource());
-    	return jdbcTemplate;
+        // Spring 对Config 类会进行特殊处理
+        // 这里调用dataSource()，并不是执行这个方法，其实是从IoC 容器中拿到这个Bean
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource());
+        return jdbcTemplate;
     }
     
     // 使用SpringJDBC、MyBatis 的话都需要这个事务管理器
     @Bean
     public PlatformTransactionManager transactionManager()
     {
-    	// 事务管理器一定要把数据源传入，这样才可以控制数据源中的每个连接（事务的开启、回滚等）
-    	return new DataSourceTransactionManager(dataSource());
+        // 事务管理器一定要把数据源传入，这样才可以控制数据源中的每个连接（事务的开启、回滚等）
+        return new DataSourceTransactionManager(dataSource());
     }
 }
 ```
@@ -127,14 +127,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableDao 
 {
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	public void insert(int i, float f, String s)
-	{
-		String sql = "insert into `testTable`(iCol, fCol, sCol) values(?, ?, ?)";
-		jdbcTemplate.update(sql, i, f, s);
-	}
+    public void insert(int i, float f, String s)
+    {
+        String sql = "insert into `testTable`(iCol, fCol, sCol) values(?, ?, ?)";
+        jdbcTemplate.update(sql, i, f, s);
+    }
 }
 ```
 
@@ -152,20 +152,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TableService 
 {
-	@Autowired
-	private TableDao tableDao;
-	
-	@Transactional
-	public void insert(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("插入第一条完成");
-		
-		int value = 1/0;
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("插入第二条完成");
-	}
+    @Autowired
+    private TableDao tableDao;
+    
+    @Transactional
+    public void insert(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("插入第一条完成");
+        
+        int value = 1/0;
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("插入第二条完成");
+    }
 }
 ```
 
@@ -179,20 +179,20 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class Application 
 {
-	public static void main(String[] args)
-	{
-		// 创建一个Spring容器
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyConfig.class);
-		
-		// 获取TableService
-		TableService tableService = applicationContext.getBean(TableService.class);
-		
-		// 插入
-		tableService.insert(1, 10.01f, "xum");
-		
-		// 关闭IoC 容器
-		applicationContext.close();
-	}
+    public static void main(String[] args)
+    {
+        // 创建一个Spring容器
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(MyConfig.class);
+        
+        // 获取TableService
+        TableService tableService = applicationContext.getBean(TableService.class);
+        
+        // 插入
+        tableService.insert(1, 10.01f, "xum");
+        
+        // 关闭IoC 容器
+        applicationContext.close();
+    }
 }
 ```
 
@@ -216,34 +216,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TableService 
 {
-	@Autowired
-	private TableDao tableDao;
-	
-	@Transactional
-	public void insert(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert() 插入第一条完成");
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert() 插入第二条完成");
-		
-		// 调用另外一个带有@Transactional的方法？
-		// 并且另外一个方法中有异常怎么办
-		insert2(i*2, f*2, s);
-	}
-	
-	@Transactional
-	public void insert2(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert2() 插入第一条完成");
-		
-	    int value = 1/0;
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert2() 插入第二条完成");
-	}
+    @Autowired
+    private TableDao tableDao;
+    
+    @Transactional
+    public void insert(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert() 插入第一条完成");
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert() 插入第二条完成");
+        
+        // 调用另外一个带有@Transactional的方法？
+        // 并且另外一个方法中有异常怎么办
+        insert2(i*2, f*2, s);
+    }
+    
+    @Transactional
+    public void insert2(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert2() 插入第一条完成");
+        
+        int value = 1/0;
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert2() 插入第二条完成");
+    }
 }
 ```
 
@@ -263,34 +263,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TableService 
 {
-	@Autowired
-	private TableDao tableDao;
-	
-	@Transactional
-	public void insert(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert() 插入第一条完成");
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert() 插入第二条完成");
-		
-		// 调用另一个被@Transactional 标注的方法
-		insert2(i*2, f*2, s);
-		
-		// 两个方法都调用完，在调用者内部有异常会怎么样
-		int value = 1/0;
-	}
-	
-	@Transactional
-	public void insert2(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert2() 插入第一条完成");
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert2() 插入第二条完成");
-	}
+    @Autowired
+    private TableDao tableDao;
+    
+    @Transactional
+    public void insert(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert() 插入第一条完成");
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert() 插入第二条完成");
+        
+        // 调用另一个被@Transactional 标注的方法
+        insert2(i*2, f*2, s);
+        
+        // 两个方法都调用完，在调用者内部有异常会怎么样
+        int value = 1/0;
+    }
+    
+    @Transactional
+    public void insert2(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert2() 插入第一条完成");
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert2() 插入第二条完成");
+    }
 }
 ```
 
@@ -312,30 +312,30 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TableService 
 {
-	@Autowired
-	private TableDao tableDao;
-	
-//	调用者没有@Transactional 标注
-//	@Transactional
-	public void insert(int i, float f, String s)
-	{
-		// 调用者内部也不放任何SQL 操作，直接调用另外一个函数
-		
-		// 调用另一个被@Transactional 标注的方法
-		insert2(i*2, f*2, s);
-	}
-	
-	@Transactional
-	public void insert2(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert2() 插入第一条完成");
-		
-		int value = 1/0;
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert2() 插入第二条完成");
-	}
+    @Autowired
+    private TableDao tableDao;
+    
+//    调用者没有@Transactional 标注
+//    @Transactional
+    public void insert(int i, float f, String s)
+    {
+        // 调用者内部也不放任何SQL 操作，直接调用另外一个函数
+        
+        // 调用另一个被@Transactional 标注的方法
+        insert2(i*2, f*2, s);
+    }
+    
+    @Transactional
+    public void insert2(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert2() 插入第一条完成");
+        
+        int value = 1/0;
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert2() 插入第二条完成");
+    }
 }
 ```
 
@@ -361,31 +361,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class TableService 
 {
-	@Autowired
-	private TableDao tableDao;
-	
-//	调用者有@Transactional 标注
-	@Transactional
-	public void insert(int i, float f, String s)
-	{
-		// 调用者内部也不放任何SQL 操作，直接调用另外一个函数
-		
-		// 调用另一个被@Transactional 标注的方法
-		insert2(i*2, f*2, s);
-	}
-	
-//	被调用者有@Transactional 标注
-//	@Transactional
-	public void insert2(int i, float f, String s)
-	{
-		tableDao.insert(i, f, s);
-		System.out.println("insert2() 插入第一条完成");
-		
-		int value = 1/0;
-		
-		tableDao.insert(i*i, f*f, s+s);
-		System.out.println("insert2() 插入第二条完成");
-	}
+    @Autowired
+    private TableDao tableDao;
+    
+//    调用者有@Transactional 标注
+    @Transactional
+    public void insert(int i, float f, String s)
+    {
+        // 调用者内部也不放任何SQL 操作，直接调用另外一个函数
+        
+        // 调用另一个被@Transactional 标注的方法
+        insert2(i*2, f*2, s);
+    }
+    
+//    被调用者有@Transactional 标注
+//    @Transactional
+    public void insert2(int i, float f, String s)
+    {
+        tableDao.insert(i, f, s);
+        System.out.println("insert2() 插入第一条完成");
+        
+        int value = 1/0;
+        
+        tableDao.insert(i*i, f*f, s+s);
+        System.out.println("insert2() 插入第二条完成");
+    }
 }
 ```
 

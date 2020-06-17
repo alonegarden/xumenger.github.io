@@ -315,8 +315,8 @@ public class TableService
     @Autowired
     private TableDao tableDao;
     
-//    调用者没有@Transactional 标注
-//    @Transactional
+//  调用者没有@Transactional 标注
+//  @Transactional
     public void insert(int i, float f, String s)
     {
         // 调用者内部也不放任何SQL 操作，直接调用另外一个函数
@@ -364,7 +364,7 @@ public class TableService
     @Autowired
     private TableDao tableDao;
     
-//    调用者有@Transactional 标注
+//  调用者有@Transactional 标注
     @Transactional
     public void insert(int i, float f, String s)
     {
@@ -374,8 +374,8 @@ public class TableService
         insert2(i*2, f*2, s);
     }
     
-//    被调用者有@Transactional 标注
-//    @Transactional
+//  被调用者有@Transactional 标注
+//  @Transactional
     public void insert2(int i, float f, String s)
     {
         tableDao.insert(i, f, s);

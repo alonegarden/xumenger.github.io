@@ -2,7 +2,7 @@
 layout: post
 title: Spring浅谈：声明式事务
 categories: java之web开发 java之web框架 数据库之mysql
-tags: java spring 切面 面向切面编程 AOP AspectJ 面向切面 编译 装饰器设计模式 声明式事务 IoC IoC容器 spring-context spring-aspects pom Maven 增强器 通知方法 代理对象 Cglib代理 事务 数据库 声明式事务 MySQL MyBatis 
+tags: java spring 切面 面向切面编程 AOP AspectJ 面向切面 编译 装饰器设计模式 声明式事务 IoC IoC容器 spring-context spring-aspects pom Maven 增强器 通知方法 代理对象 Cglib代理 事务 数据库 声明式事务 MySQL MyBatis 嵌套事务
 ---
 
 ## 准备环境
@@ -298,3 +298,97 @@ public class TableService
 
 ![](../media/image/2020-06-18/03.png)
 
+## 调用者或者被调用者只有一个标注了@Transactional呢
+
+如果调用者没有被标注@Transactional，调用者标注了@Transactional，在调用者内部出现了异常会怎么样？
+
+```java
+package com.xum.demo06;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class TableService 
+{
+	@Autowired
+	private TableDao tableDao;
+	
+//	调用者没有@Transactional 标注
+//	@Transactional
+	public void insert(int i, float f, String s)
+	{
+		// 调用者内部也不放任何SQL 操作，直接调用另外一个函数
+		
+		// 调用另一个被@Transactional 标注的方法
+		insert2(i*2, f*2, s);
+	}
+	
+	@Transactional
+	public void insert2(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert2() 插入第一条完成");
+		
+		int value = 1/0;
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert2() 插入第二条完成");
+	}
+}
+```
+
+在Application 类的main() 方法中调用TableService.insert()，TableService.insert() 内部调用TableService.insert2()
+
+运行效果如下
+
+![](../media/image/2020-06-18/04.png)
+
+显然如果事务生效的话，因为有异常，会产生回滚，数据库中不会有任何数据，这里明显说明事务没有生效。在此特地强调一下使用声明式事务的一个原则，别的类调用到某个类的数据库操作函数，必须直接调用到的那个函数带有@Transactional 注解
+
+>为什么会这样呢？那就有必要研究Spring 的源码研究一下@Transactional 背后的实现原理来分析了！
+
+再看另一种情况，如果调用者标注了@Transactional，被调用者没有标注@Transactional，在Application.main() 中优先调用这个标注了@Transactional 的方法呢。注意先删除数据库中的数据
+
+```java
+package com.xum.demo06;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class TableService 
+{
+	@Autowired
+	private TableDao tableDao;
+	
+//	调用者有@Transactional 标注
+	@Transactional
+	public void insert(int i, float f, String s)
+	{
+		// 调用者内部也不放任何SQL 操作，直接调用另外一个函数
+		
+		// 调用另一个被@Transactional 标注的方法
+		insert2(i*2, f*2, s);
+	}
+	
+//	被调用者有@Transactional 标注
+//	@Transactional
+	public void insert2(int i, float f, String s)
+	{
+		tableDao.insert(i, f, s);
+		System.out.println("insert2() 插入第一条完成");
+		
+		int value = 1/0;
+		
+		tableDao.insert(i*i, f*f, s+s);
+		System.out.println("insert2() 插入第二条完成");
+	}
+}
+```
+
+很显然，这个时候，事务就可以生效了！！！
+
+>为什么会这样呢？那就有必要研究Spring 的源码研究一下@Transactional 背后的实现原理来分析了！

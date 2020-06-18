@@ -7,7 +7,7 @@ tags: java spring 切面 面向切面编程 AOP AspectJ 面向切面 编译 装�
 
 在上一篇中讲到了使用@Transactional 注解事务运行效果，以及各种嵌套情况下的不同现象，本文就试着去研究一下背后的原理
 
-上一篇讲到为了开启声明式事务功能，需要在配置类上添加@EnableTransactionManagement 注解，是不是有点熟悉，开启AOP 功能的时候，是不是要@@EnableAspectJAutoProxy，都是@Enable...
+上一篇讲到为了开启声明式事务功能，需要在配置类上添加@EnableTransactionManagement 注解，是不是有点熟悉，开启AOP 功能的时候，是不是要先@EnableAspectJAutoProxy，都是@Enable...
 
 ```java
 @Target(ElementType.TYPE)
@@ -21,12 +21,16 @@ public @interface EnableTransactionManagement {
 }
 ```
 
-显然这个注解为容器注入了TransactionManagementConfigurationSelector 这个Bean，这个Bean 为容器注入AutoProxyRegistrar、ProxyTransactionManagementConfiguration
+显然这个注解为容器注入了TransactionManagementConfigurationSelector 这个Bean。继续看后者的实现，其为容器中注入AutoProxyRegistrar、ProxyTransactionManagementConfiguration 组件
+
+这只暂时只考虑AdviceMode 为PROXY 的情况（因为默认就是PROXY）
 
 ```java
 public class TransactionManagementConfigurationSelector extends AdviceModeImportSelector<EnableTransactionManagement> {
 
-    // 重写这个方法，用于表示具体注入什么组件
+    /**
+     * 重写这个方法，用于表示具体注入什么组件
+     */
     @Override
     protected String[] selectImports(AdviceMode adviceMode) {
         switch (adviceMode) {
@@ -53,7 +57,7 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 
 AutoProxyRegistrar 为IoC 容器注入InfrastructureAdvisorAutoProxyCreator，后者是一个PostProcessor，所以这个注入的动作主要是利用后置处理器机制在对象创建以后，包装对象，返回一个代理对象（增强器），代理对象执行方法利用拦截器链进行调用。和AOP 的基本原理一致！
 
-ProxyTransactionManagementConfiguration 会给容器中注入事务增强器，这个是声明式事务的一个重点所在！
+ProxyTransactionManagementConfiguration 会给容器中注入事务增强器，这个是声明式事务的关键所在！
 
 ## ProxyTransactionManagementConfiguration组件
 
@@ -123,7 +127,7 @@ public TransactionAttributeSource transactionAttributeSource() {
 
 显然这个是从IoC 容器中获取一个AnnotationTransactionAttributeSource 组件，当然接下来就是看这个组件了
 
-## AnnotationTransactionAttributeSource 的实现
+## AnnotationTransactionAttributeSource的实现
 
 ```java
 public AnnotationTransactionAttributeSource(boolean publicMethodsOnly) {
@@ -146,7 +150,7 @@ public AnnotationTransactionAttributeSource(boolean publicMethodsOnly) {
 
 这个组件实现各种注解解析器，包括SpringTransactionAnnotationParser、JtaTransactionAnnotationParser、Ejb3TransactionAnnotationParser
 
-比如SpringTransactionAnnotationParser 的解析属性的方法如下，用于解析@Transactional 注解中每个属性
+比如SpringTransactionAnnotationParser 的解析属性的方法如下，用于解析@Transactional 注解中每个属性，比如propagation、isolation、timeout……
 
 ```java
 protected TransactionAttribute parseTransactionAnnotation(AnnotationAttributes attributes) {
@@ -203,7 +207,7 @@ public class ProxyTransactionManagementConfiguration extends AbstractTransaction
 }
 ```
 
-对应的实现如下
+对应的代码实现如下所示
 
 ```java
 @Bean
@@ -218,7 +222,7 @@ public TransactionInterceptor transactionInterceptor() {
 }
 ```
 
-按照惯例，当然就是去看一下TransactionInterceptor 事务增强器的实现了
+按照惯例，当然就是去看一下TransactionInterceptor 事务增强器的实现了，可以看到它继承自TransactionAspectSupport，并实现了MethodInterceptor、Serializable
 
 ```java
 public class TransactionInterceptor 
@@ -226,9 +230,9 @@ public class TransactionInterceptor
     implements MethodInterceptor, Serializable 
 ```
 
-显然，它实现了MethodInterceptor 接口，是一个方法拦截器。上面针对AutoProxyRegistrar 的分析中，知道在声明式事务中，是在IoC 容器中放一个代理对象，当代理对象要执行目标方法的时候，方法拦截器就会工作
+实现了MethodInterceptor 接口，说明它是一个方法拦截器。上面针对AutoProxyRegistrar 的分析中，知道在声明式事务中，其实是在IoC 容器中放一个代理对象，当代理对象要执行目标方法的时候，方法拦截器就会工作
 
-其invoke() 方法如下
+其工作方法就是invoke()，源码如下所示
 
 ```java
 @Override
@@ -244,9 +248,9 @@ public Object invoke(MethodInvocation invocation) throws Throwable {
 }
 ```
 
-其内部其实是调用了invokeWithinTransaction() 方法，该方法先获取事务的属性，再获取PlatformTransactionManager（回到上文的例子中，特地说明了要往IoC 容器中加入一个PlatformTransactionManager）
+其内部其实是调用了invokeWithinTransaction() 方法，该方法先获取事务的属性，再获取PlatformTransactionManager（回到[上文的例子](http://www.xumenger.com/spring-transactional-20200618/)中，特地说明了要往IoC 容器中加入一个PlatformTransactionManager）
 
-而且这个方法中有关于事务开启、回滚的逻辑，详细看我在代码中的注释！
+关于事务开启、回滚、提交的逻辑就是在这个方法中实现的！详细看我在下面代码中的注释！
 
 ```java
 @Nullable

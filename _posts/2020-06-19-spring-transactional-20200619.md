@@ -246,6 +246,8 @@ public Object invoke(MethodInvocation invocation) throws Throwable {
 
 其内部其实是调用了invokeWithinTransaction() 方法，该方法先获取事务的属性，再获取PlatformTransactionManager（回到上文的例子中，特地说明了要往IoC 容器中加入一个PlatformTransactionManager）
 
+而且这个方法中有关于事务开启、回滚的逻辑，详细看我在代码中的注释！
+
 ```java
 @Nullable
 protected Object invokeWithinTransaction(Method method, @Nullable Class<？> targetClass,
@@ -258,16 +260,28 @@ protected Object invokeWithinTransaction(Method method, @Nullable Class<？> tar
     final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
 
     if (txAttr == null || !(tm instanceof CallbackPreferringPlatformTransactionManager)) {
+
+        /**
+         * 如果有必要的话开启事务
+         */
         // Standard transaction demarcation with getTransaction and commit/rollback calls.
         TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);
 
         Object retVal;
         try {
+
+            /**
+             * 执行目标方法
+             */
             // This is an around advice: Invoke the next interceptor in the chain.
             // This will normally result in a target object being invoked.
             retVal = invocation.proceedWithInvocation();
         }
         catch (Throwable ex) {
+
+            /**
+             * 如果出现异常，则获取事务管理器，并利用事务管理器回滚操作！
+             */
             // target invocation exception
             completeTransactionAfterThrowing(txInfo, ex);
             throw ex;
@@ -275,6 +289,10 @@ protected Object invokeWithinTransaction(Method method, @Nullable Class<？> tar
         finally {
             cleanupTransactionInfo(txInfo);
         }
+
+        /**
+         * 如果一切正常，则提交事务！
+         */
         commitTransactionAfterReturning(txInfo);
         return retVal;
     }
@@ -335,3 +353,7 @@ protected Object invokeWithinTransaction(Method method, @Nullable Class<？> tar
     }
 }
 ```
+
+>同样，本文也只是粗略的过一遍，详细的还得是自己结合具体的各种案例，详细的进行Debug 和分析
+
+>同样的，理解Java 的反射机制，对于理解这部分的代码也是极其关键的！！！

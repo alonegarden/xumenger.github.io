@@ -44,7 +44,7 @@ GET querylog20200715/_search {
             "terms": {
                 "field": "xUsrNam",
                 "order": {
-                    "_count": desc
+                    "_count": "desc"
                 },
                 "size": 3
             }
@@ -53,7 +53,7 @@ GET querylog20200715/_search {
             "terms": {
                 "field": "xErrCod",
                 "order": {
-                    "_count": desc
+                    "_count": "desc"
                 },
                 "size": 3
         }
@@ -177,7 +177,7 @@ GET querylog20200715/_search {
             "terms": {
                 "field": "xUsrNam",
                 "order": {
-                    "_count": desc
+                    "_count": "desc"
                 },
                 "size": 3,
                 "shard_size": 100
@@ -187,7 +187,7 @@ GET querylog20200715/_search {
             "terms": {
                 "field": "xErrCod",
                 "order": {
-                    "_count": desc
+                    "_count": "desc"
                 },
                 "size": 3
         }

@@ -2,7 +2,7 @@
 layout: post
 title: Elasticsearch分布式架构下聚合精度问题
 categories: 大数据之elasticsearch 大数据之kafka 
-tags: es ELK ES Elastic ElasticSearch Kibana 聚合 shard_size 分片 分布式 DSL
+tags: es ELK ES Elastic ElasticSearch Kibana 聚合 shard_size 分片 分布式 DSL 副本 replica 容灾 
 ---
 
 扩展阅读

@@ -105,15 +105,15 @@ GET querylog20200715/_search {
             "sum_other_doc_count": 2557,
             "buckets": [
                 {
-                    "key": "SUCESS",
+                    "key": "SUCCESS",
                     "doc_count": 1800,
                 },
                 {
-                    "key": "FAL001",
+                    "key": "FAIL001",
                     "doc_count": 1200,
                 },
                 {
-                    "key": "FAL003",
+                    "key": "FAIL003",
                     "doc_count": 1000,
                 },
             ]
@@ -157,7 +157,7 @@ GET querylog20200715/_search {
                     "doc_count": 18,
                 },
             ]
-        },
+        }
 ```
 
 为什么会这样呢，在 2020-07-15 21:00:00 至 2020-07-15 21:07:00 这个短的时间范围内的"xumenger" 出现的次数是27，但是在 2020-07-15 21:00:00 至 2020-07-15 21:50:00 时间范围内出现的次数最多的竟然是20 次的"lisi"
@@ -193,7 +193,7 @@ GET querylog20200715/_search {
                 "size": 3
             }
         }
-    },
+    }
 ```
 
 得到的结果是这样的
@@ -216,7 +216,7 @@ GET querylog20200715/_search {
                     "doc_count": 20,
                 },
             ]
-        },
+        }
 ```
 
 ## 为什么呢？

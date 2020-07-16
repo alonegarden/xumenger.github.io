@@ -56,6 +56,7 @@ GET querylog20200715/_search {
                     "_count": "desc"
                 },
                 "size": 3
+            }
         }
     },
 
@@ -190,6 +191,7 @@ GET querylog20200715/_search {
                     "_count": "desc"
                 },
                 "size": 3
+            }
         }
     },
 ```

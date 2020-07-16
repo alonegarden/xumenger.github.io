@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ElasticSearch分布式架构下聚合精度问题
+title: Elasticsearch分布式架构下聚合精度问题
 categories: 大数据之elasticsearch 大数据之kafka 
 tags: es ELK ES Elastic ElasticSearch Kibana 聚合 shard_size 分片 分布式 DSL
 ---
@@ -239,3 +239,21 @@ shard_size 规定了每个分片上返回的个数
 将shard_size 的值设置的比size 大，那么每个分片返回的词条信息就会更多一些，相应的误差的几率就会减小！！！！！
 
 既然享受了ES 的分布式存储、快速搜索、聚合、数据可视化的便利，就要“忍受”它带来的精度问题，当然如果自己的项目能够忍受一定程度的误差，比如只是想要了解一个趋势，而不是精确的值，那么选择ES 是很合适的！！
+
+## ES 分布式架构
+
+>[Elasticsearch系列---分布式架构机制讲解](https://mp.weixin.qq.com/s/mn6r8MPKnHoOCfvsUkPJUA)
+
+3 台node 环境下的容错
+
+我们先按primary shard 为3，replica shard 为1进行容错性计算。此时每台node 存放2 个shard，如果一台宕机，此时另外2 台肯定还有完整的数据，如果两台宕机，剩下的那台就只有2/3 的数据，数据丢失1/3，容错性为1台。如果是这样设置，那3 台的容错性和2 台的容错性一样，就存在资源浪费的情况
+
+那怎么样提升容错性呢？把replica shard 的值改成2，这样每台node 存放3个shard，如下图所示：
+
+![](../media/image/2020-07-16/01.png)
+
+如果有2台宕机，就剩下node-2，此时集群的数据还是完整的，replica 会升成primary shard 继续提供服务，如下图所示：
+
+![](../media/image/2020-07-16/02.png)
+
+结论：3台node环境容错性最大可以是2

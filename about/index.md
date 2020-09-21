@@ -6,6 +6,8 @@ comments: no
 
 本博客的模板参考自[飘过的小牛](http://github.thinkingbar.com/)
 
+[菜包子的博客](https://caicai147.github.io/)
+
 我的github：[https://github.com/xumenger](https://github.com/xumenger)
 
 我的个人网站：[http://www.xumenger.com](http://www.xumenger.com) 或 [http://xumenger.github.io](http://xumenger.github.io)

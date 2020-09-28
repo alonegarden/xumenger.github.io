@@ -17,12 +17,17 @@ comments: no
 ## 文章目录
 
 * [3D图形学理论基础](./#3D图形学理论基础)
+* [Unity Shader 基础结构](./#Unity Shader 基础结构)
 * [Unity Shader调试](./#Unity Shader调试)
 
 ## 3D图形学理论基础
 
 
-Unity Shader 基础结构
+
+
+## Unity Shader 基础结构
+
+比如下面是编写Unity Shader 的基本框架！
 
 ```shader
 Shader "Test/ShaderExample"{
@@ -57,14 +62,21 @@ Shader "Test/ShaderExample"{
 
         // 每个Pass 定义了一次完整的渲染流程，但如果Pass 数量过多，会造成渲染性能的下降
         Pass {
+            [Name]
+            [Tags]
+            [RenderSetup]
+
+            // Other Code
 
         }
 
         // Other Pass
+
     }
 
     SubShader {
         // 显卡B使用的子着色器
+
     }
 
     // 如果显卡对于上面的子着色器都不支持的话，会使用Fallback 语义指定的Unity Shader

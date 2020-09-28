@@ -10,7 +10,7 @@ comments: no
 
 >[https://github.com/xumenger/Unity_Shaders_Book](https://github.com/xumenger/Unity_Shaders_Book)
 
->本文主要内容来自《Unity Shader 入门精要》
+>本文内容来自《Unity Shader 入门精要》！！
 
 >[https://github.com/xumenger/Awesome-Unity-Shader](https://github.com/xumenger/Awesome-Unity-Shader)
 
@@ -24,11 +24,11 @@ comments: no
 
 ## <span id="001">3D图形学理论基础</span>
 
-对于模型空间和世界空间，Unity 使用的是左手坐标
+对于模型空间和世界空间，Unity 使用的是左手坐标。但是对于观察空间来说，Unity 使用的是右手坐标系，通俗来说观察空间就是以摄像机为原点的坐标系
 
 ![](./image/001-01.jpeg)
 
-
+顶点着色器最基本的功能就是把模型的顶点坐标从模型空间转换到齐次裁剪坐标空间中。渲染游戏的过程可以理解成是把一个个顶点经过层层处理最终转化到屏幕上的过程
 
 ## <span id="002">Unity Shader 基础结构</span>
 

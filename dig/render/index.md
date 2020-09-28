@@ -16,9 +16,9 @@ comments: no
 
 ## 文章目录
 
-* [3D图形学理论基础](./#3D图形学理论基础)
-* [Unity Shader 基础结构](./#Unity Shader 基础结构)
-* [Unity Shader调试](./#Unity Shader调试)
+* [3D图形学理论基础](#3D图形学理论基础)
+* [Unity Shader 基础结构](#Unity Shader 基础结构)
+* [Unity Shader调试](#Unity Shader调试)
 
 ## 3D图形学理论基础
 

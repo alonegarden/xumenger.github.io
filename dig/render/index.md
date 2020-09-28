@@ -30,7 +30,7 @@ comments: no
 比如下面是编写Unity Shader 的基本框架！
 
 ```shader
-Shader "Test/ShaderExample"{
+Shader "Test/ShaderExample" {
 
     Properties {
         // 属性

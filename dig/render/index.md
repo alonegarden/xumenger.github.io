@@ -20,7 +20,8 @@ comments: no
 
 * [3D图形学理论基础](#001)
 * [Unity Shader 基础结构](#002)
-* [Unity Shader调试](#003)
+* [Unity Shader 调试](#003)
+* [一个简单的Shader](#004)
 
 ## <span id="001">3D图形学理论基础</span>
 
@@ -44,13 +45,13 @@ Unity 中内置的变换矩阵
 
 变量名               | 描述 
 ------------------- | ---------------------------------------------------- 
-UINTY_MATRIX_MVP    |  当前的模型观察投影矩阵，用于将顶点/方向矢量从模型空间变换到裁剪空间
-UINTY_MATRIX_MV     |  当前的模型观察矩阵，用于将顶点/方向矢量从模型空间变换到观察空间
-UINTY_MATRIX_V      |  当前的观察矩阵，用于将顶点/方向矢量从世界空间变换到观察空间
-UINTY_MATRIX_P      |  当前的投影矩阵，用于将顶点/方向矢量从观察空间变换到裁剪空间
-UINTY_MATRIX_VP     |  当前的观察投影矩阵，用于将顶点/方向矢量从观察空间变换到裁剪空间
-UINTY_MATRIX_T_MV   |  UINTY_MATRIX_MV的转置矩阵，用于将顶点/方向矢量从观察空间变换到模型空间
-UINTY_MATRIX_IT_MV  |  UINTY_MATRIX_MV的逆转置矩阵，用于将法线从模型空间变换到观察空间，也用于得到UINTY_MATRIX_MV的逆矩阵
+UNITY_MATRIX_MVP    |  当前的模型观察投影矩阵，用于将顶点/方向矢量从模型空间变换到裁剪空间
+UNITY_MATRIX_MV     |  当前的模型观察矩阵，用于将顶点/方向矢量从模型空间变换到观察空间
+UNITY_MATRIX_V      |  当前的观察矩阵，用于将顶点/方向矢量从世界空间变换到观察空间
+UNITY_MATRIX_P      |  当前的投影矩阵，用于将顶点/方向矢量从观察空间变换到裁剪空间
+UNITY_MATRIX_VP     |  当前的观察投影矩阵，用于将顶点/方向矢量从观察空间变换到裁剪空间
+UNITY_MATRIX_T_MV   |  UINTY_MATRIX_MV的转置矩阵，用于将顶点/方向矢量从观察空间变换到模型空间
+UNITY_MATRIX_IT_MV  |  UINTY_MATRIX_MV的逆转置矩阵，用于将法线从模型空间变换到观察空间，也用于得到UINTY_MATRIX_MV的逆矩阵
 _Object2World       |  当前的模型矩阵，用于将顶点/方向矢量从模型空间变换到世界空间
 _World2Object       |  _Object2World的逆矩阵，用于将顶点/方向矢量从世界空间变换到模型空间
 
@@ -113,6 +114,107 @@ Shader "Test/ShaderExample" {
 }
 ```
 
-## <span id="003">Unity Shader调试</span>
+## <span id="003">Unity Shader 调试</span>
 
 在Unity 的Project 窗口选中Unity Shader 文件后，对应在Inspector 窗口点击【Compile and show code】下拉列表可以让开发者检查该Unity Shader 针对不同的图形编程接口（例如OpenGL、D3D9 等）最终编译生成的Shader 代码，可以利用这些代码来分析和优化着色器！
+
+Mac 使用的图像编程接口是基于OpenGL 的，而其他平台，比如Windows，可能使用的是DirectX。在OpenGL 中，渲染纹理（Render Texture）的(0, 0) 点在左下角，而在DirectX 中(0, 0) 在左上角
+
+
+## <span id="004">一个简单的Shader</span>
+
+以下给出书中第一个Shader 实例源码，并添加必要的说明
+
+```
+Shader "Example/SimpleShader" {
+    Properties {
+        // 定义一个属性，可以在材质面板上选择颜色
+        _Color ("Color Tint", Color) = (1, 1, 1, 1)
+    }
+
+    SubShader {
+        Pass {
+            CGPROGRAM
+
+            #include "UnityCG.cginc"
+
+            // 告诉编译器 vert 是顶点着色器
+            #pragma vertex vert
+            // 告诉编译器 frag 是片元着色器
+            #pragma fragment frag
+
+
+            // uniform 关键词是 Cg 中用于修饰变量和参数的一种修饰词
+            // 它仅仅用于提供一些关于该变量的初始值是如何制定和存储的相关信息
+            uniform fixed4 _Color;
+
+
+            // 使用一个结构体定义顶点着色器的输入
+            // POSITION、NORMAL、TEXCOORD0 语义的数据来自哪里？
+            // 它们由该材质的 Mesh Render 组件提供，在每帧调用 Draw Call 的时候
+            // Mesh Render 组件会把它负责渲染的模型数据发送给 Unity Shader
+            struct a2v {
+                // vertex 包含了顶点的位置，通过 POSITION 语义指定的
+                // POSITION 语义告诉 Unity 用模型空间的顶点坐标填充 vertex 变量
+                float4 vertex : POSITION;
+
+                // NORMAL 语义告诉 Unity 用模型空间的法线向量填充 normal 变量
+                float3 normal : NORMAL;
+
+                // TEXCOORD0 语义告诉 Unity 用模型的第一套纹理坐标填充 texcoord 变量
+                float4 texcoord : TEXCOORD0;
+            };
+
+            // 使用一个结构体定义顶点着色器的输出
+            // 用于在顶点着色器和片元着色器之间传输信息
+            struct v2f {
+                // SV_POSITION 语义表示顶点在裁剪空间的位置
+                // SV_POSITION 语义告诉 Unity，pos 里包含了顶点在裁剪空间中的位置信息
+                // 否则，渲染器将无法得到裁剪空间中的顶点坐标，也无法将顶点渲染到屏幕上
+                float4 pos : SV_POSITION;
+
+                // COLOR0 语义 可用于存储颜色信息
+                // COLOR0 语义中的数据可以由用户自己定义，但一般存储颜色，比如逐顶点的漫反射颜色或者逐顶点的高光反射颜色
+                // 类似的语义还有 COLOR1 等
+                fixed3 color : COLOR0;
+            };
+
+
+            // 顶点着色器是逐顶点执行的
+            v2f vert(a2v v) {
+                v2f o;
+
+                // 下面一行，等价于 o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+                // UNITY_MATRIX_MVP 当前的模型观察投影矩阵，用于将顶点/方向矢量从模型空间变换到裁剪空间
+                o.pos = UnityObjectToClipPos(v.vertex);
+
+                // v.normal 包含了顶点的法线向量，其分量范围在[-1.0, 1.0]
+                // 下面的代码将分量范围映射到 [0.0, 1.0]
+                // 存储到 o.color 中传递给片元着色器
+                o.color = v.normal * 0.5 + fixed3(0.5, 0.5, 0.5);
+                return o;
+            }
+
+
+            // 片元着色器是逐片元执行的
+            // 片元大致可以认为对应屏幕像素，或者说render target上的像素，在透视投影下，离得近的模型占的屏幕面积大，自然片元就更多
+            // 片元着色器的输入实际上是把顶点着色器的输出进行插值后得到的结果
+            fixed4 frag(v2f i) : SV_Target {
+                fixed3 c = i.color;
+
+                // 使用 _Color 属性来控制输出颜色
+                c *= _Color.rbg;
+
+                // 将插值后的 i.color 显示到屏幕上
+                return fixed4(c, 1.0);
+            }
+
+            ENDCG
+        }
+    }
+}
+```
+
+顶点/片元着色器的复杂之处在于，很多事情都需要开发者亲力亲为，比如需要自己转换法线向量、自己处理光照和阴影等等
+
+为了方便开发者的编码过程，Unity 提供了很多的内置文件，这些文件包含了很多提前定义的函数、变量和宏等，在后续的具体案例中，用到的地方会详细介绍

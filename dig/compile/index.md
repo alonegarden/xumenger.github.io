@@ -18,7 +18,7 @@ comments: no
 
 ## <span id="001">编译器前端架构</span>
 
-比如针对下面的C 程序（注：参考自[1106c语言语法树](https://www.cnblogs.com/queenjuan/p/4943388.html)）
+比如针对下面的C 程序（注：参考自[《1106c语言语法树》](https://www.cnblogs.com/queenjuan/p/4943388.html)）
 
 ```c
 #include <stdio.h>
@@ -53,29 +53,6 @@ main()
 
 ![](./image/001-01.png)
 
-使用类似BNF 的格式定义这个编译器的语法规则，在编译器实现时，一个重点就是按照这个规则将程序解析为一棵语法树
-
-```
-// 程序
-Program -> Blocks
-
-// 块
-Blocks ->
-
-// 语句
-Statement ->
-
-// 赋值语句
-Assignment Statement -> 
-
-// 表达式
-Expression
-
-//
-
-```
-
-
 ## <span id="002">Lexer 词法分析器</span>
 
 比如解析表达式`auto x = y + 1` 为
@@ -91,7 +68,7 @@ Expression
 ]
 ```
 
-语法分析器中使用的技术主要是自动机处理状态（包括在TCP 协议等很多地方，都大量应用了状态的概念），以下参考[编译原理学习笔记之词法分析中的状态机与自动机](https://blog.csdn.net/ZP_icenow/article/details/82661407)
+语法分析器中使用的技术主要是自动机处理状态（包括在TCP 协议等很多地方，都大量应用了状态的概念），以下参考[《编译原理学习笔记之词法分析中的状态机与自动机》](https://blog.csdn.net/ZP_icenow/article/details/82661407)
 
 比如解析比较符号
 
@@ -105,8 +82,19 @@ Expression
 
 ![](./image/002-03.png)
 
+使用JavaScript 实现一个简单的词法分析器
+
+```javascript
+
+```
+
 ## <span id="003">Parser 语法分析器</span>
 
+使用JavaScript 实现一个简单的语法分析器
+
+```javascript
+
+```
 
 ## <span id="004">中间代码生成</span>
 

@@ -2776,7 +2776,7 @@ LClosure *luaY_parser (lua_State *L, ZIO *z, Mbuffer *buff,
 
 ## <span id="004">中间代码生成</span>
 
-在Lua 5.4 中，lopcodes.h 定义了Lua 的指令
+Lua 代码时通过翻译成Lua 虚拟机能识别的字节码运行的。在Lua 5.4 中，lopcodes.h 定义了Lua 的字节码指令
 
 ```c
 /*
@@ -3159,8 +3159,6 @@ LUAI_DDEC(const lu_byte luaP_opmodes[NUM_OPCODES];)
 
 #endif
 ```
-
-在
 
 ## <span id="005">ANTLR 定义的Lua 文法</span>
 

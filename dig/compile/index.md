@@ -6,7 +6,7 @@ comments: no
 
 >本文内容主要来自《一起手写一个JIT 编译器》！！先学习实现一个简单的编译器，关于编译原理的知识后续会慢慢补充和完善
 
->[]()
+>[编译原理 — 中科大](https://www.bilibili.com/video/BV17W41187gL)
 
 ## 文章目录
 
@@ -14,7 +14,7 @@ comments: no
 * [Lexer 词法分析器](#002)
 * [Parser 语法分析器](#003)
 * [中间代码生成](#004)
-* [ANTLR 定义的Lua 文法]()
+* [ANTLR 定义的Lua 文法](#005)
 
 ## <span id="001">编译器前端架构</span>
 
@@ -75,7 +75,7 @@ Expression
 
 ANTLR 致力于解决编译前端的所有工作。使用ANTLR 的语法可以定义目标语言的词法记号和语法规则，ANTLR 自动生成目标语言的词法分析器和语法分析器；此外，如果在语法规则中指定抽象语法树的规则，在生成语法分析器的同时，ANTLR 还能够生成抽象语法树；最终使用树分析器遍历抽象语法树，完成语义分析和中间代码生成。整个工作在ANTLR 强大的支持下，将变得非常轻松和愉快
 
-比如在[https://github.com/antlr/grammars-v4](https://github.com/antlr/grammars-v4) 项目中，使用ANTLR 定义了很多语言的文法，比如Lua
+比如在[https://github.com/antlr/grammars-v4](https://github.com/antlr/grammars-v4) 项目中，使用ANTLR 定义了很多语言的文法，比如[Lua](https://github.com/lua/lua)
 
 ```
 /*

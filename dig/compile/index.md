@@ -67,48 +67,66 @@ main()
 
 虚拟机核心相关源文件
 
+<style>
+table th:nth-of-type(2) {
+    width: 240;
+}
+</style>
+
 文件名               | 作用 
 ------------------- | ----------------------------------------------------
-lapi.c              | <div style="width: 240pt">C语言接口，对外接口前缀是lua\_ </div>
-lcode.c             | <div style="width: 240pt">源码生成器，对外接口前缀是luaK\_ </div>
-ldebug.c            | <div style="width: 240pt">调试库，对外接口前缀是luaK\_ </div>
-ldo.c               | <div style="width: 240pt">函数调用及栈管理，对外接口前缀是luaK\_ </div>
-ldump.c             | <div style="width: 240pt">序列化预编译的Lua 字节码 </div>
-lfunc.c             | <div style="width: 240pt">提供操作函数原型及闭包的辅助函数，对外接口前缀是luaF\_ </div>
-lgc.c               | <div style="width: 240pt">GC垃圾回收，对外接口前缀是luaC\_ </div>
-llex.c              | <div style="width: 240pt">词法分析，对外接口前缀是luaX\_ </div>
-lmem.c              | <div style="width: 240pt">内存管理，对外接口前缀是luaM\_ </div>
-lobject.c           | <div style="width: 240pt">对象管理，对外接口前缀是luaO\_ </div>
-lopcodes.c          | <div style="width: 240pt">字节码操作，对外接口前缀是luaP\_ </div>
-lparser.c           | <div style="width: 240pt">语法分析，对外接口前缀是luaY\_ </div>
-lstate.c            | <div style="width: 240pt">全局状态机，对外接口前缀是luaE\_ </div>
-lstring.c           | <div style="width: 240pt">字符串操作，对外接口前缀是luaS\_ </div>
-ltable.c            | <div style="width: 240pt">表操作，对外接口前缀是luaH\_ </div>
-lundump.c           | <div style="width: 240pt">加载预编译字节码，对外接口前缀是luaU\_ </div>
-ltm.c               | <div style="width: 240pt">tag方法，对外接口前缀是luaT\_ </div>
-lzio.c              | <div style="width: 240pt">缓存流接口，对外接口前缀是luaZ\_ </div>
+lapi.c              | C语言接口，对外接口前缀是lua\_
+lcode.c             | 源码生成器，对外接口前缀是luaK\_
+ldebug.c            | 调试库，对外接口前缀是luaK\_
+ldo.c               | 函数调用及栈管理，对外接口前缀是luaK\_
+ldump.c             | 序列化预编译的Lua 字节码
+lfunc.c             | 提供操作函数原型及闭包的辅助函数，对外接口前缀是luaF\_
+lgc.c               | GC垃圾回收，对外接口前缀是luaC\_
+llex.c              | 词法分析，对外接口前缀是luaX\_
+lmem.c              | 内存管理，对外接口前缀是luaM\_
+lobject.c           | 对象管理，对外接口前缀是luaO\_
+lopcodes.c          | 字节码操作，对外接口前缀是luaP\_
+lparser.c           | 语法分析，对外接口前缀是luaY\_
+lstate.c            | 全局状态机，对外接口前缀是luaE\_
+lstring.c           | 字符串操作，对外接口前缀是luaS\_
+ltable.c            | 表操作，对外接口前缀是luaH\_
+lundump.c           | 加载预编译字节码，对外接口前缀是luaU\_
+ltm.c               | tag方法，对外接口前缀是luaT\_
+lzio.c              | 缓存流接口，对外接口前缀是luaZ\_
 
 内嵌库相关源文件
 
+<style>
+table th:nth-of-type(2) {
+    width: 240;
+}
+</style>
+
 文件名               | 作用 
 ------------------- | ----------------------------------------------------
-lauxlic.c           | <div style="width: 240pt">库编写时需要用到的辅助函数库 </div>
-lbaselib.c          | <div style="width: 240pt">基础库 </div>
-ldblib.c            | <div style="width: 240pt">调试库 </div>
-liolib.c            | <div style="width: 240pt">IO库 </div>
-lmathlib.c          | <div style="width: 240pt">数学库 </div>
-loslib.c            | <div style="width: 240pt">OS库 </div>
-ltablib.c           | <div style="width: 240pt">表操作库 </div>
-lstrlib.c           | <div style="width: 240pt">字符串操作库 </div>
-loadlib.c           | <div style="width: 240pt">动态扩展加载器 </div>
-linit.c             | <div style="width: 240pt">负责内嵌库的初始化 </div>
+lauxlic.c           | 库编写时需要用到的辅助函数库
+lbaselib.c          | 基础库
+ldblib.c            | 调试库
+liolib.c            | IO库
+lmathlib.c          | 数学库
+loslib.c            | OS库
+ltablib.c           | 表操作库
+lstrlib.c           | 字符串操作库
+loadlib.c           | 动态扩展加载器
+linit.c             | 负责内嵌库的初始化
 
 解析器、字节码解释器相关源文件
 
+<style>
+table th:nth-of-type(2) {
+    width: 240;
+}
+</style>
+
 文件名               | 作用 
 ------------------- | ----------------------------------------------------
-lua.c               | <div style="width: 240pt">解释器 </div>
-luac.c              | <div style="width: 240pt">字节码编译器 </div>
+lua.c               | 解释器
+luac.c              | 字节码编译器
 
 ## <span id="002">Lexer 词法分析器</span>
 

@@ -4,7 +4,9 @@ layout: page
 comments: no
 ---
 
->本文内容主要来自《一起手写一个JIT 编译器》！！先学习实现一个简单的编译器（只涉及前端），关于编译原理的知识后续会慢慢补充和完善
+>[https://github.com/lua/lua/tree/v5.4.0](https://github.com/lua/lua/tree/v5.4.0)
+
+>[https://github.com/antlr/grammars-v4](https://github.com/antlr/grammars-v4)
 
 >[编译原理 — 中科大](https://www.bilibili.com/video/BV17W41187gL)
 
@@ -90,24 +92,24 @@ main()
 
 ![](./image/002-03.png)
 
-使用JavaScript 实现一个简单的词法分析器
+Lua 5.4 的词法分析器的代码如下
 
-```javascript
+```c
 
 ```
 
 ## <span id="003">Parser 语法分析器</span>
 
-上面对于“源码”进行了词法分析之后，得到token 流（记号流），token 流作为词法分析的输出，输入给语法分析器，语法分析器处理token 流。语法分析器主要使用的理论是**形式语言**
+上面对于“源码”进行了词法分析之后，得到token 流（记号流），token 流作为词法分析的输出，输入给语法分析器，语法分析器处理token 流得到抽象语法树。语法分析器主要使用的理论是**形式语言**
 
 >形式语言的一个特性是，给定一个这个语言的字符串，一定存在一个函数，可以将其映射为一个抽象语法树，而且这种映射是不需要理解这个语言本身的含义的！不像自然语言，形式语言不能有歧义！其实这又引申出另一个领域，自然语言处理，这里就不涉及了，因为又涉及到机器学习、人工智能的领域！
 
->树数据结构在计算机科学中极其重要，比如二叉树、平衡二叉树、二叉查找树、堆、红黑树、B树、B+树、语法树、动态规划背后也是树的思想……
+>树数据结构在计算机科学中极其重要，比如二叉树、平衡二叉树、二叉查找树、堆、红黑树、B树、B+树、抽象语法树（AST）、动态规划背后也是树的思想……
 
 一般我们用BNF（巴科斯范式）、ABNF（扩展巴科斯范式）等定义一个语言的语法，比如[使用ABNF 定义JSON 的语法](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)
 
 ```
-// null/false/true
+// null/false/true 值
 JSON-text = ws value ws
 ws = *(%x20 / %x09 / %x0A / %x0D)
 value = null / false / true
@@ -150,9 +152,9 @@ member = string ws %3A ws value
 object = %x7B ws [ member *( ws %x2C ws member ) ] ws %x7D
 ```
 
-接下来使用JavaScript 实现一个简单的语法分析器
+Lua 5.4 的语法分析器的实现如下
 
-```javascript
+```c
 
 ```
 

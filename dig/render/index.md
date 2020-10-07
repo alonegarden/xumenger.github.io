@@ -61,7 +61,7 @@ UNITY_MATRIX_IT_MV  |  UINTY_MATRIX_MV的逆转置矩阵，用于将法线从模
 _Object2World       |  当前的模型矩阵，用于将顶点/方向矢量从模型空间变换到世界空间
 _World2Object       |  _Object2World的逆矩阵，用于将顶点/方向矢量从世界空间变换到模型空间
 
-最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802)的一个视频[Unity Shader 102 - 3D成像的过程和depth的小应用](https://www.bilibili.com/video/BV1MD4y1U7B6)
+最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802)的一个视频[《Unity Shader 102 - 3D成像的过程和depth的小应用》](https://www.bilibili.com/video/BV1MD4y1U7B6)
 
 ## <span id="002">Unity Shader 基础结构</span>
 

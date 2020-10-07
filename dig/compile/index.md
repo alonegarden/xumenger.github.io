@@ -4,6 +4,8 @@ layout: page
 comments: no
 ---
 
+>本文主要通过分析Lua 源码来理解编译原理、虚拟机与指令集、垃圾回收等等的知识，会持续补充完善
+
 >[https://github.com/lua/lua/tree/v5.4.0](https://github.com/lua/lua/tree/v5.4.0)
 
 >[https://github.com/antlr/grammars-v4](https://github.com/antlr/grammars-v4)

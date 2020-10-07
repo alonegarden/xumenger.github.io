@@ -18,6 +18,14 @@ comments: no
 
 ## <span id="001">编译器前端架构</span>
 
+比如下面是一种没有优化的编译器结构（来自[编译原理 — 中科大](https://www.bilibili.com/video/BV17W41187gL)）
+
+![](./image/001-01.png)
+
+这个是一种更复杂的编译器结构
+
+![](./image/001-02.png)
+
 比如针对下面的C 程序（注：参考自[《1106c语言语法树》](https://www.cnblogs.com/queenjuan/p/4943388.html)）
 
 ```c
@@ -51,7 +59,7 @@ main()
 
 解析得到其语法树是
 
-![](./image/001-01.png)
+![](./image/001-03.png)
 
 ## <span id="002">Lexer 词法分析器</span>
 
@@ -68,17 +76,17 @@ main()
 ]
 ```
 
-语法分析器中使用的技术主要是自动机处理状态（包括在TCP 协议等很多地方，都大量应用了状态的概念），以下参考[《编译原理学习笔记之词法分析中的状态机与自动机》](https://blog.csdn.net/ZP_icenow/article/details/82661407)
+语法分析器中使用的技术主要是自动机处理状态（包括在TCP 协议等很多技术领域，都大量应用了状态的概念），以下参考[《编译原理学习笔记之词法分析中的状态机与自动机》](https://blog.csdn.net/ZP_icenow/article/details/82661407)
 
 比如解析比较符号
 
 ![](./image/002-01.png)
 
-比如解析标识符
+比如解析标识符：`id ->letter (letter | digit )*`
 
 ![](./image/002-02.png)
 
-比如解析无符号数
+比如解析无符号数：`num ->digit+ (.digit+)? (E (+ | -)? digit+)?`
 
 ![](./image/002-03.png)
 

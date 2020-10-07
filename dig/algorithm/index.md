@@ -10,4 +10,4 @@ comments: no
 
 >[https://leetcode.com/](https://leetcode.com/)
 
->[https://github.com/xumenger/LeetCodeAnimation](https://github.com/xumenger/LeetCodeAnimation)
+>[https://github.com/MisterBooo/LeetCodeAnimation](https://github.com/MisterBooo/LeetCodeAnimation)

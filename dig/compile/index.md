@@ -18,6 +18,41 @@ comments: no
 
 ## <span id="001">编译器前端架构</span>
 
+比如针对下面的C 程序（注：参考自[1106c语言语法树](https://www.cnblogs.com/queenjuan/p/4943388.html)）
+
+```c
+#include <stdio.h>
+
+main()
+{
+    int i, j. temp;
+    int a[10];
+
+    for (i=0; i<10; i++)
+        scanf("%d", &a[i]);
+
+    for (j=0; j<=9; j++)
+    {
+        for (i=0; i<10-j; i++)
+            if (a[i] > a[i+1])
+            {
+                temp = a[i];
+                a[i] = a[i+1];
+                a[i+1] = temp;
+            }
+    }
+
+    for (i=1; i<11; i++)
+        printf("%5d", a[i]);
+
+    printf("\n");
+}
+```
+
+解析得到其语法树是
+
+![](./image/001-01.png)
+
 使用类似BNF 的格式定义这个编译器的语法规则，在编译器实现时，一个重点就是按照这个规则将程序解析为一棵语法树
 
 ```

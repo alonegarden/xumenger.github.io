@@ -4,7 +4,7 @@ layout: page
 comments: no
 ---
 
->本文内容主要来自《一起手写一个JIT 编译器》！！先学习实现一个简单的编译器，关于编译原理的知识后续会慢慢补充和完善
+>本文内容主要来自《一起手写一个JIT 编译器》！！先学习实现一个简单的编译器（只涉及前端），关于编译原理的知识后续会慢慢补充和完善
 
 >[编译原理 — 中科大](https://www.bilibili.com/video/BV17W41187gL)
 
@@ -18,7 +18,7 @@ comments: no
 
 ## <span id="001">编译器前端架构</span>
 
-比如下面是一种没有优化的编译器结构（来自[编译原理 — 中科大](https://www.bilibili.com/video/BV17W41187gL)）
+比如下面是一种没有优化的编译器结构（来自[《编译原理 — 中科大》](https://www.bilibili.com/video/BV17W41187gL)）
 
 ![](./image/001-01.png)
 
@@ -86,7 +86,7 @@ main()
 
 ![](./image/002-02.png)
 
-比如解析无符号数：`num ->digit+ (.digit+)? (E (+ | -)? digit+)?`
+比如解析无符号数（不考虑十进制外的其他计数法等）：`num ->digit+ (.digit+)? (E (+ | -)? digit+)?`
 
 ![](./image/002-03.png)
 
@@ -97,6 +97,8 @@ main()
 ```
 
 ## <span id="003">Parser 语法分析器</span>
+
+上面对于“源码”进行了词法分析之后，得到token 流（记号流），token 流作为词法分析的输出，输入给语法分析器，语法分析器处理token 流
 
 使用JavaScript 实现一个简单的语法分析器
 

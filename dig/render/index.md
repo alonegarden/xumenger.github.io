@@ -16,6 +16,12 @@ comments: no
 
 >[https://blog.csdn.net/zhmxy555/category_9264739.html](https://blog.csdn.net/zhmxy555/category_9264739.html)
 
+>Book of Shader：[https://thebookofshaders.com/(英)](https://thebookofshaders.com/)与[https://thebookofshaders.com/?lan=ch(中)](https://thebookofshaders.com/?lan=ch)
+
+>[Shader语法](https://docs.unity3d.com/Manual/SL-ShaderSemantics.html)、[Sampler语法](https://docs.unity3d.com/2018.4/Documentation/Manual/SL-SamplerStates.html)、[Unity Shader 例子](https://docs.unity3d.com/Manual/SL-VertexFragmentShaderExamples.html)
+
+>[GLSL 成像具体过程](https://learnopengl.com/Getting-started/Hello-Triangle)
+
 ## 文章目录
 
 * [3D图形学理论基础](#001)
@@ -54,6 +60,8 @@ UNITY_MATRIX_T_MV   |  UINTY_MATRIX_MV的转置矩阵，用于将顶点/方向�
 UNITY_MATRIX_IT_MV  |  UINTY_MATRIX_MV的逆转置矩阵，用于将法线从模型空间变换到观察空间，也用于得到UINTY_MATRIX_MV的逆矩阵
 _Object2World       |  当前的模型矩阵，用于将顶点/方向矢量从模型空间变换到世界空间
 _World2Object       |  _Object2World的逆矩阵，用于将顶点/方向矢量从世界空间变换到模型空间
+
+最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802)的一个视频[Unity Shader 102 - 3D成像的过程和depth的小应用](https://www.bilibili.com/video/BV1MD4y1U7B6)
 
 ## <span id="002">Unity Shader 基础结构</span>
 

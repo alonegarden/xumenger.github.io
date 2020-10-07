@@ -94,7 +94,7 @@ lzio.c              | 缓存流接口，对外接口前缀是luaZ\_
 
 文件名               | 作用 
 ------------------- | ----------------------------------------------------
-lauxlic.c           | 库编写时需要用到的辅助函数库&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+lauxlic.c           | 库编写时需要用到的辅助函数库&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 lbaselib.c          | 基础库
 ldblib.c            | 调试库
 liolib.c            | IO库
@@ -109,7 +109,7 @@ linit.c             | 负责内嵌库的初始化
 
 文件名               | 作用 
 ------------------- | ----------------------------------------------------
-lua.c               | 解释器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+lua.c               | 解释器&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 luac.c              | 字节码编译器
 
 ## <span id="002">Lexer 词法分析器</span>

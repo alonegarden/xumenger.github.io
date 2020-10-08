@@ -66,6 +66,12 @@ _World2Object       |  _Object2World的逆矩阵，用于将顶点/方向矢量�
 
 最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802) 的一个视频[《Unity Shader 102 - 3D成像的过程和depth的小应用》](https://www.bilibili.com/video/BV1MD4y1U7B6)
 
+再补充一下渲染流水线的知识。渲染流水线的最终目的在于生成/渲染出一张二维纹理，即在电脑屏幕上看到的效果。它的输入是一个虚拟摄像机、一些光源、一些Shader 以及纹理等
+
+![](./image/001-02.jpeg)
+
+更详细的内容建议阅读《Unity Shader 入门精要》基础篇！
+
 ## <span id="002">Unity Shader 基础结构</span>
 
 比如下面是编写Unity Shader 的基本框架！
@@ -194,7 +200,11 @@ Shader "Example/SimpleShader" {
             };
 
 
-            // 顶点着色器是逐顶点执行的
+            // 顶点着色器时流水线的第一个阶段，它的输入来自CPU
+            // 顶点着色器的处理单位是顶点，也就是说，输入进来的每个顶点都会调用一次顶点着色器
+            // 顶点着色器本身不可以创建或者销毁任何顶点，而且无法得到顶点与顶点之间的关系
+            // 例如，无法得知两个顶点是否属于同一个三角形网格
+            // 正是因为这种相互独立性，GPU 可以利用本身的特性并发化处理每个顶点，这个阶段的处理速度非常快
             v2f vert(a2v v) {
                 v2f o;
 
@@ -253,12 +263,21 @@ Shader "Example/SimpleShader" {
 o.vertex = UnityObjectToClipPos(v.vertex);
 
 // 等价于
-o.vertex = mul(UNITY_MATRIX_MVP,v.vertex);    
+o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 ```
 
 UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos()、UnityViewToClipPos()
 
 在这以前，你还需要在Pass中加上一句 `#include "UnityCG.cginc"`
+
+**mul()**
+
+在上面介绍UnityObjectToClipPos() 的时候，说到其等价于`o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);`
+
+
+**dot()**
+
+在线性代数中，矩阵有叉乘、点乘两种乘法运算，
 
 **ComputeScreenPos()**
 
@@ -266,13 +285,8 @@ UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos(
 **TRANSFORM_TEX()**
 
 
-**mul()**
-
 
 **normalize()**
-
-
-**dot()**
 
 
 **saturate()**

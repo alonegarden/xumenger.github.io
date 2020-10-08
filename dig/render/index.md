@@ -460,12 +460,17 @@ Shader "Unity Shaders Book/Chapter 14/Toon Shading" {
                 diff = (diff * 0.5 + 0.5) * atten;
                 
                 // 使用这个漫反射系数对渐变纹理_Ramp 进行采样
+                // 并将结果和材质的反射率、光照颜色相乘，作为最后的漫反射光照
                 fixed3 diffuse = _LightColor0.rgb * albedo * tex2D(_Ramp, float2(diff, diff)).rgb;
                 
+                // 计算高光
                 fixed spec = dot(worldNormal, worldHalfDir);
+                // 使用fwidth() 对高光区域的边界进行抗锯齿处理
                 fixed w = fwidth(spec) * 2.0;
+                // 最后还使用step(0.0001, _SpecularScale)，这是为了在_SpecularScale 为0 时，可以完全消除高光反射的光照
                 fixed3 specular = _Specular.rgb * lerp(0, 1, smoothstep(-w, w, spec + _SpecularScale - 1)) * step(0.0001, _SpecularScale);
                 
+                // 最后，返回环境光照、漫反射光照和高光反射叠加的结果
                 return fixed4(ambient + diffuse + specular, 1.0);
             }
         
@@ -475,6 +480,8 @@ Shader "Unity Shaders Book/Chapter 14/Toon Shading" {
     FallBack "Diffuse"
 }
 ```
+
+当然《Unity Shader 入门精要》实现的卡通渲染光照模型是一种非常简单的实现，在商业项目中，往往需要设计和实现更加复杂的光照模型，以得到出色的卡通效果
 
 其中\_Ramp 设置的贴图是这样的
 

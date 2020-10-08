@@ -30,6 +30,7 @@ comments: no
 * [一个简单的Shader](#004)
 * [Unity Shader 内置函数/宏/变量](#005)
 * [卡通渲染](#006)
+* [基础图形学公式](#007)
 
 ## <span id="001">3D图形学理论基础</span>
 
@@ -273,3 +274,7 @@ Shader "Example/SimpleShader" {
 
 
 最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)
+
+## <span id="007">基础图形学公式</span>
+
+以上展示了一些典型的案例，并且给出了一些基础的图形学知识，这里穿插一下在编写Shader 实现各种效果的时候，可能会经常用到的公式！

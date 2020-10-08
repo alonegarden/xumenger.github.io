@@ -243,9 +243,12 @@ Shader "Example/SimpleShader" {
 
 ## <span id="005">Unity Shader 内置函数/宏/变量</span>
 
-在编写Unity Shader 的时候，直接使用Unity 内置的一些函数/宏/变量可以有效的提升开发效率！下面会尽可能详细的列举，并说明其功能和背后的原理！
+在编写Unity Shader 的时候，直接使用Unity 内置的一些函数/宏/变量可以有效的提升开发效率！下面会尽可能详细的列举，并说明其功能和背后的原理！同时也会提到这些内置的函数/宏/变量可能会在实现哪些效果的时候用到，作为一个快速参考的便签使用！
 
 **UnityObjectToClipPos()**
+
+
+**ComputeScreenPos()**
 
 
 **TRANSFORM_TEX()**
@@ -269,11 +272,34 @@ Shader "Example/SimpleShader" {
 **lerp()**
 
 
+**tex2Dproj()**
+
+
+**UNITY_PROJ_COORD()**
+
+
+**LinearEyeDepth()**
+
+
+**smoothstep()**
+
+
+**COMPUTE_VIEW_NORMAL**
+
+
 ## <span id="006">实现卡通效果渲染</span>
 
 
 
-最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)
+>最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)
+
+>[游戏诞生之日09 - 美术篇 卡通渲染着色器 UTS2](https://zhuanlan.zhihu.com/p/137288013)
+
+>[【翻译】西川善司「实验做出的游戏图形」「GUILTY GEAR Xrd -SIGN-」中实现的「纯卡通动画的实时3D图形」的秘密，前篇（1）](https://www.cnblogs.com/TracePlus/p/4205798.html)
+
+>[到目前为止的二次元渲染总结](https://zhuanlan.zhihu.com/p/126668414)
+
+>[从零开始的卡通渲染](https://zhuanlan.zhihu.com/c_1215952152252121088)
 
 ## <span id="007">基础图形学公式</span>
 

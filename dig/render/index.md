@@ -29,6 +29,7 @@ comments: no
 * [Unity Shader 调试](#003)
 * [一个简单的Shader](#004)
 * [Unity Shader 内置函数/宏/变量](#005)
+* [卡通渲染](#006)
 
 ## <span id="001">3D图形学理论基础</span>
 
@@ -267,7 +268,8 @@ Shader "Example/SimpleShader" {
 ### lerp()
 
 
-## 卡通渲染
+## <span id="006">卡通渲染</span>
+
 
 
 最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)

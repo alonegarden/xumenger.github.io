@@ -28,6 +28,7 @@ comments: no
 * [Unity Shader 基础结构](#002)
 * [Unity Shader 调试](#003)
 * [一个简单的Shader](#004)
+* [Unity Shader 内置函数/宏/变量](#005)
 
 ## <span id="001">3D图形学理论基础</span>
 
@@ -61,7 +62,7 @@ UNITY_MATRIX_IT_MV  |  UINTY_MATRIX_MV的逆转置矩阵，用于将法线从模
 _Object2World       |  当前的模型矩阵，用于将顶点/方向矢量从模型空间变换到世界空间
 _World2Object       |  _Object2World的逆矩阵，用于将顶点/方向矢量从世界空间变换到模型空间
 
-最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802)的一个视频[《Unity Shader 102 - 3D成像的过程和depth的小应用》](https://www.bilibili.com/video/BV1MD4y1U7B6)
+最后推荐B 站[up 主Flynnmnn](https://space.bilibili.com/398411802) 的一个视频[《Unity Shader 102 - 3D成像的过程和depth的小应用》](https://www.bilibili.com/video/BV1MD4y1U7B6)
 
 ## <span id="002">Unity Shader 基础结构</span>
 
@@ -127,6 +128,9 @@ Shader "Test/ShaderExample" {
 在Unity 的Project 窗口选中Unity Shader 文件后，对应在Inspector 窗口点击【Compile and show code】下拉列表可以让开发者检查该Unity Shader 针对不同的图形编程接口（例如OpenGL、D3D9 等）最终编译生成的Shader 代码，可以利用这些代码来分析和优化着色器！
 
 Mac 使用的图像编程接口是基于OpenGL 的，而其他平台，比如Windows，可能使用的是DirectX。在OpenGL 中，渲染纹理（Render Texture）的(0, 0) 点在左下角，而在DirectX 中(0, 0) 在左上角
+
+### 帧调试器
+
 
 
 ## <span id="004">一个简单的Shader</span>
@@ -234,3 +238,36 @@ Shader "Example/SimpleShader" {
 [https://docs.unity3d.com/2019.3/Documentation/Manual/SL-BuiltinFunctions.html](https://docs.unity3d.com/2019.3/Documentation/Manual/SL-BuiltinFunctions.html)
 
 [https://docs.unity3d.com/2019.3/Documentation/Manual/SL-UnityShaderVariables.html](https://docs.unity3d.com/2019.3/Documentation/Manual/SL-UnityShaderVariables.html)
+
+## <span id="005">Unity Shader 内置函数/宏/变量</span>
+
+在编写Unity Shader 的时候，直接使用Unity 内置的一些函数/宏/变量可以有效的提升开发效率！下面会尽可能详细的列举，并说明其功能和背后的原理！
+
+### UnityObjectToClipPos()
+
+
+### TRANSFORM_TEX()
+
+
+### mul()
+
+
+### normalize()
+
+
+### dot()
+
+
+### saturate()
+
+
+### tex2D()
+
+
+### lerp()
+
+
+## 卡通渲染
+
+
+最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)

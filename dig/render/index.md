@@ -29,7 +29,7 @@ comments: no
 * [Unity Shader 调试](#003)
 * [一个简单的Shader](#004)
 * [Unity Shader 内置函数/宏/变量](#005)
-* [卡通渲染](#006)
+* [实现卡通效果渲染](#006)
 * [基础图形学公式](#007)
 
 ## <span id="001">3D图形学理论基础</span>
@@ -269,7 +269,7 @@ Shader "Example/SimpleShader" {
 **lerp()**
 
 
-## <span id="006">卡通渲染</span>
+## <span id="006">实现卡通效果渲染</span>
 
 
 

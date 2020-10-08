@@ -247,6 +247,18 @@ Shader "Example/SimpleShader" {
 
 **UnityObjectToClipPos()**
 
+用于将顶点位置从模型空间转换到裁剪空间，在顶点着色器中使用
+
+```
+o.vertex = UnityObjectToClipPos(v.vertex);
+
+// 等价于
+o.vertex = mul(UNITY_MATRIX_MVP,v.vertex);    
+```
+
+UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos()、UnityViewToClipPos()
+
+在这以前，你还需要在Pass中加上一句 `#include "UnityCG.cginc"`
 
 **ComputeScreenPos()**
 

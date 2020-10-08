@@ -10,7 +10,7 @@ comments: no
 
 >[https://github.com/xumenger/Unity_Shaders_Book](https://github.com/xumenger/Unity_Shaders_Book)
 
->本文内容来自《Unity Shader 入门精要》！！
+>本文内容主要来自《Unity Shader 入门精要》！！
 
 >[https://github.com/xumenger/Awesome-Unity-Shader](https://github.com/xumenger/Awesome-Unity-Shader)
 
@@ -289,13 +289,210 @@ Shader "Example/SimpleShader" {
 
 ## <span id="006">实现卡通效果渲染</span>
 
+卡通风格是游戏中常见的一种渲染风格，使用这种风格的游戏画面通常有一些共有的特点，例如物体都被黑色的线条描边，以及分明的明暗变化等等，下面的例子仍然来自《Unity Shader 入门精要》
 
+```
+Shader "Unity Shaders Book/Chapter 14/Toon Shading" {
+    Properties {
+        _Color ("Color Tint", Color) = (1, 1, 1, 1)
+        _MainTex ("Main Tex", 2D) = "white" {}
 
->最后推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)
+        // _Ramp 是用于控制漫反射色调的渐变纹理，后面会有说明
+        _Ramp ("Ramp Texture", 2D) = "white" {}
+
+        // 用于控制轮廓线宽度
+        _Outline ("Outline", Range(0, 1)) = 0.1
+
+        // 用于控制轮廓线颜色
+        _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
+
+        // 高光反射颜色
+        _Specular ("Specular", Color) = (1, 1, 1, 1)
+
+        // 用于控制计算高光反射时使用的阈值
+        _SpecularScale ("Specular Scale", Range(0, 0.1)) = 0.01
+    }
+
+    SubShader {
+        Tags { "RenderType"="Opaque" "Queue"="Geometry"}
+        
+        // 定义渲染轮廓线需要的Pass，这个Pass 只渲染背面的三角面片
+        Pass {
+            // 使用NAME 命令为该Pass 定义了名称，这是因为描边在非真实感渲染中是非常常见的效果
+            // 为该Pass 定义名称可以让我们在后面的使用中不需要再重复编写此Pass，只需要调用它的名字即可
+            NAME "OUTLINE"
+            
+            // 只渲染背面，所以使用Cull 指令把正面的三角面片剔除
+            Cull Front
+            
+            CGPROGRAM
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            #include "UnityCG.cginc"
+            
+            float _Outline;
+            fixed4 _OutlineColor;
+            
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+            }; 
+            
+            struct v2f {
+                float4 pos : SV_POSITION;
+            };
+            
+
+            // 定义描边需要的顶点着色器
+            v2f vert (a2v v) {
+                v2f o;
+                
+                // 把顶点、法线变换到视角空间（观察空间）下，这是为了让描边可以在观察空间达到最好的效果
+                float4 pos = float4(UnityObjectToViewPos(v.vertex), 1.0);
+                float3 normal = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
+
+                // 设置法线的z 分量，对其归一化后再将顶点沿其方向扩展，得到扩展后的顶点坐标
+                // 对法线的处理是为了尽可能避免背面扩张后的顶点挡住正面的面片
+                normal.z = -0.5;
+                pos = pos + float4(normalize(normal), 0) * _Outline;
+
+                // 最后把顶点从视角空间变换到裁剪空间
+                o.pos = mul(UNITY_MATRIX_P, pos);
+                
+                return o;
+            }
+            
+            // 片元着色器很简单，只需要用轮廓线颜色渲染整个背面即可
+            float4 frag(v2f i) : SV_Target { 
+                return float4(_OutlineColor.rgb, 1);               
+            }
+            
+            ENDCG
+        }
+        
+
+        // 定义光照模型所在的Pass，以渲染模型的正面
+        // 由于光照模型需要使用Unity 提供的光照等信息，需要为Pass 进行相应的设置
+        Pass {
+            Tags { "LightMode"="ForwardBase" }
+            
+            // 这次只渲染正面，所以剔除模型的背面
+            Cull Back
+        
+            CGPROGRAM
+        
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            // 添加相应的编译指令，都是为了让Shader 中的光照变量可以被正确赋值
+            #pragma multi_compile_fwdbase
+        
+            #include "UnityCG.cginc"
+            #include "Lighting.cginc"
+            #include "AutoLight.cginc"
+            #include "UnityShaderVariables.cginc"
+            
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            sampler2D _Ramp;
+            fixed4 _Specular;
+            fixed _SpecularScale;
+        
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 texcoord : TEXCOORD0;
+                float4 tangent : TANGENT;
+            }; 
+        
+            struct v2f {
+                float4 pos : POSITION;
+                float2 uv : TEXCOORD0;
+                float3 worldNormal : TEXCOORD1;
+                float3 worldPos : TEXCOORD2;
+                SHADOW_COORDS(3)
+            };
+            
+            v2f vert (a2v v) {
+                v2f o;
+                
+                o.pos = UnityObjectToClipPos( v.vertex);
+                o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
+
+                // 计算世界空间下的法线向量和顶点位置
+                o.worldNormal  = UnityObjectToWorldNormal(v.normal);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                
+                // 使用Unity 内置的宏TRANSFER_SHADOW 计算阴影所需要的各个变量
+                TRANSFER_SHADOW(o);
+                
+                return o;
+            }
+            
+
+            // 片元着色器中包含了计算光照模型的关键代码
+            float4 frag(v2f i) : SV_Target { 
+                // 对世界空间下的法线向量归一化
+                fixed3 worldNormal = normalize(i.worldNormal);
+
+                // 对
+                fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                fixed3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                fixed3 worldHalfDir = normalize(worldLightDir + worldViewDir);
+                
+                //
+                fixed4 c = tex2D (_MainTex, i.uv);
+                // 计算材质的反射率albedo
+                fixed3 albedo = c.rgb * _Color.rgb;
+                
+                // 计算环境光照ambient
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                
+                // 使用Unity 内置的宏UNITY_LIGHT_ATTENUATION 计算当前世界坐标系下的阴影值
+                UNITY_LIGHT_ATTENUATION(atten, i, i.worldPos);
+                
+                // 计算半兰伯特漫反射系数
+                fixed diff =  dot(worldNormal, worldLightDir);
+                // 并和阴影值相乘得到最终的漫反射系数
+                diff = (diff * 0.5 + 0.5) * atten;
+                
+                // 使用这个漫反射系数对渐变纹理_Ramp 进行采样
+                fixed3 diffuse = _LightColor0.rgb * albedo * tex2D(_Ramp, float2(diff, diff)).rgb;
+                
+                fixed spec = dot(worldNormal, worldHalfDir);
+                fixed w = fwidth(spec) * 2.0;
+                fixed3 specular = _Specular.rgb * lerp(0, 1, smoothstep(-w, w, spec + _SpecularScale - 1)) * step(0.0001, _SpecularScale);
+                
+                return fixed4(ambient + diffuse + specular, 1.0);
+            }
+        
+            ENDCG
+        }
+    }
+    FallBack "Diffuse"
+}
+```
+
+其中\_Ramp 设置的贴图是这样的
+
+![](./image/006-01.png)
+
+使用这个Shader 渲染的效果是这样的
+
+![](./image/006-02.png)
+
+>当然，这个例子还是很简单的，推荐一个开源的卡通渲染Shader 项目：[https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project](https://github.com/unity3d-jp/UnityChanToonShaderVer2_Project)
 
 >[游戏诞生之日09 - 美术篇 卡通渲染着色器 UTS2](https://zhuanlan.zhihu.com/p/137288013)
 
 >[【翻译】西川善司「实验做出的游戏图形」「GUILTY GEAR Xrd -SIGN-」中实现的「纯卡通动画的实时3D图形」的秘密，前篇（1）](https://www.cnblogs.com/TracePlus/p/4205798.html)
+
+>[【翻译】西川善司「实验做出的游戏图形」「GUILTY GEAR Xrd -SIGN-」中实现的「纯卡通动画的实时3D图形」的秘密，前篇（2）](https://www.cnblogs.com/TracePlus/p/4205834.html)
+
+>[【翻译】西川善司的「实验做出的游戏图形」「GUILTY GEAR Xrd -SIGN-」中实现的「纯卡通动画的实时3D图形」的秘密，后篇](https://www.cnblogs.com/TracePlus/p/4205978.html)
 
 >[到目前为止的二次元渲染总结](https://zhuanlan.zhihu.com/p/126668414)
 
@@ -304,3 +501,4 @@ Shader "Example/SimpleShader" {
 ## <span id="007">基础图形学公式</span>
 
 以上展示了一些典型的案例，并且给出了一些基础的图形学知识，这里穿插一下在编写Shader 实现各种效果的时候，可能会经常用到的公式！
+

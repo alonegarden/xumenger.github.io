@@ -244,28 +244,28 @@ Shader "Example/SimpleShader" {
 
 在编写Unity Shader 的时候，直接使用Unity 内置的一些函数/宏/变量可以有效的提升开发效率！下面会尽可能详细的列举，并说明其功能和背后的原理！
 
-### UnityObjectToClipPos()
+**UnityObjectToClipPos()**
 
 
-### TRANSFORM_TEX()
+**TRANSFORM_TEX()**
 
 
-### mul()
+**mul()**
 
 
-### normalize()
+**normalize()**
 
 
-### dot()
+**dot()**
 
 
-### saturate()
+**saturate()**
 
 
-### tex2D()
+**tex2D()**
 
 
-### lerp()
+**lerp()**
 
 
 ## <span id="006">卡通渲染</span>

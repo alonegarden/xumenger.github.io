@@ -255,7 +255,7 @@ Shader "Example/SimpleShader" {
 
 在编写Unity Shader 的时候，直接使用Unity 内置的一些函数/宏/变量可以有效的提升开发效率！下面会尽可能详细的列举，并说明其功能和背后线性代数、图形学、Unity 的原理！同时也会提到这些内置的函数/宏/变量可能会在实现哪些效果的时候用到，作为一个快速参考的便签使用！
 
-**UnityObjectToClipPos()**
+### UnityObjectToClipPos()
 
 用于将顶点位置从模型空间转换到裁剪空间，在顶点着色器中使用
 
@@ -270,7 +270,7 @@ UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos(
 
 在这以前，你还需要在Pass中加上一句 `#include "UnityCG.cginc"`
 
-**mul() 与 dot()**
+### mul() 与 dot()
 
 在上面介绍UnityObjectToClipPos() 的时候，说到其等价于`o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);`
 
@@ -300,38 +300,68 @@ UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos(
 
 ![](./image/005-02.png)
 
-**ComputeScreenPos()**
+另外，矩阵在整个线性代数的世界中扮演了举足轻重的角色。在三位数学中，通常使用矩阵来进行变换。一个矩阵可以把一个矢量从一个坐标空间转换到另一个坐标空间，比如在顶点着色器中需要把顶点坐标从模型空间变换到齐次裁剪坐标系中
+
+### ComputeScreenPos()
+
+该函数在UnityCG.cginc 中被定义，主要用于得到片元在屏幕上的像素位置
+
+通常用法需要两个步骤，首先在顶点着色器中将ComputeScreenPos() 的结果保存在输出结构体中，然后在片元着色器中进行一次齐次除法运算后得到视口空间下的坐标
+
+```
+struct vertOut {
+    float4 pos: SV_POSITION;
+    float4 srcPos: TEXCOORD0;
+};
+
+vertOut vert(appdata_base v) 
+{
+    vertOut o;
+    o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+
+    // 第一步，把ComputeScreenPos()的结果保存在srcPos
+    o.srcPos = ComputeScreenPos(o.pos);
+
+    return o;
+}
+
+fixed4 frag(vertOut i) : SV_Target
+{
+    // 第二步：用srcPos.xy 除以srcPos.w 得到视口空间中的坐标
+    float2 wcoord = (i.srcPos.xy / i.srcPos.w);
+    return fixed4(wcoord, 0.0, 1.0);
+}
+```
+
+### TRANSFORM_TEX()
 
 
-**TRANSFORM_TEX()**
+
+### normalize()
 
 
-
-**normalize()**
-
-
-**saturate()**
+### saturate()
 
 
-**tex2D()**
+### tex2D()
 
 
-**lerp()**
+### lerp()
 
 
-**tex2Dproj()**
+### tex2Dproj()
 
 
-**UNITY_PROJ_COORD()**
+### UNITY_PROJ_COORD()
 
 
-**LinearEyeDepth()**
+### LinearEyeDepth()
 
 
-**smoothstep()**
+### smoothstep()
 
 
-**COMPUTE_VIEW_NORMAL**
+### COMPUTE_VIEW_NORMAL
 
 
 ## <span id="006">实现卡通效果渲染</span>

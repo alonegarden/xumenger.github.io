@@ -268,7 +268,17 @@ o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 
 UNITY_MATRIX_VP、UNITY_MATRIX_P 都有对应的封装方法UnityWorldToClipPos()、UnityViewToClipPos()
 
-在这以前，你还需要在Pass中加上一句 `#include "UnityCG.cginc"`
+在这以前，你还需要在Pass中加上一句 `#include "UnityCG.cginc"`，另外还有这些函数
+
+函数名                                       | 描述 
+------------------------------------------- | -----------------------------------------------------------------------
+float3 WorldSpaceViewDir(float4 v)          | 输入一个模型空间中的顶点位置，返回世界空间中从该点到摄像机的观察方向
+float3 ObjSpaceViewDir(float4 v)            | 输入一个模型空间中的顶点位置，返回模型空间中从该点到摄像机的观察方向
+float3 WorldSpaceLightDir(float4 v)         | 仅用于前向渲染。输入一个模型空间中的顶点位置，返回世界空间中从该点到光源的光照方向。没有被归一化
+float3 ObjSpaceLightDir(float4 v)           | 仅用于前向渲染。输入一个模型空间中的顶点位置，返回模型空间中从该点到光源的光照方向。没有被归一化
+float3 UnityObjectToWorldNormal(float3 norm)| 把法线向量从模型空间转换到世界空间中
+float3 UnityObjectToWorldDir(float3 dir)    | 把方向矢量从模型空间转换到世界空间中
+float3 UnityWorldToObjectDir(float3 dir)    | 把方向矢量从世界空间转换到模型空间中
 
 ### mul() 与 dot()
 

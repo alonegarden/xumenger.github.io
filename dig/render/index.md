@@ -349,6 +349,50 @@ x 为用于操作的标量或者矢量，可以是float、float2、float3 等类
 
 该函数用于把x 截取在[0, 1] 范围内，如果x 是一个矢量，那么会对它的每个分量进行这样的操作
 
+比如在Unity Shader 中实现漫反射光照模型，漫反射公式是
+
+**C**diffuse = (**C**light · **M**diffuse) max(0, **n** · **l**)
+
+**C**light 为入射光强度；**M**diffuse 为材质的反射系数；**n** 为表面法线；**l** 为光源方向。为了防止点乘结果为负值，要用到max() 操作，也可以用saturate() 实现
+
+比如实现逐像素的漫反射效果
+
+```
+struct v2f {
+    float4 pos : SV_POSITION;
+    float3 worldNormal : TEXCOORD0;
+};
+
+v2f vert(a2v v)
+{
+    v2f o;
+    // Transform the vertex from object space to projection space
+    o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+
+    // Transform the normal from object space to world space
+    o.worldNormal = mul(v.normal, (float3x3)_World2Object);
+}
+
+fixed4 frag(v2f i): SV_Target
+{
+    // 获取环境光
+    fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
+
+    // 对世界空间的法线向量进行归一化
+    fixed3 worldNormal = normalize(i.worldNormal);
+    // 获取世界空间中的光线方向。但如果场景中有多个光源且可能是点光源，直接使用_WorldSpaceLightPos0 就不能得到正确的结果
+    fixed3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
+
+    // 使用公式计算漫反射
+    fixed3 diffuse = _LightColot0.rgb * _Diffuse.rgb * saturate(dot(worldNormal, worldLightDir));
+
+    // 环境光和漫反射光部分进行相加
+    fixed3 color = ambient + diffuse;
+
+    return fixed4(color, 1.0);
+}
+```
+
 ### TRANSFORM_TEX()
 
 

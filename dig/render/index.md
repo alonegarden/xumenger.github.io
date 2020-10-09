@@ -343,11 +343,14 @@ fixed4 frag(vertOut i) : SV_Target
 }
 ```
 
+### saturate(x)
+
+x 为用于操作的标量或者矢量，可以是float、float2、float3 等类型
+
+该函数用于把x 截取在[0, 1] 范围内，如果x 是一个矢量，那么会对它的每个分量进行这样的操作
+
 ### TRANSFORM_TEX()
 
-
-
-### saturate()
 
 
 ### tex2D()

@@ -347,9 +347,6 @@ fixed4 frag(vertOut i) : SV_Target
 
 
 
-### normalize()
-
-
 ### saturate()
 
 

@@ -395,10 +395,126 @@ fixed4 frag(v2f i): SV_Target
 
 ### TRANSFORM_TEX()
 
+```
+#define TRANSFORM_TEX(tex, name) (tex.xy * name##_ST.xy + name##_ST.zw)
 
+// 先使用缩放属性.xy 对顶点纹理坐标进行缩放
+// 然后使用偏移属性.zw 对结果进行偏移
+
+// 第一个参数是顶点纹理坐标
+// 第二个参数是纹理名
+```
+
+在Unity 中，我们需要使用**纹理名_ST** 的方式来声明纹理的属性。其中ST 是缩放(scale) 和平移(translation) 的缩写，.xy 存储的是缩放值。.zw 存储的是偏移值
+
+上面的宏用于对顶点纹理坐标进行变换，得到最终的纹理坐标
 
 ### tex2D()
 
+tex2D() 函数对纹理进行采样。第一个参数需要被采样的纹理，第二个参数是一个float2 类型的纹理坐标，函数返回计算得到的纹素值
+
+TRANSFORM_TEX()、tex2D() 主要用在对纹理的处理中，比如下面这个Shader，使用单张纹理来作为模拟的颜色
+
+```
+Shader "Unity Shaders Book/Chapter 7/Single Texture" {
+    Properties {
+        _Color ("Color Tint", Color) = (1, 1, 1, 1)
+
+        // 纹理属性
+        _MainTex ("Main Tex", 2D) = "white" {}
+
+        // 控制高光反射颜色
+        _Specular ("Specular", Color) = (1, 1, 1, 1)
+
+        // 控制高光区域大小
+        _Gloss ("Gloss", Range(8.0, 256)) = 20
+    }
+    SubShader {     
+        Pass { 
+            Tags { "LightMode"="ForwardBase" }
+        
+            CGPROGRAM
+            
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Lighting.cginc"
+            
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;     // 使用 纹理名_ST 的方式来声明纹理的属性。其中ST 是缩放(scale) 和平移(translation) 的缩写，.xy 存储的是缩放值。.zw 存储的是偏移值
+            fixed4 _Specular;
+            float _Gloss;
+            
+            struct a2v {
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+
+                // TEXCOORD0 语义，Unity 将模型的第一组纹理坐标存储到该变量
+                float4 texcoord : TEXCOORD0;
+            };
+            
+            struct v2f {
+                float4 pos : SV_POSITION;
+                float3 worldNormal : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+
+                // 用于存储纹理坐标的变量uv，以便在片元着色器中使用该变量进行纹理采样
+                float2 uv : TEXCOORD2;
+            };
+            
+            v2f vert(a2v v) {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                
+                // 使用纹理的属性值_MainTex_ST 对顶点纹理坐标进行变换，得到最终的纹理坐标
+                // 先使用缩放属性.xy 对顶点纹理坐标进行缩放
+                // 然后使用偏移属性.zw 对结果进行偏移
+                o.uv = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+                // Or just call the built-in function
+//              o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
+                
+                return o;
+            }
+            
+            fixed4 frag(v2f i) : SV_Target {
+                // 先计算了世界空间下的法线向量和光照方向
+                fixed3 worldNormal = normalize(i.worldNormal);
+                fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                
+
+                // 使用tex2D() 函数对纹理进行采样
+                // 第一个参数需要被采样的纹理，第二个参数是一个float2 类型的纹理坐标
+                // 函数返回计算得到的纹素值
+                // 使用采样结果和颜色属性_Color 的乘积来作为材质的反射率 albedo
+                // Use the texture to sample the diffuse color
+                fixed3 albedo = tex2D(_MainTex, i.uv).rgb * _Color.rgb;
+                
+                // 反射率albedo 与环境光照相乘得到环境光部分
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                
+                // 使用albedo 来计算漫反射光照的结果
+                fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(worldNormal, worldLightDir));
+                
+                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                fixed3 halfDir = normalize(worldLightDir + viewDir);
+                fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(worldNormal, halfDir)), _Gloss);
+                
+
+                // 环境光、漫反射、高光反射光照相加返回
+                return fixed4(ambient + diffuse + specular, 1.0);
+            }
+            
+            ENDCG
+        }
+    } 
+    FallBack "Specular"
+}
+```
 
 ### lerp()
 

@@ -12,7 +12,9 @@ tags: java bean IoC 循环依赖 Spring 容器 constructor-arg 设计模式 模�
 ```java
 public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
         MessageSource, ApplicationEventPublisher, ResourcePatternResolver 
+
 public interface ConfigurableApplicationContext extends ApplicationContext, Lifecycle, Closeable
+
 public abstract class AbstractApplicationContext extends DefaultResourceLoader
         implements ConfigurableApplicationContext, DisposableBean 
 ```

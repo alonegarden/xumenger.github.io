@@ -2,7 +2,7 @@
 layout: post
 title: ApplicationContext 的初始化过程
 categories: java之web开发 java之web框架 Spring之IoC
-tags: java bean IoC 循环依赖 Spring 容器 constructor-arg 设计模式 模板模式 BeanDefinition
+tags: java bean IoC 循环依赖 Spring 容器 constructor-arg 设计模式 模板模式 BeanDefinition ApplicationContext getBean() 
 ---
 
 一直提到，在Spring 的ApplicationContext 中，refresh() 方法是至关重要的，理解Spring 容器的初始化过程，这个函数是毋庸置疑的切入点！

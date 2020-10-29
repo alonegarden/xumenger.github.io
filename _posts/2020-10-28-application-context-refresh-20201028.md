@@ -91,5 +91,5 @@ public void refresh() throws BeansException, IllegalStateException {
 }
 ```
 
-接下来介绍@Autowired、AOP、声明式事务、集成MyBatis 等功能都分别是在什么地方实现的，大概的原理（细节都会分别开专题讲解）
+@Autowired、AOP、声明式事务、集成MyBatis、SpringBoot集成Tomcat、SpringMVC等功能都分别是在哪个环节实现的？
 

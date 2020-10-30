@@ -93,3 +93,14 @@ public void refresh() throws BeansException, IllegalStateException {
 
 @Autowired、AOP、声明式事务、集成MyBatis、SpringBoot集成Tomcat、SpringMVC等功能都分别是在哪个环节实现的？
 
+在refresh() 中，obtainFreshBeanFactory() 中调用loadBeanDefinitions() 解析得到BeanDefinition，在finishBeanFactoryInitialization() 中通过调用getBean() 实现对于Bean 的依赖注入
+
+那么在obtainFreshBeanFactory() 和finishBeanFactoryInitialization() 之间的一系列方法调用都做了什么？
+
+* prepareBeanFactory()
+* invokeBeanFactoryPostProcessors()
+* registerBeanPostProcessors()
+* initMessageSource()
+* initApplicationEventMulticaster()
+* onRefresh()
+* registerListeners()

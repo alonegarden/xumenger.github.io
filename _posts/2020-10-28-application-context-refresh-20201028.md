@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ApplicationContext 的初始化过程
-categories: java之web开发 java之web框架 Spring之IoC 
+categories: java之web开发 java之web框架 spring之IoC 
 tags: java bean IoC 循环依赖 Spring 容器 constructor-arg 设计模式 模板模式 BeanDefinition ApplicationContext getBean() 依赖注入 
 ---
 

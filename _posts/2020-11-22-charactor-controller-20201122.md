@@ -9,7 +9,7 @@ tags: unity 动作 动画 动画状态机 角色动画 RPG
 
 本次动作系统作为开源项目，其项目地址为[https://github.com/xumenger/CharactorAnimatorSystem/tree/main](https://github.com/xumenger/CharactorAnimatorSystem/tree/main)
 
-对应的一些教程性的视频，我会录制到B 站，视频地址：[]()
+对应的一些教程性的视频，我会录制到B 站，视频地址：[https://www.bilibili.com/video/BV1xV411a75s/](https://www.bilibili.com/video/BV1xV411a75s/)
 
 目前基于最简单的动画状态机的思路来进行设计和开发，本文主要记录大致的设计思路和注意事项！
 

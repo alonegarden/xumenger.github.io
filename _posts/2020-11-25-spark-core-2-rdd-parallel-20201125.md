@@ -204,10 +204,47 @@ object TestRDDParallel_1 {
 }
 ```
 
-可以看到println("执行！！！！") 打印了两次，因为有几个分区，这个就会被执行多少次！比如1、2 在一个分区，这个迭代器一次性拿到这个分区的所有数据加载到内存中，即1、2，然后1、2 每一个再去做map(_ * 2) 的计算！这个map() 会是在内存中的操作，所以性能会比较高，这个就类似于批处理！
+可以看到println("执行！！！！") 打印了两次，因为有几个分区，这个就会被执行多少次！比如1、2 在一个分区，**这个迭代器一次性拿到这个分区的所有数据加载到内存中**，即1、2，然后1、2 每一个再去做map(_ * 2) 的计算！这个map() 会是在内存中的操作，所以性能会比较高，这个就类似于批处理！
 
 ![](../media/image/2020-11-25/01-04.png)
 
 事情总是两面的，一个分区中的所有数据被全部加载到内存中，但是处理完的数据是不会被释放的（应该是全部的数据都处理完才能被释放！），因为存在对象的引用，所以在内存较小、数据量很大的情况下，用这个算子容易造成内存溢出！这种情况下用map() 这个算子可能更合适，一个一个地处理分区中的数据！map() 没有引用，来一条处理一条，处理完就可以释放了
 
 所以map()、mapPartitions() 有各自适用的场景！
+
+## 案例：取出每个分区的最大值
+
+map() 算子是每个数据拿过来，所以是分不清这个数据是来自于哪个分区的，而mapPartitions() 是按照分区为单位处理一个分区内的所有数据，所以用mapPartitions() 方便实现这个需求
+
+```scala
+package com.xum.rdd
+
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+
+object TestRDDParallel_1 {
+  def main(args: Array[String]): Unit = {
+    // 创建Spark 运行配置对象，连接
+    val sparkConf = new SparkConf().setMaster("local[*]").setAppName("WordCount")
+    val sc = new SparkContext(sparkConf)
+    
+    // 强制设置只有两个分区，以实现控制并发度为2
+    val rdd = sc.makeRDD(List(1,2,3,4), 2)
+    
+    // mapPartitions() 要求传入一个迭代器，最后返回一个迭代器
+    // 但是没有要求两个迭代器内数据数量一致
+    val mapPartRDD = rdd.mapPartitions(
+      iter => {
+      	// 生成一个新的迭代器，只有一个数据（最大值！）
+        List(iter.max).iterator
+      }
+    )
+    
+    mapPartRDD.collect().foreach(println)
+    
+    sc.stop()
+  }
+}
+```
+
+![](../media/image/2020-11-25/01-05.png)

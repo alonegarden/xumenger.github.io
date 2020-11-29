@@ -64,6 +64,7 @@ public class JobExample : MonoBehaviour
         resultArray.Dispose();
     }
 
+
     private struct SimpleJob : IJob
     {
         public float a;
@@ -106,19 +107,61 @@ public class JobExample : MonoBehaviour
 
 >Jobs -> Burst -> Enable Compilation 先不打开！另外，上面的案例也先从场景中删除！
 
-在上文中，使用了HybridECS 开发了一个简单的案例，本文在上面代码的基础上添加C# Job，看一下优化后的效果
+在上文中，使用了HybridECS 开发了一个简单的案例，本文在上面代码的基础上添加C# Job，看一下优化后的效果，只需要修改原来的WaveSystem.cs。不需要像上面的例子一样，专门实现一个IJob，并且把原来OnUpdate() 中的逻辑挪到这个IJob 的Execute() 方法中，Unity 已经做好了封装，直接在原来的代码基础上引入Unity.Jobs，然后对应改一下代码就可以了
 
 ```c#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+using Unity.Entities;
+using Unity.Transforms;
+using Unity.Mathematics;
+
+using Unity.Jobs;
+
+
+// 从原来的继承自ComponentSystem，修改为继承JobComponentSystem
+// 或者可以继承SystemBase，函数原型稍微变了一些
+public class WaveSystem : JobComponentSystem
+{
+    // 和MonoBehaviour Update() 类似，每帧执行
+    // 这里实现的OnUpdate() 方法的原型对应也有变化！
+    protected override JobHandle OnUpdate(JobHandle inputHandle)
+    {
+        // Entities.ForEach() 不能使用引用型变量，Time.ElapsedTime是引用型变量
+        // 所以需要现在外面转成值类型变量，然后在Entities.ForEach 中使用值类型变量
+        float elapsedTime = (float)Time.ElapsedTime;
+
+        // 遍历所有有Translation、MoveSpeedData 组件的实体，通过Lambda 表达式编写逻辑
+        // ref 是读写变量。in 是只读变量
+        JobHandle outputHandle = Entities.ForEach((ref Translation trans, in MoveSpeedData speed, in WaveData wave) =>
+        {
+            // math.sin() 也是Unity.Mathematics 提供的方法
+            // y(t) = Asin(wt + q)
+            // A: 振幅
+            // w: 角频率
+            // q: 相移
+            float yPosition = wave.Amplitute * math.sin(elapsedTime * speed.Value + trans.Value.x * wave.XOffset + trans.Value.z * wave.ZOffset);
+
+            // 在OnUpdate 方法中更新实体的Translation 组件
+            trans.Value = new float3(trans.Value.x, yPosition, trans.Value.z);
+        }).Schedule(inputHandle);
+
+        return outputHandle;
+    }
+}
 ```
 
-再次运行游戏，可以看一下FPS 等性能的指标
+再次运行游戏，可以看一下FPS 等性能的指标。现在FPS 可以达到11 左右了，相比于之前提升很小！
 
-![](../media/2020-11-29/.gif)
+![](../media/2020-11-29/02.gif)
 
-现在再打开Profiler 看一下整体性能
+现在再打开Profiler 看一下整体性能，在Main 线程运行的时候，其他的Worker 也有在执行逻辑，但是看起来还是主要是Idle 状态的，为什么呢？
 
-![](../media/2020-11-29/.gif)
+![](../media/2020-11-29/03.gif)
+
+>如何解释这个问题？开了C# Job 后，好像性能也没有提升！Worker 线程看起来也主要处于Idle 状态？Profiler 的性能指标怎么看？是不是瓶颈在GPU，不在CPU？
 
 ## 参考资料
 

@@ -2,7 +2,7 @@
 layout: post
 title: Unity DOTS 技术：C# Job
 categories: 游戏开发之unity
-tags: Unity UD ECS 性能 内存 DOD 面向数据编程 DOTS C# 委托 HybridECS Burst 
+tags: Unity UD ECS 性能 内存 DOD 面向数据编程 DOTS C# 委托 HybridECS Burst Batches GPU 材质 
 ---
 
 >Job System 是Unity 对CPU 多核编程的应用。通过把工作分散到CPU 的各个核心上来大大提升运行效率。而ECS 与它的搭配则是由于ECS 的System 部分天然是以批量处理为核心的，因此只要稍加改动，就可以转变为批量的分Job 交到多核去处理，实现性能的极大提升
@@ -162,6 +162,16 @@ public class WaveSystem : JobComponentSystem
 ![](../media/2020-11-29/03.gif)
 
 >如何解释这个问题？开了C# Job 后，好像性能也没有提升！Worker 线程看起来也主要处于Idle 状态？Profiler 的性能指标怎么看？是不是瓶颈在GPU，不在CPU？Batches 值为什么这么高？感觉应该和Batches 数过高有关！
+
+## 优化Batches
+
+上面为Cube 使用的是默认的材质，现在专门为Cube 创建一个材质，然后更新到Prefab 上，注意勾选Enable GPU Instancing！
+
+![](../media/2020-11-29/04.png)
+
+然后再运行游戏，可以看到现在Batches 从20300 降低到45，但是FPS 好像也还是没有什么有效提升？！
+
+![](../media/2020-11-29/05.png)
 
 ## 参考资料
 

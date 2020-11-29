@@ -9,17 +9,96 @@ tags: Unity UD ECS 性能 内存 DOD 面向数据编程 DOTS C# 委托 HybridECS
 
 >使用C# Job 开发，需要通过Package Manager 先安装这个包：Job
 
+>Native Containers: Unity.Collections、NativeArray/NativeList/NativeHashMap/NativeQueue、Memory Management(Allocator/Dispose)
+
 ## C# Job 使用展示
 
 首先独立于上文的案例，在场景中创建一个空物体，在物体上加一个MonoBehaviour
 
 ```c#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
+using Unity.Jobs;
+using Unity.Collections;
+
+public class JobExample : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        // NativeArray定义为一个struct
+        NativeArray<float> resultArray = new NativeArray<float>(1, Allocator.TempJob);
+
+        // 创建一个SimpleJob
+        SimpleJob job1 = new SimpleJob
+        {
+            a = 5f,
+            result = resultArray
+        };
+
+        // 创建另一个Job
+        AnotherJob job2 = new AnotherJob
+        {
+            // job1 与job2 的result 指向一个实际变量！
+            result = resultArray
+        };
+
+        // 开启调度Job
+        JobHandle handle1 = job1.Schedule();
+        // job2依赖job1（即要求在job1执行完成之后job2再执行）
+        JobHandle handle2 = job2.Schedule(handle1);
+
+        // 等待job1执行结束
+        // handle1.Complete();
+        // 因为job2 依赖job1，所以一定是job1 先执行完，这里主线程只用等待job2 执行结束就好了！
+        handle2.Complete();
+
+        // 拿到结果
+        float resultingValue = resultArray[0];
+        Debug.Log("SimpleJob 执行完成后，result 的值 = " + resultingValue);
+        Debug.Log("SimpleJob 执行完成后，a 的值 = " + job1.a);
+
+        // 释放资源
+        resultArray.Dispose();
+    }
+
+    private struct SimpleJob : IJob
+    {
+        public float a;
+        public NativeArray<float> result;
+
+        void IJob.Execute()
+        {
+            result[0] = a;
+            Debug.Log("SimpleJob 执行方法中，拿到a的值 = " + a);
+
+            // 尝试修改一下a 的值
+            a = 100f;
+            Debug.Log("SimpleJob 执行方法中，修改a后值 = " + a);
+        }
+    }
+
+
+    // 用于测试Job 间的依赖
+    private struct AnotherJob: IJob
+    {
+        public NativeArray<float> result;
+
+        void IJob.Execute()
+        {
+            result[0] = result[0] + 1;
+        }
+    }
+}
 ```
 
 然后游戏运行起来的效果是这样的
 
 ![](../media/image/2020-11-29/01.png)
+
+简单说明一下：在SimpleJob 的Execute() 中修改了a 的值，但是在外面直接访问a 的时候看到其是没有变的；因为AnotherJob 在SimpleJob 执行完后再执行，而两个Job 的result 实际都是执行一个变量的，所以当AnotherJob 执行完之后，result 的值从原来的5 增加了1 变成了6！
 
 >这个是不是和[Java 线程池异步任务](http://www.xumenger.com/callable-future-20201105/) 的思想有点像？！
 

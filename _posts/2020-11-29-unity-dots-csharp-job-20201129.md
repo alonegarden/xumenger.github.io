@@ -7,15 +7,39 @@ tags: Unity UD ECS 性能 内存 DOD 面向数据编程 DOTS C# 委托 HybridECS
 
 >Job System 是Unity 对CPU 多核编程的应用。通过把工作分散到CPU 的各个核心上来大大提升运行效率。而ECS 与它的搭配则是由于ECS 的System 部分天然是以批量处理为核心的，因此只要稍加改动，就可以转变为批量的分Job 交到多核去处理，实现性能的极大提升
 
+>使用C# Job 开发，需要通过Package Manager 先安装这个包：Job
 
+## C# Job 使用展示
+
+首先独立于上文的案例，在场景中创建一个空物体，在物体上加一个MonoBehaviour
+
+```c#
+
+```
+
+然后游戏运行起来的效果是这样的
+
+![](../media/image/2020-11-29/01.png)
+
+>这个是不是和[Java 线程池异步任务](http://www.xumenger.com/callable-future-20201105/) 的思想有点像？！
 
 ## 使用C# Job 优化程序
 
->Jobs -> Burst -> Enable Compilation 先不打开！
+>Jobs -> Burst -> Enable Compilation 先不打开！另外，上面的案例也先从场景中删除！
 
 在上文中，使用了HybridECS 开发了一个简单的案例，本文在上面代码的基础上添加C# Job，看一下优化后的效果
 
+```c#
 
+```
+
+再次运行游戏，可以看一下FPS 等性能的指标
+
+![](../media/2020-11-29/.gif)
+
+现在再打开Profiler 看一下整体性能
+
+![](../media/2020-11-29/.gif)
 
 ## 参考资料
 
@@ -30,26 +54,3 @@ tags: Unity UD ECS 性能 内存 DOD 面向数据编程 DOTS C# 委托 HybridECS
 * [Unity DOTS 介绍](https://www.bilibili.com/video/BV1tp4y1S7sc)
 * [【游戏开发】Unity ECS DOTS 教程 （合集）机翻！](https://www.bilibili.com/video/BV1qE411x7Wg)
 * [https://software.intel.com/sites/landingpage/IntrinsicsGuide/](https://software.intel.com/sites/landingpage/IntrinsicsGuide/)
-
-
-
-
-
-视频相关
-
-* [Unity DOTS技术详解 - 宣雨松](https://www.bilibili.com/video/BV18J411t7G8)
-* [UUG Online直播回放：DOTS从原理到应用-雨松MOMO](https://www.bilibili.com/video/BV1sD4y1Q7an)
-* [Unity DOTS 介绍](https://www.bilibili.com/video/BV1tp4y1S7sc)
-* [[天天直播] 使用C# Job System并行化Dynamic Bone](https://www.bilibili.com/video/BV1Q741177Jd)
-* [DOTS深度研究之从原理到实践](https://www.xuanyusong.com/archives/4708)
-* [Unity DOTS 介绍](https://www.bilibili.com/video/BV1tp4y1S7sc)
-* [【游戏开发】Unity ECS DOTS 教程 （合集）机翻！](https://www.bilibili.com/video/BV1qE411x7Wg)
-
-文档资料
-
-* [DOTS原理与ECS实战：以ECS搜寻目标为例](https://www.bilibili.com/video/BV1xK4y1v7rw)
-
-雨松MoMo
-
-* [https://connect.unity.com/u/yu-song-momo-1](https://connect.unity.com/u/yu-song-momo-1)
-* [UUG Online直播回放：DOTS从原理到应用-雨松MOMO](https://www.bilibili.com/video/BV1sD4y1Q7an)

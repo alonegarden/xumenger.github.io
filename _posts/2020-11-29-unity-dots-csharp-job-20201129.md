@@ -153,7 +153,7 @@ public class WaveSystem : JobComponentSystem
 }
 ```
 
-再次运行游戏，可以看一下FPS 等性能的指标。现在FPS 可以达到11 左右了，相比于之前提升很小！
+再次运行游戏，可以看一下FPS 等性能的指标。现在FPS 可以达到11 左右了，相比于之前提升很小！但观察资源管理器，看到CPU 占用在310% 左右，CPU 利用率确实是提升了的！
 
 ![](../media/2020-11-29/02.gif)
 
@@ -161,7 +161,7 @@ public class WaveSystem : JobComponentSystem
 
 ![](../media/2020-11-29/03.gif)
 
->如何解释这个问题？开了C# Job 后，好像性能也没有提升！Worker 线程看起来也主要处于Idle 状态？Profiler 的性能指标怎么看？是不是瓶颈在GPU，不在CPU？
+>如何解释这个问题？开了C# Job 后，好像性能也没有提升！Worker 线程看起来也主要处于Idle 状态？Profiler 的性能指标怎么看？是不是瓶颈在GPU，不在CPU？Batches 值为什么这么高？感觉应该和Batches 数过高有关！
 
 ## 参考资料
 

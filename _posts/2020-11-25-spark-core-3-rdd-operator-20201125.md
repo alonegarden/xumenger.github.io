@@ -43,9 +43,11 @@ rdd.filter(
 
 Scala中集合的distinct去重是使用HashSet实现的
 
-而在Spark中，数据分布在不同的分区中，如何实现去重？
+而在Spark 中，数据分布在不同的分区中，如何实现去重？
 
 ```scala
+// TODO 补充distinct 代码
+
 map(x => (x, null)).reduceByKey((x, _) => x, numPartitions).map(_._1)
 ```
 
@@ -106,4 +108,39 @@ println(rdd5.collect().mkString(","))
 val rdd6 = rdd1.zip(rdd2)
 println(rdd6.collect().mkString(","))
 // (1,3),(2,4),(3,5),(4,6)
+```
+
+
+## partitionBy算子处理键值对
+
+```scala
+val rdd = sc.makeRDD(List(1, 2, 3, 4))
+
+// 转换成tuple 类型
+val mapRDD : RDD[(Int, Int)] = rdd.map((_, 1))
+
+// 隐式转换：RDD => PairRDDFunctions
+// 根据指定的分区规则，对数据进行重分区
+val newRDD = rdd.partitionBy(new HashPartitioner(2))
+```
+
+partitionBy() 是PairRDDFunctions 中的一个方法，不是RDD 的算子！
+
+因为RDD 中有一个方法（待补充）
+
+```scala
+implicit def rddToPairRDDFunctions[K, V]
+....
+```
+
+>扩展内容：分区器！当然也可以自己实现一个分区器！
+
+
+## reduceByKey算子
+
+```scala
+val rdd = sc.makeRDD(List(("a", 1), ("a", 2), ("b", 4)))
+
+// reduceByKey 相同key 的数据进行value 的聚合
+val reduceDD = rdd.reduceByKey((x:Int, y:Int) => {x + y})
 ```

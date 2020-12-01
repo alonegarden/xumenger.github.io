@@ -2,7 +2,7 @@
 layout: post
 title: Spark 计算框架：RDD 常用算子原理
 categories: 大数据之kafka 大数据之spark
-tags: scala java 大数据 kafka spark MacOS 环境搭建 Scala Maven Hadoop SQL 算子 数据分析 groupBy filter distinct coalesce shuffle 数据倾斜 分区 分组 聚合 
+tags: scala java 大数据 kafka spark MacOS 环境搭建 Scala Maven Hadoop SQL 算子 数据分析 groupBy filter distinct coalesce shuffle 数据倾斜 分区 分组 聚合 关系型数据库 
 ---
 
 
@@ -158,7 +158,7 @@ val groupRDD : RDD[(String, Iterable[Int])] = rdd.groupByKey((x:Int, y:Int) => {
 
 ![](../media/image/2020-11-25-3/01.png)
 
-如果groupByKey 会导致数据打乱重组，存在shuffle 操作
+如果groupByKey 会导致数据打乱重组，存在shuffle 操作。这个图中例子刚好分区和分组都是两个，但是还是不要把分区和分组搞混了！
 
 分区之间可以并行计算的依据就是数据之间没有关系，不需要互相依赖，可以按照自己的逻辑专心处理当前分区
 
@@ -177,7 +177,7 @@ val groupRDD : RDD[(String, Iterable[Int])] = rdd.groupByKey((x:Int, y:Int) => {
 但如果只需要分组，不需要聚合，那么就还只能使用groupByKey
 
 
-## aggregateByKey
+## aggregateByKey与foldByKey
 
 ```scala
 val rdd = sc.makeRDD(List(("a", 1), ("a", 2), ("b", 4)), 2)
@@ -193,9 +193,28 @@ rdd.aggregateByKey(0)(
     (x, y) => math.max(x, y),
     (x, y) => x + y
 ).collect().foreach(println)
+
+
+// 获取相同key 的数据的平均值
+val newRDD : RDD[(String, (Int, Int))] = rdd.aggregateByKey( (0, 0) )(
+    (t, v) => {
+        (t._1 + v, t._2 + 1)
+    },
+    (t1, t2) => {
+        (t1._1 + t2._1, t1._2 + t2._2)
+    }
+)
+
+val resultRDD : RDD[(String, Int)] = newRDD.mapValues{
+    case (num, cnt) => {
+        num / cnt
+    }
+}
+
+resultRDD.collect().foreach(println)
 ```
 
-![](../media/image/2020-11-25-3/04.png)
+如果分区内和分区间的计算规则一致的话可以直接使用foldByKey
 
 
 ## 
@@ -205,3 +224,4 @@ rdd.aggregateByKey(0)(
 
 理解RDD 算子很核心的一个点在于理解分区！
 
+RDD 的这些算子和关系型数据库中的SQL 的很多理念是类似的或者一致的！

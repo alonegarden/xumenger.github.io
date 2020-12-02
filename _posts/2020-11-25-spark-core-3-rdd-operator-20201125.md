@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spark 计算框架：RDD 常用算子原理
+title: Spark 计算框架：RDD 转换算子
 categories: 大数据之kafka 大数据之spark
 tags: scala java 大数据 kafka spark MacOS 环境搭建 Scala Maven Hadoop SQL 算子 数据分析 groupBy filter distinct coalesce shuffle 数据倾斜 分区 分组 聚合 关系型数据库 
 ---
@@ -217,7 +217,34 @@ resultRDD.collect().foreach(println)
 如果分区内和分区间的计算规则一致的话可以直接使用foldByKey
 
 
+## combineByKey
+
+https://www.bilibili.com/video/BV11A411L7CK?p=74
+
+
+## join
+
+在类型为(K,V)和(K,W)的RDD 上调用，返回一个相同key 对应的所有元素连接在一起的(K,(V,W)) 的RDD
+
+类似于关系型数据库SQL 中的join 连接
+
+join 算子是内连接！
+
+
+
+## leftOuterJoin/rightOuterJoin
+
+leftOuterJoin/rightOuterJoin 是外连接
+
+
+## cogroup
+
+>connect and group
+
+
+
 ## 
+
 
 
 ## 简单总结

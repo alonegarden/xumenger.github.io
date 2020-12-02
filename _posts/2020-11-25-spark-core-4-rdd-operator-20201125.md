@@ -5,7 +5,9 @@ categories: 大数据之kafka 大数据之spark
 tags: scala java 大数据 kafka spark MacOS 环境搭建 Scala Maven Hadoop SQL 算子 数据分析 groupBy filter distinct coalesce shuffle 数据倾斜 分区 分组 聚合 关系型数据库 行动算子 转换算子 
 ---
 
-上一篇中讲到的转换算子都是得到新的RDD，而行动算子触发作业的执行！collect() 就是一个典型的行动算子，先看一下collect() 的代码实现
+上一篇中讲到的转换算子都是得到新的RDD，而行动算子触发作业的执行！
+
+collect() 就是一个典型的行动算，collect 算子会将不同分区的数据按照分区顺序采集到Driver 端内存中，形成数组。先看一下collect() 的代码实现
 
 ```scala
 /**
@@ -105,11 +107,21 @@ def runJob[T, U: ClassTag](
 }
 ```
 
-最后触发有向无环图调度器的执行！！
+最后触发**有向无环图**调度器的执行！！
 
 ## reduce 算子
 
 聚合功能
+
+https://www.bilibili.com/video/BV11A411L7CK?p=82
+
+
+
+## count 算子
+
+
+
+## first 算子
 
 
 

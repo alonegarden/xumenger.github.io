@@ -115,14 +115,68 @@ def runJob[T, U: ClassTag](
 
 https://www.bilibili.com/video/BV11A411L7CK?p=82
 
+```scala
+
+```
+
 
 
 ## count 算子
 
+```scala
 
+```
 
 ## first 算子
 
+```scala
+
+```
+
+## take 算子
+
+```scala
+
+```
+
+## takeOrdered 算子
+
+```scala
+
+```
+
+## aggregate 算子
+
+https://www.bilibili.com/video/BV11A411L7CK?p=84
+
+```scala
+
+```
+
+和aggregateByKey 的区别？首先aggregate 是行动算子，而aggregateByKey 是转换算子。还有一个主要的区别
+
+## flod 算子
+
+```scala
+
+```
+
+## countByKey 算子
+
+```scala
+
+```
 
 
-## 
+## countByValue 算子
+
+
+
+
+## 实现wordCount 的各种方式
+
+https://www.bilibili.com/video/BV11A411L7CK?p=85
+
+```scala
+
+```

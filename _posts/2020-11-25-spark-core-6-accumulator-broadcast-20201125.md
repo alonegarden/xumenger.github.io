@@ -45,9 +45,34 @@ print(sum)
 
 ![](../media/image/2020-11-25-6/01.png)
 
+sum 在各个Executor 端也是独立的，并不是我们通常理解的多个线程写一个共享变量的并发问题！
+
 ## 累加器
 
+累加器就可以解决上面的问题，Spark 可以把它从Driver 传给Executor，在Executor 计算完毕之后，又回将结果返回给Driver
+
+累加器用来把Executor 端变量信息聚合到Drvier 端。在Driver 程序中定义的变量，在Executor 端的每个Task 都会得到这个变量的一个新的副本，每个task 更新这些副本的值后，传回Driver 端进行merge
+
+```scala
+val rdd = sc.makeRDD(List(1,2,3,4))
+
+// 获取系统累加器
+// Spark默认提供了简单数据聚合的累加器，除了longAccumulator 还有其他类型
+val sumAcc = sc.longAccumulator("sum")
+
+rdd.foreach(
+    num => {
+        // 使用累加器
+        sumAcc.add(num)
+    }
+)
+
+// 获取累加器的值
+println(sumAcc.value)
+```
 
 ## 广播变量
 
+```scala
 
+```

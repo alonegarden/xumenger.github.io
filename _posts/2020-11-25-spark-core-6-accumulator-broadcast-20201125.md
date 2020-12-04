@@ -122,8 +122,157 @@ println(sumAcc.value)
 
 所以一般情况下，累加器要放在行动算子中进行操作！
 
-## 广播变量
+## 自定义累加器
+
+比如普通的WordCount 使用reduceByKey() 会导致shuffle
 
 ```scala
+val rdd = sc.makeRDD(List("hello", "spark", "hello"))
 
+val resultRDD = rdd.map((_, 1)).reduceByKey(_ + _)
+
+resultRDD.foreach(println)
+```
+
+可以使用自定义累加器避免shuffle
+
+```scala
+// 有一个输入和输出的泛型约束
+// IN：累加器输入的数据类型。String
+// OUT：累加器返回的数据类型。mutable.Map[String, Long] 键值对
+class MyAccumulator extends AccumulatorV2[String, mutable.Map[String, Long]]
+{
+	private var wcMap = mutable.Map[String, Long]()
+
+    // 判断是否为初始状态
+    override def isZero: Boolean = {
+        wcMap.isEmpty
+    }
+
+
+    override def copy() : AccumulatorV2[String, mutable.Map[String, Long]] = {
+        new MyAccumulator
+    }
+
+    // 重置累加器
+    override def reset(): Unit = {
+        wcMap.clear
+    }
+
+    // 获取累加器需要计算的值
+    override def add(word: String): Unit = {
+        val newCnt = wcMap.getOrElse(word, 0L) + 1
+        wcMap.update(word, newCnt)
+    }
+
+    // Driver合并多个累加器
+    override def merge(other: AccumulatorV2[String, mutable.Map[String, Long]]): Unit = {
+        val map1 = this.wcMap
+        val map2 = other.value
+
+        map2.foreach {
+            case (word, count) => {
+                val newCount = map1.getOrElse(word, 0L) + 1
+                map1.update(word, newCount)
+            }
+        }
+    }
+
+    // 获取累加器结果
+    override def value: mutable.Map[String, Long] = {
+        wcMap
+    }
+}
+```
+
+然后可以使用自定义累加器
+
+```scala
+val rdd = sc.makeRDD(List("hello", "spark", "hello"))
+
+// 创建累加器对象
+val wcAcc = new MyAccumulator
+
+// 向Spark 进行注册
+sc.register(wcAcc, "wordCountAcc")
+
+// 使用累加器
+rdd.foreach(
+    word => {
+        wcAcc.add(word)
+    }
+)
+
+// 获取累加器累加的结果
+println(wcAcc.value)
+```
+
+## 广播变量
+
+广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Spark 操作使用。比如，如果你的应用需要向所有节点发送一个较大的只读查询表，广播变量用起来都很顺手
+
+在多个并行操作中使用同一个变量，但是Spark 会为每个任务分别发送
+
+```scala
+val rdd1 = sc.makeRDD(List(
+    ("a", 1), ("b", 2), ("c", 3)
+))
+
+val rdd2 = sc.makeRDD(List(
+    ("a", 4), ("b", 5), ("c", 6)
+))
+
+// join 或导致数据几何增长，并且会影响shuffle 的性能，不推荐使用
+val joinRDD : RDD[(String, [Int, Int])] = rdd1.join(rdd2)
+
+// 结果： (a,(1,4)), (b,(2,5)), (c,(3,6))
+joinRDD.collect().foreach(println)
+```
+
+可以用下面的逻辑实现上面的功能，这样就没有shuffle 了，性能明显提升！
+
+```scala
+val rdd1 = sc.makeRDD(List(
+    ("a", 1), ("b", 2), ("c", 3)
+))
+
+val map = mutable.Map(("a", 4), ("b", 5), ("c", 6))
+
+rdd1.map {
+    case (w, c) => {
+        val l: Int = map.getOrElse(w, 0)
+        (w, (c, l))
+    }
+}
+```
+
+但是在分布式计算中，要把map 分发给所有的Executor ，如果数据量很大，网络传输的成本也是很高的！假如有十个分区，只有一个Executor，那么一个Executor 上有10 个Task，每个Task 都有一份map，显然数据冗余
+
+闭包数据，都是以Task 为单位发送的！每个任务都包含闭包数据！就可能导致一个Executor 中含有大量重复数据，并且占用大量内存
+
+![](../media/image/2020-11-25-6/02.png)
+
+Executor 其实就是一个JVM，所以在启动时，会自动分配内存，所以可不可以将任务中的闭包数据，放在Executor 的内存中，作为共享数据？当然前提是这个数据不能被修改，否则就会导致线程安全问题
+
+![](../media/image/2020-11-25-6/03.png)
+
+Spark 提供的广播变量就是这个作用，广播变量可以把闭包中的数据保存到Executor 的内存中。不能修改！所以广播变量是分布式共享只读变量
+
+```scala
+val rdd1 = sc.makeRDD(List(
+    ("a", 1), ("b", 2), ("c", 3)
+))
+
+val map = mutable.Map(("a", 4), ("b", 5), ("c", 6))
+
+// 封装广播变量
+val bc : Broadcast[mutable.Map[String, Int]] = sc.broadcast(map)
+
+rdd1.map {
+    case (w, c) => {
+        // 访问广播变量
+        val l: Int = bc.value.getOrElse(w, 0)
+        (w, (c, l))
+    }
+}
 ```

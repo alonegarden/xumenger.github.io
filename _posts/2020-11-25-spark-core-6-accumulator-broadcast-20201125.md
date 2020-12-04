@@ -71,6 +71,57 @@ rdd.foreach(
 println(sumAcc.value)
 ```
 
+使用累加器需要注意，如果在转换算子中调用累加器，如果没有行动算子的话，那么则不会执行！比如
+
+```scala
+val rdd = sc.makeRDD(List(1,2,3,4))
+
+// 获取系统累加器
+// Spark默认提供了简单数据聚合的累加器，除了longAccumulator 还有其他类型
+val sumAcc = sc.longAccumulator("sum")
+
+rdd.map(
+    num => {
+        // 使用累加器
+        sumAcc.add(num)
+
+        num
+    }
+)
+
+// 获取累加器的值，结果是0
+println(sumAcc.value)
+```
+
+除了少加的情况，还存在多加的情况，比如：
+
+```scala
+val rdd = sc.makeRDD(List(1,2,3,4))
+
+// 获取系统累加器
+// Spark默认提供了简单数据聚合的累加器，除了longAccumulator 还有其他类型
+val sumAcc = sc.longAccumulator("sum")
+
+val mapRDD = rdd.map(
+    num => {
+        // 使用累加器
+        sumAcc.add(num)
+
+        num
+    }
+)
+
+// 两次调用行动算子
+mapRDD.collect()
+mapRDD.collect()
+
+// 获取累加器的值，结果是20
+// 因为累加器是全局共享的，调用了两次行动算子，就会导致多加
+println(sumAcc.value)
+```
+
+所以一般情况下，累加器要放在行动算子中进行操作！
+
 ## 广播变量
 
 ```scala

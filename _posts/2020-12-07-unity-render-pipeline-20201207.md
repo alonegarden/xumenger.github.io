@@ -32,11 +32,19 @@ and no accessible extension method 'maximumVisibleLights' accepting a first argu
 
 这里可以看到材质是，而不是Standard！所以需要为当前项目设置URP（通用渲染管线）
 
+首先需要在包管理器中安装Universal RP（如果原来安装了Lightweight RP，请先Remove）
+
+![](../media/image/2020-12-07/04.png)
+
 Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> Pipeline Asset (Forward Renderer)
 
 菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的URP 配置资源
 
-![](../media/image/2020-12-07/04.png)
+菜单 -> Edit -> Project Settings -> Quality 在Rendering 选择刚才创建的URP 配置资源
+
+![](../media/image/2020-12-07/05.png)
+
+![](../media/image/2020-12-07/06.png)
 
 ## 项目升级为HDRP
 
@@ -59,7 +67,7 @@ Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> 
 
 菜单 -> Edit -> Render Pipeline -> Upgrade Project Materials to High Definition Materials，把当前项目中所有的标准材质找出来统一升级为HDRP 材质！150 个材质升级大概需要5 分钟！
 
->HDRP 渲染管线不适合应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
+>HDRP 渲染管线不能应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
 
 ## URP/LWRP 原理
 

@@ -15,7 +15,7 @@ tags: Unity UD 渲染管线 HDRP GPU 可编程渲染管线 高清渲染管线 Un
 
 Unity 已经正式将LWRP 的名称变更为Universal RP，即通用渲染管线，并将正式接过内置管线的大旗，成为新一代Unity 的兼容所有平台的通用渲染管线
 
-比如从github 下载一个URP 的Unity 项目，在本机打开后可能有这样的错误
+比如从github 下载一个基于URP 的Unity 项目，在本机打开后可能有这样的错误
 
 ![](../media/image/2020-12-07/02.png)
 
@@ -30,7 +30,7 @@ and no accessible extension method 'maximumVisibleLights' accepting a first argu
 
 ![](../media/image/2020-12-07/03.png)
 
-这里可以看到材质是，而不是Standard！所以需要为当前项目设置URP（通用渲染管线）
+这里可以看到材质是Universal Render Pipeline，而不是Standard！所以需要为当前项目设置URP（通用渲染管线）
 
 首先需要在包管理器中安装Universal RP（如果原来安装了Lightweight RP，请先Remove）
 
@@ -70,6 +70,8 @@ Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> 
 >HDRP 渲染管线不能应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
 
 ## URP/LWRP 原理
+
+以上主要讲到了如何在Unity 进行配置以将项目升级为URP 或者HDRP，或者解决因为配置错误而导致的编译报错问题，但是最主要的还是弄清楚各种可编程渲染管线的工作原理，相对而言HDRP 在我目前的应用场景中还是用不到，所以下面主要通过参考一些资料，和内置管线进行对比的方式展示URP 的原理
 
 URP 是单Pass 前向渲染管线，而内置管线是多Pass 前向渲染管线和延迟渲染管线。URP 没有延迟渲染，因此我们只对比前向渲染这一项（其实手游也基本只会用前向渲染，延迟渲染的G-Buffer 所需要的带宽带来的开销太大）
 

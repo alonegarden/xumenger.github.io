@@ -11,17 +11,9 @@ tags: Unity UD 渲染管线 HDRP GPU 可编程渲染管线 高清渲染管线 Un
 
 渲染管线最主要需要关注的事情包括：剔除（Culling）、渲染（Render）、后期处理（Post Processing）
 
-## URP/LWRP
+## 项目升级为URP/LWRP
 
 Unity 已经正式将LWRP 的名称变更为Universal RP，即通用渲染管线，并将正式接过内置管线的大旗，成为新一代Unity 的兼容所有平台的通用渲染管线
-
-URP 是单Pass 前向渲染管线，而内置管线是多Pass 前向渲染管线和延迟渲染管线。URP 没有延迟渲染，因此我们只对比前向渲染这一项（其实手游也基本只会用前向渲染，延迟渲染的G-Buffer 所需要的带宽带来的开销太大）
-
-所谓的前向渲染，就是在渲染物体受光点光照的时候，分别对每个点光对该物体产生的影响进行计算，最后将所有光的渲染结果相加得到最终物体的颜色。内置管线的做法是，用多个Pass 来渲染光照，第一个Pass 只渲染主光源，然后多出来的光每个光用一个Pass 单独渲染，这也是为什么在做手游的时候很少会用点光源，因为对于内置管线来说，每多一盏光，整个场景的DrawCall 就会翻倍，这个性能开销是无法接受的
-
-URP 的做法则是在一个Pass 当中，对这个物体收到的所有光源通过一个for 循环一次性计算，这样一个物体的光照可以在一次DrawCall 中计算完毕，省去多个Pass 的上下文切换以及光栅化等开销。不过URP 只支持一盏直光，单个物体最多支持4 盏点光，单个相机最多支持16 盏灯光
-
-用了URP 之后，只要控制好点光的范围，在手游里面也可以做多点光照明了，例如释放一个火球照亮周围物件，这在内置管线里基本是可以放弃的功能（或者用其他作假的方式模拟）
 
 比如从github 下载一个URP 的Unity 项目，在本机打开后可能有这样的错误
 
@@ -34,17 +26,50 @@ and no accessible extension method 'maximumVisibleLights' accepting a first argu
 'ScriptableCullingParameters' could be found (are you missing a using directive or an assembly reference?)
 ```
 
-需要为当前项目设置URP（通用渲染管线）
-
-Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> Pipeline Asset (Forward Renderer)
-
-菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的URP 资源
+同时可以看到场景中的材质失效，显示为紫粉色
 
 ![](../media/image/2020-12-07/03.png)
 
-## HDRP
+这里可以看到材质是，而不是Standard！所以需要为当前项目设置URP（通用渲染管线）
 
+Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> Pipeline Asset (Forward Renderer)
 
+菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的URP 配置资源
+
+![](../media/image/2020-12-07/04.png)
+
+## 项目升级为HDRP
+
+如何从现有的渲染管线升级到HDRP 渲染管线呢？
+
+首先从Package Manager 安装这几个插件包
+
+* Render-pipeline.high（HDRP）
+* Postprocessing（Post Processing Stack v2）
+* Cinemachine
+
+现在不支持内置的渲染管线和HDRP 渲染管线混用，因为它们的渲染模式不一样的，所以还需要把现有的标准的材质升级为HDRP 的材质（Standard Shader 升级为HDRP Shader）
+
+* Projects窗口 -> Assets -> Create -> Rendering -> High Definition Render Pipeline Asset
+* 菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的HDRP 配置资源
+
+不过，如果是自己编写的Shader，需要自己手动修改代码的方式以支持HDRP
+
+原来的材质还都是使用的Standard Shader，Unity 提供了一个工具，可以将所有的Standard Shader 更新为HDRP Shader
+
+菜单 -> Edit -> Render Pipeline -> Upgrade Project Materials to High Definition Materials，把当前项目中所有的标准材质找出来统一升级为HDRP 材质！150 个材质升级大概需要5 分钟！
+
+>HDRP 渲染管线不适合应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
+
+## URP/LWRP 原理
+
+URP 是单Pass 前向渲染管线，而内置管线是多Pass 前向渲染管线和延迟渲染管线。URP 没有延迟渲染，因此我们只对比前向渲染这一项（其实手游也基本只会用前向渲染，延迟渲染的G-Buffer 所需要的带宽带来的开销太大）
+
+所谓的前向渲染，就是在渲染物体受光点光照的时候，分别对每个点光对该物体产生的影响进行计算，最后将所有光的渲染结果相加得到最终物体的颜色。内置管线的做法是，用多个Pass 来渲染光照，第一个Pass 只渲染主光源，然后多出来的光每个光用一个Pass 单独渲染，这也是为什么在做手游的时候很少会用点光源，因为对于内置管线来说，每多一盏光，整个场景的DrawCall 就会翻倍，这个性能开销是无法接受的
+
+URP 的做法则是在一个Pass 当中，对这个物体收到的所有光源通过一个for 循环一次性计算，这样一个物体的光照可以在一次DrawCall 中计算完毕，省去多个Pass 的上下文切换以及光栅化等开销。不过URP 只支持一盏直光，单个物体最多支持4 盏点光，单个相机最多支持16 盏灯光
+
+用了URP 之后，只要控制好点光的范围，在手游里面也可以做多点光照明了，例如释放一个火球照亮周围物件，这在内置管线里基本是可以放弃的功能（或者用其他作假的方式模拟）
 
 ## 参考资料
 

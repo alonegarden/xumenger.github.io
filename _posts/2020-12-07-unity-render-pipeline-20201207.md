@@ -38,7 +38,7 @@ and no accessible extension method 'maximumVisibleLights' accepting a first argu
 
 Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> Pipeline Asset (Forward Renderer)
 
-菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的URP 配置资源
+菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Render Pipeline Settings 选择刚才创建的URP 配置资源
 
 菜单 -> Edit -> Project Settings -> Quality 在Rendering 选择刚才创建的URP 配置资源
 
@@ -59,7 +59,7 @@ Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> 
 现在不支持内置的渲染管线和HDRP 渲染管线混用，因为它们的渲染模式不一样的，所以还需要把现有的标准的材质升级为HDRP 的材质（Standard Shader 升级为HDRP Shader）
 
 * Projects窗口 -> Assets -> Create -> Rendering -> High Definition Render Pipeline Asset
-* 菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Redner Pipeline Settings 选择刚才创建的HDRP 配置资源
+* 菜单 -> Edit -> Project Settings -> Graphics 在Scriptable Render Pipeline Settings 选择刚才创建的HDRP 配置资源
 
 不过，如果是自己编写的Shader，需要自己手动修改代码的方式以支持HDRP
 
@@ -68,6 +68,8 @@ Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> 
 菜单 -> Edit -> Render Pipeline -> Upgrade Project Materials to High Definition Materials，把当前项目中所有的标准材质找出来统一升级为HDRP 材质！150 个材质升级大概需要5 分钟！
 
 >HDRP 渲染管线不能应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
+
+![](../media/image/2020-12-07/07.png)
 
 ## URP/LWRP 原理
 

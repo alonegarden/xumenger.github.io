@@ -67,9 +67,9 @@ Projects窗口 -> Assets -> Create -> Rendering -> Universal Render Pipeline -> 
 
 菜单 -> Edit -> Render Pipeline -> Upgrade Project Materials to High Definition Materials，把当前项目中所有的标准材质找出来统一升级为HDRP 材质！150 个材质升级大概需要5 分钟！
 
->HDRP 渲染管线不能应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
-
 ![](../media/image/2020-12-07/07.png)
+
+>HDRP 渲染管线不能应用于手游项目，一些影视项目可以考虑使用HDRP 渲染管线
 
 ## URP/LWRP 原理
 

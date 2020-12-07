@@ -2,7 +2,7 @@
 layout: post
 title: Unity 可编程渲染管线
 categories: 游戏开发之unity
-tags: Unity UD 渲染管线 HDRP GPU 可编程渲染管线 高清渲染管线 Unity3D URP HDRP Shader 剔除 渲染 后处理 DrawCall 内置管线 前向渲染
+tags: Unity UD 渲染管线 HDRP GPU 可编程渲染管线 高清渲染管线 Unity3D URP HDRP Shader 剔除 渲染 后处理 DrawCall 内置管线 前向渲染 填充率 内存带宽 
 ---
 
 可编程渲染管线（Scriptable Render Pipeline），支持直接通过C# 脚本控制渲染管线。目前Unity 官方提供高清渲染管线（HDRP）和轻量级渲染管线（LWRP），前者专注于高端图形渲染，为支持Compute Shader 的现代平台优化，可配置的集合了Tile/Cluster Deferred/Forward 光照；后者专注于性能，支持所有平台，Single-Pass 前向渲染
@@ -99,12 +99,17 @@ URP 是单Pass 前向渲染管线，而内置管线是多Pass 前向渲染管线
 
 ## URP 原理
 
+URP 在下面这三个方面对性能进行改进
 
+![](../media/image/2020-12-07/11.png)
 
+URP/LWRP 是精简并且优化过的渲染管线，聚焦于性能，针对移动和XR 平台
 
-URP 的做法则是在一个Pass 当中，对这个物体收到的所有光源通过一个for 循环一次性计算，这样一个物体的光照可以在一次DrawCall 中计算完毕，省去多个Pass 的上下文切换以及光栅化等开销。不过URP 只支持一盏直光，单个物体最多支持4 盏点光，单个相机最多支持16 盏灯光
+在渲染方面，使用单批次前向渲染（Single-Pass Forward Rendering）。Shader 使用了高性能和高一致性的PBR；提供了新的Shader 库；一次渲染多个实时光……
 
-用了URP 之后，只要控制好点光的范围，在手游里面也可以做多点光照明了，例如释放一个火球照亮周围物件，这在内置管线里基本是可以放弃的功能（或者用其他作假的方式模拟）
+实时光照：按照每个物体进行光照剔除；在一个批次进行渲染；但是针对每个物体有一些限制（1 盏主方向光，4 盏附加光，比如Point/Spot）；每个相机中总共16 盏可见光
+
+>可以用帧调试器分别对内置渲染管线和LWRP/URP 进行帧调试，看一下实际渲染时候的差别！加深理解！
 
 ## 参考资料
 
